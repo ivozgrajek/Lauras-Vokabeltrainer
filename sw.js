@@ -1,4 +1,4 @@
-const CACHE = 'laura-vokabeln-v3';
+const CACHE = 'laura-vokabeln-v4';
 const CORE = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './laura.png', './laura-avatar.png'];
 
 self.addEventListener('install', e => {
