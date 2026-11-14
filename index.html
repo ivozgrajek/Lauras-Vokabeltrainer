@@ -286,6 +286,22 @@
         Lauras Vokabeltrainer &bull; Schneeleoparden Edition für Isabell &copy; 2026
     </footer>
 
+    <!-- Ausschnitt wählen -->
+    <div id="crop-modal" class="hidden fixed inset-0 z-[60] bg-slate-900/95 flex flex-col p-3">
+        <p class="text-white text-sm text-center mb-2">Ziehe mit dem Finger einen Rahmen um die Wörter, die gelesen werden sollen (zum Beispiel nur Englisch und Deutsch, ohne Beispielsätze).</p>
+        <div class="flex-1 min-h-0 flex items-center justify-center">
+            <div id="crop-stage" class="relative inline-block touch-none select-none">
+                <img id="crop-img" class="block max-w-full max-h-[68vh]" alt="Foto" draggable="false">
+                <div id="crop-rect" class="hidden absolute border-2 border-sky-400 bg-sky-400/20 pointer-events-none"></div>
+            </div>
+        </div>
+        <div class="flex flex-wrap gap-2 mt-3 justify-center">
+            <button onclick="cropConfirm(false)" class="px-5 py-3 bg-sky-500 hover:bg-sky-400 text-white font-semibold rounded-xl text-sm">Ausschnitt lesen</button>
+            <button onclick="cropConfirm(true)" class="px-5 py-3 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-xl text-sm">Ganzes Foto lesen</button>
+            <button onclick="cropCancel()" class="px-5 py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold rounded-xl text-sm">Abbrechen</button>
+        </div>
+    </div>
+
     <script>
         // ---------- Speicher ----------
         function loadVocabs() {
@@ -352,7 +368,6 @@
                     c.width = Math.round(img.width * scale);
                     c.height = Math.round(img.height * scale);
                     const ctx = c.getContext('2d');
-                    ctx.filter = 'grayscale(1) contrast(1.35)';   // wird nicht von jedem Browser unterstützt, dann ohne
                     ctx.drawImage(img, 0, 0, c.width, c.height);
                     URL.revokeObjectURL(url);
                     resolve(c);
@@ -362,30 +377,117 @@
             });
         }
 
-        // Zeilen aus der Texterkennung bauen; die größte Lücke in einer Zeile wird zum Trenner " | "
+        // Lautschrift [..] entfernen
+        function cleanPhonetics(s) {
+            return s.replace(/\[[^\]]*\]?/g, ' ').replace(/^[•·▪●!]+\s*/, '').replace(/\s{2,}/g, ' ').trim();
+        }
+
+        // Zeilen in Spalten-Abschnitte teilen und zu Wortpaaren "englisch | deutsch" machen.
+        // Abschnitte entstehen an großen Lücken und direkt nach einer Lautschrift-Klammer "]".
+        // Bei 3 Spalten (Wort | Übersetzung | Beispielsatz) zählen die ersten beiden.
         function ocrLinesToText(data) {
             const lines = data.lines || [];
             if (!lines.length) return (data.text || '').trim();
-            return lines.map(l => {
+            const out = [];
+            lines.forEach(l => {
                 const ws = (l.words || [])
-                    .filter(w => w.text && w.text.trim() && !/^[|¦\[\]_]+$/.test(w.text.trim()))
+                    .filter(w => w.text && w.text.trim() && !/^[|¦_\]\[]+$/.test(w.text.trim()))
                     .sort((a, b) => a.bbox.x0 - b.bbox.x0);
-                if (ws.length === 0) return '';
-                const parts = ws.map(w => w.text.trim());
-                if (ws.length < 2) return parts[0];
-                const h = Math.max(1, l.bbox.y1 - l.bbox.y0);
-                let best = -1, gap = 0;
-                for (let i = 0; i < ws.length - 1; i++) {
-                    const g = ws[i + 1].bbox.x0 - ws[i].bbox.x1;
-                    if (g > gap) { gap = g; best = i; }
+                if (ws.length === 0) return;
+                const hs = ws.map(w => w.bbox.y1 - w.bbox.y0).sort((a, b) => a - b);
+                const h = Math.max(8, hs[Math.floor(hs.length / 2)]);
+
+                let segs = [[ws[0].text.trim()]];
+                for (let i = 1; i < ws.length; i++) {
+                    const prevTxt = ws[i - 1].text.trim();
+                    const gap = ws[i].bbox.x0 - ws[i - 1].bbox.x1;
+                    if (gap > h * 1.3 || (/\]$/.test(prevTxt) && gap > h * 0.3)) segs.push([]);
+                    segs[segs.length - 1].push(ws[i].text.trim());
                 }
-                if (best >= 0 && gap > h * 1.2) {
-                    return parts.slice(0, best + 1).join(' ') + ' | ' + parts.slice(best + 1).join(' ');
+                segs = segs.map(s => cleanPhonetics(s.join(' ')))
+                           .filter(s => s && !/^[\d\s.,:;!?-]+$/.test(s));   // leere Teile und reine Zahlen (große Farbzahlen) weg
+
+                if (segs.length === 1) { out.push(segs[0]); return; }          // Einzelzeile (z.B. durch Seitenumbruch)
+                if (segs.length === 2 || segs.length === 3) { out.push(segs[0] + ' | ' + segs[1]); return; }
+                if (segs.length >= 4) {
+                    for (let i = 0; i + 1 < segs.length; i += 2) out.push(segs[i] + ' | ' + segs[i + 1]);
                 }
-                return parts.join(' ');
-            }).filter(s => s.trim()).join('\n');
+            });
+            return out.join('\n');
         }
 
+        // ---------- Ausschnitt wählen ----------
+        const cropState = { canvas: null, rect: null, start: null };
+
+        function openCrop(canvas) {
+            cropState.canvas = canvas;
+            cropState.rect = null;
+            cropState.start = null;
+            document.getElementById('crop-img').src = canvas.toDataURL('image/jpeg', 0.85);
+            document.getElementById('crop-rect').classList.add('hidden');
+            document.getElementById('crop-modal').classList.remove('hidden');
+        }
+
+        function closeCrop() {
+            document.getElementById('crop-modal').classList.add('hidden');
+        }
+
+        (function initCrop() {
+            const stage = document.getElementById('crop-stage');
+            const rectEl = document.getElementById('crop-rect');
+            const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+            stage.addEventListener('pointerdown', e => {
+                const r = stage.getBoundingClientRect();
+                cropState.start = { x: clamp(e.clientX - r.left, 0, r.width), y: clamp(e.clientY - r.top, 0, r.height) };
+                cropState.rect = null;
+                rectEl.classList.add('hidden');
+                stage.setPointerCapture(e.pointerId);
+            });
+            stage.addEventListener('pointermove', e => {
+                if (!cropState.start) return;
+                const r = stage.getBoundingClientRect();
+                const x = clamp(e.clientX - r.left, 0, r.width), y = clamp(e.clientY - r.top, 0, r.height);
+                const rect = { x: Math.min(x, cropState.start.x), y: Math.min(y, cropState.start.y), w: Math.abs(x - cropState.start.x), h: Math.abs(y - cropState.start.y) };
+                cropState.rect = rect;
+                rectEl.style.left = rect.x + 'px'; rectEl.style.top = rect.y + 'px';
+                rectEl.style.width = rect.w + 'px'; rectEl.style.height = rect.h + 'px';
+                rectEl.classList.remove('hidden');
+            });
+            const end = () => {
+                cropState.start = null;
+                if (cropState.rect && (cropState.rect.w < 30 || cropState.rect.h < 30)) {
+                    cropState.rect = null;
+                    rectEl.classList.add('hidden');
+                }
+            };
+            stage.addEventListener('pointerup', end);
+            stage.addEventListener('pointercancel', end);
+        })();
+
+        function cropConfirm(useAll) {
+            const c = cropState.canvas;
+            let sx = 0, sy = 0, sw = c.width, sh = c.height;
+            if (!useAll && cropState.rect) {
+                const k = c.width / document.getElementById('crop-img').clientWidth;
+                sx = Math.round(cropState.rect.x * k); sy = Math.round(cropState.rect.y * k);
+                sw = Math.max(20, Math.round(cropState.rect.w * k)); sh = Math.max(20, Math.round(cropState.rect.h * k));
+            }
+            closeCrop();
+            const scale = sw < 1100 ? 1.6 : 1;           // kleine Ausschnitte vergrößern
+            const out = document.createElement('canvas');
+            out.width = Math.round(sw * scale); out.height = Math.round(sh * scale);
+            const ctx = out.getContext('2d');
+            ctx.filter = 'grayscale(1) contrast(1.35)';  // wird nicht von jedem Browser unterstützt, dann ohne
+            ctx.drawImage(c, sx, sy, sw, sh, 0, 0, out.width, out.height);
+            runOcr(out);
+        }
+
+        function cropCancel() {
+            closeCrop();
+            setOcrProgress(false);
+        }
+
+        // ---------- Foto wählen → Ausschnitt → Texterkennung ----------
         async function handlePhoto(event) {
             const file = event.target.files[0];
             event.target.value = '';
@@ -395,10 +497,17 @@
                 return;
             }
             pendingVocabs = []; renderReview();
-            setOcrProgress(true, 'Foto wird vorbereitet...', 0.02);
+            try {
+                openCrop(await prepareImage(file));
+            } catch (err) {
+                showToast(err.message || 'Das Foto konnte nicht geöffnet werden.');
+            }
+        }
+
+        async function runOcr(canvas) {
+            setOcrProgress(true, 'Texterkennung wird vorbereitet...', 0.02);
             let worker = null;
             try {
-                const canvas = await prepareImage(file);
                 worker = await Tesseract.createWorker('deu+eng', 1, {
                     logger: m => {
                         if (m.status === 'recognizing text') setOcrProgress(true, 'Laura liest dein Foto...', 0.1 + 0.9 * m.progress);
@@ -408,7 +517,7 @@
                 await worker.setParameters({ tessedit_pageseg_mode: '6', preserve_interword_spaces: '1' });
                 const { data } = await worker.recognize(canvas);
                 const text = ocrLinesToText(data);
-                if (!text.trim()) throw new Error('Es wurde kein Text erkannt. Bitte näher, schärfer und mit mehr Licht fotografieren.');
+                if (!text.trim()) throw new Error('Es wurde kein Text erkannt. Wähle einen engeren Ausschnitt oder fotografiere schärfer und mit mehr Licht.');
                 document.getElementById('paste-text').value = text;
                 setOcrProgress(false);
                 parsePastedText();
@@ -439,7 +548,13 @@
         }
 
         function splitLine(line) {
-            const m = line.match(/\t+|\s*[=|;]\s*|\s+[-–—]\s+|\s*:\s+|\s{2,}/);
+            // Ein senkrechter Strich ist der eindeutigste Trenner (Semikolons gehören oft zum Wort: "wohnen; leben")
+            const bar = line.indexOf('|');
+            if (bar >= 0) {
+                const a = line.slice(0, bar).trim(), b = line.slice(bar + 1).trim();
+                return (a && b) ? [a, b] : null;
+            }
+            const m = line.match(/\t+|\s*=\s*|\s+[-–—]\s+|\s*:\s+|\s{2,}/);
             if (!m) return null;
             const a = line.slice(0, m.index).trim();
             const b = line.slice(m.index + m[0].length).trim();
@@ -474,13 +589,11 @@
                 for (let i = 0; i < n; i++) pairs.push([first[i], second[i]]);
             }
 
-            return pairs.map(([a, b]) => {
-                if (order === 'en-de') return { en: a, de: b };
-                if (order === 'de-en') return { en: b, de: a };
-                const ga = germanScore(a), gb = germanScore(b);
-                if (ga > gb) return { en: b, de: a };
-                return { en: a, de: b };
-            });
+            // Reihenfolge einmal für die ganze Seite bestimmen (Spalten sind meist einheitlich)
+            let sa = 0, sb = 0;
+            pairs.forEach(([a, b]) => { sa += germanScore(a); sb += germanScore(b); });
+            const deFirst = order === 'de-en' || (order === 'auto' && sa > sb);
+            return pairs.map(([a, b]) => deFirst ? { en: b, de: a } : { en: a, de: b });
         }
 
         function parsePastedText() {
