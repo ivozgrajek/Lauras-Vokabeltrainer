@@ -1,436 +1,808 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lauras Vokabeltrainer</title>
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/png" href="icon.png">
-    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-    <style>
-        :root {
-            --primary-color: #3b82f6;
-            --primary-hover: #2563eb;
-            --bg-color: #f3f4f6;
-            --card-bg: rgba(255, 255, 255, 0.95);
-            --text-color: #1f2937;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#3b82f6">
+<title>Lauras Vokabeltrainer</title>
 
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            background-image: radial-gradient(#d1d5db 1px, transparent 1px), radial-gradient(#d1d5db 1px, var(--bg-color) 1px);
-            background-size: 40px 40px;
-            background-position: 0 0, 20px 20px;
-            color: var(--text-color);
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 
-        header {
-            background-color: var(--card-bg);
-            padding: 15px 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
+<style>
+:root {
+    --primary: #3b82f6;
+    --hover: #2563eb;
+    --bg: #f3f4f6;
+    --text: #1f2937;
+}
 
-        header img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--primary-color);
-        }
+* { box-sizing: border-box; }
 
-        header h1 {
-            font-size: 1.25rem;
-            margin: 0;
-            color: #111827;
-        }
+body {
+    margin: 0;
+    padding: 15px;
+    font-family: Arial, sans-serif;
+    background-color: var(--bg);
+    background-image: radial-gradient(#d1d5db 1px, transparent 1px);
+    background-size: 25px 25px;
+    color: var(--text);
+}
 
-        .container {
-            max-width: 650px;
-            margin: 20px auto;
-            padding: 20px;
-            background: var(--card-bg);
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            flex: 1;
-            box-sizing: border-box;
-            width: 100%;
-        }
+header {
+    max-width: 700px;
+    margin: auto;
+    padding: 15px;
+    background: white;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 2px 5px #0001;
+}
 
-        .welcome-section {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-            background: #eff6ff;
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 4px solid var(--primary-color);
-        }
+header img, .welcome img {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    object-fit: cover;
+}
 
-        .welcome-section img {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
+h1 { font-size: 21px; margin: 0; }
 
-        .welcome-section h2 {
-            margin: 0;
-            font-size: 1.4rem;
-            color: #1e3a8a;
-        }
+.container {
+    max-width: 700px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px #0001;
+}
 
-        .section {
-            display: none;
-        }
+.welcome {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: #eff6ff;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
 
-        .section.active {
-            display: block;
-        }
+.welcome h2 { margin: 0; color: #1e3a8a; }
 
-        button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-size: 1rem;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 10px;
-            font-weight: bold;
-            transition: background-color 0.2s;
-        }
+.nav {
+    display: flex;
+    gap: 7px;
+    margin-bottom: 20px;
+}
 
-        button:hover {
-            background-color: var(--primary-hover);
-        }
+button {
+    border: none;
+    border-radius: 8px;
+    background: var(--primary);
+    color: white;
+    padding: 12px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
 
-        input[type="text"] {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 1rem;
-        }
+button:hover { background: var(--hover); }
 
-        .nav-buttons {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
+.nav button {
+    flex: 1;
+    background: #4b5563;
+    font-size: 13px;
+}
 
-        .nav-buttons button {
-            margin-top: 0;
-            background-color: #4b5563;
-        }
+.nav button.active { background: var(--primary); }
 
-        .nav-buttons button.active-nav {
-            background-color: var(--primary-color);
-        }
+.section { display: none; }
+.section.active { display: block; }
 
-        .feedback {
-            margin-top: 15px;
-            padding: 12px;
-            border-radius: 6px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+input[type="text"], textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 7px;
+    margin: 7px 0;
+    font-size: 16px;
+}
 
-        .feedback.success {
-            background-color: #d1fae5;
-            color: #065f46;
-        }
+textarea {
+    min-height: 180px;
+    resize: vertical;
+    font-family: monospace;
+}
 
-        .feedback.error {
-            background-color: #fee2e2;
-            color: #991b1b;
-        }
+.full { width: 100%; margin-top: 10px; }
 
-        ul {
-            padding-left: 20px;
-        }
+.secondary { background: #6b7280; }
+.secondary:hover { background: #4b5563; }
 
-        li {
-            margin-bottom: 8px;
-        }
-    </style>
+.danger { background: #dc2626; }
+
+.panel {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 9px;
+    padding: 15px;
+    margin: 12px 0;
+}
+
+.feedback {
+    padding: 14px;
+    border-radius: 8px;
+    margin-top: 12px;
+    font-weight: bold;
+}
+
+.success { background: #d1fae5; color: #065f46; }
+.error { background: #fee2e2; color: #991b1b; }
+.info { background: #dbeafe; color: #1e40af; }
+
+.vocab-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    border-bottom: 1px solid #eee;
+    padding: 9px 0;
+}
+
+.vocab-item button {
+    padding: 7px 10px;
+    font-size: 12px;
+}
+
+.small { font-size: 13px; color: #6b7280; }
+
+#progress {
+    height: 8px;
+    background: #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#progress-bar {
+    height: 100%;
+    width: 0;
+    background: var(--primary);
+}
+
+@media(max-width: 450px) {
+    body { padding: 8px; }
+    .container { padding: 14px; }
+    .nav { gap: 4px; }
+    .nav button { padding: 10px 4px; font-size: 11px; }
+}
+</style>
 </head>
+
 <body>
 
-    <header>
-        <img src="icon.png" alt="Laura Logo">
-        <h1>Lauras Vokabeltrainer</h1>
-    </header>
+<header>
+    <img src="icon.png" alt="Laura">
+    <h1>Lauras Vokabeltrainer</h1>
+</header>
 
-    <div class="container">
-        <!-- Begrüßung mit Laura und Hallo Isabell -->
-        <div class="welcome-section">
-            <img src="icon.png" alt="Laura">
-            <div>
-                <h2>Hallo Isabell!</h2>
-                <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #4b5563;">Dein Schneeleoparden-Vokabeltrainer ist bereit. Viel Erfolg!</p>
-            </div>
-        </div>
+<div class="container">
 
-        <!-- Navigation -->
-        <div class="nav-buttons">
-            <button id="btn-test" class="active-nav" onclick="switchTab('test')">Zufallstest</button>
-            <button id="btn-vocab" onclick="switchTab('vocab')">Vokabelliste</button>
-            <button id="btn-scan" onclick="switchTab('scan')">Kamera / OCR</button>
-        </div>
-
-        <!-- Sektion 1: Vokabeltest -->
-        <div id="section-test" class="section active">
-            <h3>Vokabel-Test (Bi-directional)</h3>
-            <p id="test-progress">Frage 1 von 20</p>
-            <div id="test-box" style="background: #f9fafb; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #e5e7eb;">
-                <p id="word-prompt" style="font-size: 1.1rem; font-weight: bold;">Lade Vokabeln...</p>
-                <input type="text" id="answer-input" placeholder="Deine Übersetzung eingeben..." onkeypress="handleKeyPress(event)">
-                <button onclick="checkAnswer()">Antwort prüfen</button>
-            </div>
-            <div id="feedback-container"></div>
-            <button onclick="startTest()" style="background-color: #6b7280; margin-top: 15px;">Test neu starten</button>
-        </div>
-
-        <!-- Sektion 2: Vokabelliste -->
-        <div id="section-vocab" class="section">
-            <h3>Deine Vokabeln</h3>
-            <p>Füge neue Vokabeln hinzu oder verwalte sie:</p>
-            <input type="text" id="new-de" placeholder="Deutsch (z.B. Hund)">
-            <input type="text" id="new-en" placeholder="Fremdsprache (z.B. dog)">
-            <button onclick="addVocab()">Vokabel hinzufügen</button>
-            <ul id="vocab-list" style="margin-top: 20px; max-height: 250px; overflow-y: auto;"></ul>
-        </div>
-
-        <!-- Sektion 3: Kamera / OCR -->
-        <div id="section-scan" class="section">
-            <h3>Kamera-Scan (OCR)</h3>
-            <p>Fotografiere einen Vokabelzettel oder wähle ein Bild aus – die Vokabeln werden automatisch ausgelesen:</p>
-            <input type="file" accept="image/*" capture="environment" id="camera-input" onchange="handleImageScan(event)" style="margin: 15px 0;">
-            <div id="scan-result" style="background: #f9fafb; padding: 15px; border-radius: 8px; border: 1px solid #e5e7eb; min-height: 80px;">
-                <em>Noch kein Bild ausgewählt. Klicke auf den Button, um ein Foto zu machen oder ein Bild hochzuladen.</em>
-            </div>
-        </div>
+<div class="welcome">
+    <img src="icon.png" alt="Laura">
+    <div>
+        <h2>Hallo Isabell!</h2>
+        <p>Dein Schneeleoparden-Vokabeltrainer ist bereit. Viel Erfolg!</p>
     </div>
+</div>
 
-    <script>
-        // Vokabeldatenbank (Start-Set)
-        let vocabularies = [
-            { de: "Haus", en: "house" },
-            { de: "Katze", en: "cat" },
-            { de: "Schule", en: "school" },
-            { de: "Apfel", en: "apple" },
-            { de: "Wasser", en: "water" },
-            { de: "Buch", en: "book" },
-            { de: "Sonne", en: "sun" },
-            { de: "Freund", en: "friend" },
-            { de: "Baum", en: "tree" },
-            { de: "Auto", en: "car" }
+<div class="nav">
+    <button id="btn-test" class="active" onclick="switchTab('test')">Zufallstest</button>
+    <button id="btn-vocab" onclick="switchTab('vocab')">Vokabeln</button>
+    <button id="btn-scan" onclick="switchTab('scan')">Foto-Scan</button>
+</div>
+
+<!-- TEST -->
+
+<section id="section-test" class="section active">
+
+<h3>Vokabel-Test</h3>
+<p id="test-progress">Bereit?</p>
+
+<div id="progress">
+    <div id="progress-bar"></div>
+</div>
+
+<div class="panel">
+    <p id="word-prompt">Lade Vokabeln...</p>
+
+    <input type="text" id="answer-input"
+           placeholder="Deine Übersetzung..."
+           onkeydown="if(event.key==='Enter') checkAnswer()">
+
+    <button class="full" onclick="checkAnswer()">Antwort prüfen</button>
+</div>
+
+<div id="feedback-container"></div>
+
+<button class="full secondary" onclick="startTest()">Test neu starten</button>
+
+</section>
+
+<!-- VOKABELLISTE -->
+
+<section id="section-vocab" class="section">
+
+<h3>Deine Vokabeln</h3>
+
+<p>Hier kannst du Vokabeln manuell hinzufügen.</p>
+
+<input type="text" id="new-de" placeholder="Deutsch (z.B. Hund)">
+<input type="text" id="new-en" placeholder="Englisch (z.B. dog)">
+
+<button class="full" onclick="addVocab()">Vokabel hinzufügen</button>
+
+<p id="vocab-count"></p>
+
+<div id="vocab-list"></div>
+
+</section>
+
+<!-- FOTO SCAN -->
+
+<section id="section-scan" class="section">
+
+<h3>Vokabeln per Foto erkennen</h3>
+
+<p>
+Fotografiere eine Vokabelliste aus deinem Schulbuch
+oder wähle ein vorhandenes Bild aus.
+</p>
+
+<div class="panel">
+
+<label for="camera-input"><b>Foto auswählen oder Kamera öffnen:</b></label>
+
+<input type="file"
+       id="camera-input"
+       accept="image/*"
+       capture="environment"
+       onchange="handleImageScan(event)"
+       style="margin:15px 0; width:100%">
+
+<div id="scan-status" class="small">
+    Noch kein Bild ausgewählt.
+</div>
+
+</div>
+
+<div id="scan-progress" style="display:none">
+    <p id="scan-progress-text">Texterkennung wird gestartet...</p>
+    <div id="progress">
+        <div id="scan-progress-bar" style="height:100%;background:#3b82f6;width:0"></div>
+    </div>
+</div>
+
+<h4>1. Erkannter Text</h4>
+
+<p class="small">
+Kontrolliere den Text. Für eine sichere Zuordnung sollte jede Zeile
+ein deutsches und ein englisches Wort enthalten, getrennt durch
+einen Bindestrich, ein Semikolon oder einen Tabulator.
+</p>
+
+<textarea id="ocr-text"
+placeholder="Hier erscheint der erkannte Text. Du kannst ihn auch bearbeiten.
+
+Beispiel:
+Haus - house
+Katze - cat
+Schule - school"></textarea>
+
+<button class="full secondary" onclick="parseOCR()">
+    Vokabelpaare erkennen
+</button>
+
+<h4>2. Erkannte Vokabelpaare</h4>
+
+<div id="parsed-list" class="panel">
+    Noch keine Vokabelpaare erkannt.
+</div>
+
+<button class="full" onclick="importParsed()">
+    Alle Vokabeln übernehmen
+</button>
+
+<p class="small">
+Die übernommenen Vokabeln werden dauerhaft gespeichert.
+</p>
+
+</section>
+
+</div>
+
+<script>
+
+// ========================================
+// VOKABELDATENBANK
+// ========================================
+
+const defaultVocab = [
+    {de:"Haus", en:"house"},
+    {de:"Katze", en:"cat"},
+    {de:"Schule", en:"school"},
+    {de:"Apfel", en:"apple"},
+    {de:"Wasser", en:"water"},
+    {de:"Buch", en:"book"},
+    {de:"Sonne", en:"sun"},
+    {de:"Freund", en:"friend"},
+    {de:"Baum", en:"tree"},
+    {de:"Auto", en:"car"}
+];
+
+let vocabularies;
+
+try {
+    const saved = localStorage.getItem("laura-vocab");
+    vocabularies = saved ? JSON.parse(saved) : defaultVocab;
+    if (!Array.isArray(vocabularies)) vocabularies = defaultVocab;
+} catch(e) {
+    vocabularies = defaultVocab;
+}
+
+function saveVocab() {
+    localStorage.setItem("laura-vocab", JSON.stringify(vocabularies));
+}
+
+// ========================================
+// NAVIGATION
+// ========================================
+
+function switchTab(tab) {
+
+    document.querySelectorAll(".section")
+        .forEach(s => s.classList.remove("active"));
+
+    document.querySelectorAll(".nav button")
+        .forEach(b => b.classList.remove("active"));
+
+    document.getElementById("section-" + tab).classList.add("active");
+    document.getElementById("btn-" + tab).classList.add("active");
+
+    if(tab === "test") startTest();
+    if(tab === "vocab") renderVocabList();
+}
+
+// ========================================
+// ZUFALLSTEST
+// ========================================
+
+let currentTestList = [];
+let currentIndex = 0;
+let currentItem = null;
+let answered = false;
+let testFinished = false;
+
+function startTest() {
+
+    if(vocabularies.length === 0) {
+        document.getElementById("word-prompt").innerText =
+            "Bitte füge zuerst Vokabeln hinzu!";
+        return;
+    }
+
+    currentTestList = [...vocabularies]
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 20);
+
+    currentIndex = 0;
+    answered = false;
+    testFinished = false;
+
+    loadQuestion();
+}
+
+function loadQuestion() {
+
+    const prompt = document.getElementById("word-prompt");
+    const input = document.getElementById("answer-input");
+    const feedback = document.getElementById("feedback-container");
+
+    if(currentIndex >= currentTestList.length) {
+
+        testFinished = true;
+        prompt.innerText = "Test beendet! 🎉";
+        input.style.display = "none";
+
+        feedback.innerHTML =
+            '<div class="feedback success">Super gemacht, Isabell! Du hast alle Vokabeln geschafft!</div>';
+
+        document.getElementById("test-progress").innerText =
+            currentTestList.length + " von " + currentTestList.length + " Fragen";
+
+        document.getElementById("progress-bar").style.width = "100%";
+        return;
+    }
+
+    currentItem = currentTestList[currentIndex];
+
+    // Richtung wird separat gespeichert.
+    // Die Original-Vokabel bleibt unverändert.
+
+    currentItem.direction = Math.random() > 0.5 ? "de-en" : "en-de";
+
+    prompt.innerText = currentItem.direction === "de-en"
+        ? "Übersetze ins Englische: " + currentItem.de
+        : "Übersetze ins Deutsche: " + currentItem.en;
+
+    input.style.display = "block";
+    input.value = "";
+    input.disabled = false;
+
+    feedback.innerHTML = "";
+    answered = false;
+
+    document.getElementById("test-progress").innerText =
+        "Frage " + (currentIndex + 1) + " von " + currentTestList.length;
+
+    document.getElementById("progress-bar").style.width =
+        (currentIndex / currentTestList.length * 100) + "%";
+
+    input.focus();
+}
+
+function checkAnswer() {
+
+    if(!currentItem || answered || testFinished) return;
+
+    const input = document.getElementById("answer-input");
+    const userAnswer = input.value.trim().toLowerCase();
+
+    if(!userAnswer) return;
+
+    const expected = currentItem.direction === "de-en"
+        ? currentItem.en.toLowerCase()
+        : currentItem.de.toLowerCase();
+
+    const feedback = document.getElementById("feedback-container");
+
+    if(userAnswer === expected) {
+
+        answered = true;
+        input.disabled = true;
+
+        speakText("Good job!");
+
+        const praise = [
+            "Good! Great job, Isabell!",
+            "Well done! Super gemacht!",
+            "Awesome! Richtig stark!",
+            "Great! Du hast es drauf!"
         ];
 
-        let currentTestList = [];
-        let currentIndex = 0;
-        let currentItem = null;
+        const randomPraise = praise[Math.floor(Math.random() * praise.length)];
 
-        function switchTab(tab) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-buttons button').forEach(b => b.classList.remove('active-nav'));
-            
-            document.getElementById('section-' + tab).classList.add('active');
-            document.getElementById('btn-' + tab).classList.add('active-nav');
+        feedback.innerHTML =
+            '<div class="feedback success">🐆 Laura sagt: "' +
+            randomPraise + '"</div>';
 
-            if (tab === 'test') {
-                startTest();
-            } else if (tab === 'vocab') {
-                renderVocabList();
-            }
-        }
+        currentIndex++;
 
-        // Test-Logik (20 Fragen / Zufall)
-        function startTest() {
-            if (vocabularies.length === 0) {
-                document.getElementById('word-prompt').innerText = "Bitte füge zuerst Vokabeln hinzu!";
-                return;
-            }
-            currentTestList = [...vocabularies].sort(() => 0.5 - Math.random()).slice(0, 20);
-            currentIndex = 0;
-            loadQuestion();
-        }
+        setTimeout(loadQuestion, 1400);
 
-        function loadQuestion() {
-            if (currentIndex >= currentTestList.length) {
-                document.getElementById('test-box').innerHTML = `
-                    <h4>Test beendet! 🎉</h4>
-                    <p>Super gemacht, Isabell! Du hast alle Vokabeln durchgeschafft.</p>
-                `;
-                document.getElementById('feedback-container').innerHTML = "";
-                return;
-            }
+    } else {
 
-            currentItem = currentTestList[currentIndex];
-            currentItem.direction = Math.random() > 0.5 ? 'de-en' : 'en-de';
+        feedback.innerHTML =
+            '<div class="feedback error">Fast! Richtig wäre: ' +
+            expected + '. Versuche es noch einmal!</div>';
+    }
+}
 
-            const promptText = currentItem.direction === 'de-en' 
-                ? `Übersetze ins Englische: <strong>${currentItem.de}</strong>`
-                : `Übersetze ins Deutsche: <strong>${currentItem.en}</strong>`;
+function speakText(text) {
 
-            document.getElementById('word-prompt').innerHTML = promptText;
-            document.getElementById('test-progress').innerText = `Frage ${currentIndex + 1} von ${currentTestList.length}`;
-            document.getElementById('answer-input').value = "";
-            document.getElementById('feedback-container').innerHTML = "";
-            document.getElementById('answer-input').focus();
-        }
+    if("speechSynthesis" in window) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = "en-US";
+        speechSynthesis.speak(utterance);
+    }
+}
 
-        function checkAnswer() {
-            if (!currentItem) return;
-            const userInputValue = document.getElementById("answer-input").value.trim().toLowerCase();
-            const feedbackContainer = document.getElementById("feedback-container");
-            
-            const expected = currentItem.direction === 'de-en' ? currentItem.en.toLowerCase() : currentItem.de.toLowerCase();
+// ========================================
+// VOKABELN MANUELL HINZUFÜGEN
+// ========================================
 
-            if (userInputValue === expected) {
-                speakText("Good job!");
+function addVocab() {
 
-                const praisePhrases = [
-                    "Good! Great job, Isabell!🎉", 
-                    "Well done! Super gemacht!👌", 
-                    "Awesome! Richtig stark!🐯", 
-                    "Great! Du hast es drauf!"
-                ];
-                const randomPraise = praisePhrases[Math.floor(Math.random() * praisePhrases.length)];
-                
-                feedbackContainer.innerHTML = `
-                    <div class="feedback success">
-                        <img src="icon.png" style="width:30px; height:30px; border-radius:50%; object-fit:cover;" alt="Laura">
-                        <span>Laura sagt: "${randomPraise}"</span>
-                    </div>
-                `;
-                
-                currentIndex++;
-                setTimeout(loadQuestion, 1500);
-            } else {
-                feedbackContainer.innerHTML = `
-                    <div class="feedback error">
-                        <img src="icon.png" style="width:30px; height:30px; border-radius:50%; object-fit:cover;" alt="Laura">
-                        <span>Laura flüstert: "Fast! Richtig wäre: ${expected}"</span>
-                    </div>
-                `;
-            }
-        }
+    const de = document.getElementById("new-de").value.trim();
+    const en = document.getElementById("new-en").value.trim();
 
-        function handleKeyPress(e) {
-            if (e.key === 'Enter') {
-                checkAnswer();
-            }
-        }
+    if(!de || !en) {
+        alert("Bitte beide Übersetzungen eingeben.");
+        return;
+    }
 
-        function speakText(text) {
-            if ('speechSynthesis' in window) {
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'en-US';
-                window.speechSynthesis.speak(utterance);
-            }
-        }
+    vocabularies.push({de, en});
+    saveVocab();
 
-        function addVocab() {
-            const de = document.getElementById('new-de').value.trim();
-            const en = document.getElementById('new-en').value.trim();
-            if (de && en) {
-                vocabularies.push({ de, en });
-                document.getElementById('new-de').value = "";
-                document.getElementById('new-en').value = "";
-                renderVocabList();
-                alert("Vokabel hinzugefügt!");
-            }
-        }
+    document.getElementById("new-de").value = "";
+    document.getElementById("new-en").value = "";
 
-        function renderVocabList() {
-            const list = document.getElementById('vocab-list');
-            list.innerHTML = "";
-            vocabularies.forEach((v, idx) => {
-                const li = document.createElement('li');
-                li.innerText = `${v.de} ⟷ ${v.en}`;
-                list.appendChild(li);
-            });
-        }
+    renderVocabList();
 
-        // Echte OCR-Bilderkennung via Tesseract.js
-        async function handleImageScan(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+    alert("Vokabel erfolgreich hinzugefügt!");
+}
 
-            const resultBox = document.getElementById('scan-result');
-            resultBox.innerHTML = `<p style="color: #3b82f6; font-weight: bold;">⏳ Bild wird analysiert und Text ausgelesen...</p>`;
+function renderVocabList() {
 
-            try {
-                // Bild mit Tesseract OCR scannen (Deutsch + Englisch)
-                const { data: { text } } = await Tesseract.recognize(file, 'deu+eng', {
-                    logger: m => {
-                        if (m.status === 'recognizing text') {
-                            const progress = Math.round(m.progress * 100);
-                            resultBox.innerHTML = `<p style="color: #3b82f6; font-weight: bold;">⏳ Analysiere Bild... (${progress}%)</p>`;
-                        }
-                    }
-                });
+    const list = document.getElementById("vocab-list");
 
-                // Zeilenweise verarbeiten und Vokabeln extrahieren
-                const lines = text.split('\n');
-                let addedCount = window.addedCount || 0;
-                let foundVocabs = [];
+    list.innerHTML = "";
 
-                lines.forEach(line => {
-                    let cleanLine = line.trim();
-                    if (!cleanLine) return;
+    document.getElementById("vocab-count").innerText =
+        "Gespeicherte Vokabeln: " + vocabularies.length;
 
-                    // Versuche Trennzeichen wie Bindestrich, Doppelpunkt oder Pfeile zu finden
-                    let parts = cleanLine.split(/[-–—:;>|]+/);
-                    if (parts.length >= 2) {
-                        let deWord = parts[0].trim();
-                        let enWord = parts[1].trim();
-                        if (deWord.length > 1 && enWord.length > 1) {
-                            vocabularies.push({ de: deWord, en: enWord });
-                            foundVocabs.push(`${deWord} ⟷ ${enWord}`);
-                        }
-                    }
-                });
+    vocabularies.forEach((v, index) => {
 
-                if (foundVocabs.length > 0) {
-                    resultBox.innerHTML = `
-                        <p style="color: #065f46; font-weight: bold;">✅ Erfolgreich ${foundVocabs.length} Vokabeln erkannt und hinzugefügt!</p>
-                        <ul style="margin: 5px 0 0 0; padding-left: 15px; font-size: 0.9rem;">
-                            ${foundVocabs.map(v => `<li>${v}</li>`).join('')}
-                        </ul>
-                    `;
-                } else {
-                    resultBox.innerHTML = `
-                        <p style="color: #991b1b; font-weight: bold;">⚠️ Kein klares Vokabelmuster gefunden.</p>
-                        <p style="font-size: 0.85rem; margin: 5px 0;">Erkannter Rohtext: "${text.substring(0, 100)}..."</p>
-                        <p style="font-size: 0.85rem;">Tipp: Achte darauf, dass die Wörter im Format "Wort - Übersetzung" auf dem Bild stehen.</p>
-                    `;
-                }
-            } catch (error) {
-                resultBox.innerHTML = `<p style="color: #991b1b; font-weight: bold;">❌ Fehler bei der Texterkennung: ${error.message}</p>`;
-            }
-        }
+        const item = document.createElement("div");
+        item.className = "vocab-item";
 
-        window.onload = function() {
-            startTest();
+        const text = document.createElement("span");
+        text.textContent = v.de + " ⟷ " + v.en;
+
+        const remove = document.createElement("button");
+        remove.className = "danger";
+        remove.textContent = "Löschen";
+
+        remove.onclick = () => {
+            vocabularies.splice(index, 1);
+            saveVocab();
+            renderVocabList();
         };
-    </script>
+
+        item.appendChild(text);
+        item.appendChild(remove);
+
+        list.appendChild(item);
+    });
+}
+
+// ========================================
+// ECHTE FOTOERKENNUNG MIT TESSERACT OCR
+// ========================================
+
+let ocrWorker = null;
+
+async function handleImageScan(event) {
+
+    const file = event.target.files[0];
+
+    if(!file) return;
+
+    if(!file.type.startsWith("image/")) {
+        alert("Bitte eine Bilddatei auswählen.");
+        return;
+    }
+
+    const status = document.getElementById("scan-status");
+    const progressBox = document.getElementById("scan-progress");
+    const progressBar = document.getElementById("scan-progress-bar");
+    const progressText = document.getElementById("scan-progress-text");
+
+    progressBox.style.display = "block";
+    progressBar.style.width = "0%";
+
+    document.getElementById("ocr-text").value = "";
+    document.getElementById("parsed-list").innerText =
+        "Noch keine Vokabelpaare erkannt.";
+
+    status.innerText = "Foto wird verarbeitet...";
+
+    try {
+
+        if(!window.Tesseract) {
+            throw new Error("Die OCR-Bibliothek konnte nicht geladen werden. Bitte Internetverbindung prüfen.");
+        }
+
+        if(!ocrWorker) {
+
+            progressText.innerText = "Sprachmodelle werden geladen...";
+
+            ocrWorker = await Tesseract.createWorker(
+                "deu+eng",
+                1,
+                {
+                    logger: message => {
+
+                        if(message.status === "recognizing text") {
+
+                            const percent = Math.round(message.progress * 100);
+
+                            progressBar.style.width = percent + "%";
+                            progressText.innerText =
+                                "Texterkennung: " + percent + "%";
+                        }
+                    }
+                }
+            );
+        }
+
+        progressText.innerText = "Foto wird gelesen...";
+
+        const result = await ocrWorker.recognize(file);
+
+        const recognizedText = result.data.text.trim();
+
+        document.getElementById("ocr-text").value = recognizedText;
+
+        if(!recognizedText) {
+            status.innerText = "Leider wurde kein Text erkannt.";
+            return;
+        }
+
+        status.innerText = "Foto erfolgreich erkannt! Bitte Text überprüfen.";
+
+        progressText.innerText = "Texterkennung abgeschlossen.";
+
+        // Automatische erste Auswertung
+        parseOCR();
+
+    } catch(error) {
+
+        console.error(error);
+
+        status.innerText = "Fehler bei der Fotoerkennung: " + error.message;
+
+        alert("Die Texterkennung ist fehlgeschlagen. Bitte versuche es erneut.");
+
+    } finally {
+
+        progressBox.style.display = "none";
+        event.target.value = "";
+    }
+}
+
+// ========================================
+// OCR-TEXT IN VOKABELPAARE UMWANDELN
+// ========================================
+
+let parsedVocab = [];
+
+function parseOCR() {
+
+    const raw = document.getElementById("ocr-text").value;
+
+    const lines = raw.split(/\r?\n/)
+        .map(line => line.trim())
+        .filter(Boolean);
+
+    parsedVocab = [];
+
+    const delimiters = /(?:\s+[-–—]\s+|\s*[;|;]\s*|\t+|\s+↔\s+|\s+→\s+|\s+=\s+|\s{2,})/;
+
+    for(const line of lines) {
+
+        let parts = line.split(delimiters)
+            .map(p => p.trim())
+            .filter(Boolean);
+
+        if(parts.length === 2) {
+
+            const de = parts[0];
+            const en = parts[1];
+
+            if(de.length < 50 && en.length < 50) {
+                parsedVocab.push({de, en});
+            }
+        }
+    }
+
+    renderParsedList();
+}
+
+function renderParsedList() {
+
+    const container = document.getElementById("parsed-list");
+
+    container.innerHTML = "";
+
+    if(parsedVocab.length === 0) {
+
+        container.textContent =
+            "Keine eindeutigen Vokabelpaare gefunden. Bitte nutze das Format Deutsch - Englisch und versuche es erneut.";
+
+        return;
+    }
+
+    parsedVocab.forEach((v, index) => {
+
+        const row = document.createElement("div");
+        row.style.marginBottom = "12px";
+
+        const de = document.createElement("input");
+        de.type = "text";
+        de.value = v.de;
+        de.placeholder = "Deutsch";
+
+        const en = document.createElement("input");
+        en.type = "text";
+        en.value = v.en;
+        en.placeholder = "Englisch";
+
+        de.addEventListener("input", () => {
+            parsedVocab[index].de = de.value;
+        });
+
+        en.addEventListener("input", () => {
+            parsedVocab[index].en = en.value;
+        });
+
+        row.appendChild(de);
+        row.appendChild(en);
+
+        container.appendChild(row);
+    });
+
+    const info = document.createElement("p");
+    info.className = "small";
+    info.textContent = parsedVocab.length +
+        " Vokabelpaare erkannt. Du kannst die Wörter hier noch korrigieren.";
+
+    container.appendChild(info);
+}
+
+// ========================================
+// ERKANNTE VOKABELN IMPORTIEREN
+// ========================================
+
+function importParsed() {
+
+    const valid = parsedVocab.filter(v =>
+        v.de.trim() && v.en.trim()
+    );
+
+    if(valid.length === 0) {
+        alert("Es gibt keine gültigen Vokabelpaare zum Importieren.");
+        return;
+    }
+
+    let added = 0;
+
+    valid.forEach(v => {
+
+        const de = v.de.trim();
+        const en = v.en.trim();
+
+        const exists = vocabularies.some(existing =>
+            existing.de.toLowerCase() === de.toLowerCase() &&
+            existing.en.toLowerCase() === en.toLowerCase()
+        );
+
+        if(!exists) {
+            vocabularies.push({de, en});
+            added++;
+        }
+    });
+
+    saveVocab();
+
+    renderVocabList();
+
+    parsedVocab = [];
+    document.getElementById("parsed-list").innerText =
+        "Import abgeschlossen: " + added + " neue Vokabeln hinzugefügt.";
+
+    alert(added + " neue Vokabeln wurden gespeichert.");
+
+}
+
+// ========================================
+// INITIALISIERUNG
+// ========================================
+
+renderVocabList();
+startTest();
+
+</script>
 
 </body>
 </html>
