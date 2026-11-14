@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lauras Vokabeltrainer</title>
     <meta name="theme-color" content="#0284c7">
-    <link rel="manifest" href="manifest.json">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js"></script>
@@ -146,7 +145,7 @@
                     </label>
                 </div>
 
-                <button onclick="parsePastedText(null, null)" class="mt-4 w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-gradient-to-br from-sky-600 to-indigo-600 text-white font-semibold shadow-lg shadow-sky-600/20 hover:opacity-95">
+                <button onclick="parsePastedText()" class="mt-4 w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-gradient-to-br from-sky-600 to-indigo-600 text-white font-semibold shadow-lg shadow-sky-600/20 hover:opacity-95">
                     <i data-lucide="wand-sparkles" class="w-5 h-5"></i> Wörter erkennen
                 </button>
 
@@ -264,7 +263,16 @@
                     </div>
 
                     <div class="space-y-4">
-                        <input type="text" id="test-user-answer" onkeydown="handleQuizKeydown(event)" placeholder="Deine Übersetzung..." autocomplete="off" autocapitalize="off" class="w-full px-4 py-3.5 rounded-xl border border-slate-200 text-base focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white">
+                        <div class="relative flex items-center gap-2">
+                            <input type="text" id="test-user-answer" onkeydown="handleQuizKeydown(event)" placeholder="Deine Übersetzung schreiben oder einsprechen..." autocomplete="off" autocapitalize="off" class="flex-1 px-4 py-3.5 rounded-xl border border-slate-200 text-base focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white">
+                            <button type="button" id="voice-input-btn" onclick="toggleVoiceInput()" class="p-3.5 rounded-xl bg-sky-50 hover:bg-sky-100 text-sky-600 border border-sky-200 transition-all shrink-0 flex items-center justify-center shadow-xs" title="Übersetzung einsprechen">
+                                <i data-lucide="mic" id="voice-input-icon" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                        <p id="voice-status-text" class="hidden text-xs font-semibold text-rose-600 flex items-center gap-1.5 px-1">
+                            <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+                            Laura hört zu... Sprich jetzt die Übersetzung!
+                        </p>
                         <div id="test-feedback" class="hidden p-4 rounded-xl border">
                             <div class="flex items-center gap-2 font-bold mb-1">
                                 <span id="feedback-icon"></span>
@@ -313,10 +321,9 @@
     </div>
 
     <script>
-        const VOCAB_STORAGE = 'lauras_vocab_snow_leopard_v2';
+        const VOCAB_STORAGE = 'lauras_vocab_snow_leopard_v3';
 
         const DEFAULT_VOCABS = [
-            // PUA / Einführung
             { en: "We're from …", de: "Wir sind aus …" },
             { en: "Here's your ball.", de: "Hier ist dein Ball." },
             { en: "Hello.", de: "Hallo." },
@@ -406,7 +413,6 @@
             { en: "double", de: "Doppel-; zweimal" },
             { en: "to rap", de: "rappen" },
             { en: "like me", de: "wie ich" },
-            // Unit 1
             { en: "at home", de: "zu Hause" },
             { en: "to live", de: "wohnen; leben" },
             { en: "flat", de: "Wohnung" },
@@ -572,7 +578,6 @@
             { en: "plan", de: "Plan; Entwurf" },
             { en: "to be lucky", de: "Glück haben" },
             { en: "to find", de: "finden; herausfinden" },
-            // Unit 2
             { en: "planner", de: "Handbuch; Kalender" },
             { en: "rule", de: "Regel" },
             { en: "lunch", de: "Mittagessen" },
@@ -717,7 +722,6 @@
             { en: "sweet", de: "Süß" },
             { en: "to put (in)", de: "(hinein)setzen; (hinein)stellen; (hinein)legen" },
             { en: "box", de: "Box; Kasten; Schachtel; Kiste" },
-            // Unit 3
             { en: "a.m.", de: "vormittags (Uhrzeit); morgens (Uhrzeit)" },
             { en: "p.m.", de: "nachmittags (Uhrzeit); abends (Uhrzeit)" },
             { en: "still", de: "noch; immer noch" },
@@ -837,7 +841,6 @@
             { en: "map", de: "Stadtplan; Landkarte" },
             { en: "studying", de: "Lernen; Studieren" },
             { en: "first", de: "zuerst; als Erstes" },
-            // Unit 4
             { en: "fun", de: "lustig; witzig; fröhlich" },
             { en: "museum", de: "Museum" },
             { en: "to cost", de: "kosten" },
@@ -955,7 +958,6 @@
             { en: "I'd like to … (= I would like to)", de: "Ich möchte …; Ich würde gern …" },
             { en: "to fall off", de: "herunterfallen; hinunterfallen" },
             { en: "to need to (do)", de: "(tun) müssen" },
-            // Unit 5
             { en: "to go shopping", de: "einkaufen gehen" },
             { en: "bottle", de: "Flasche" },
             { en: "That's …", de: "Das macht …" },
@@ -1083,7 +1085,6 @@
             { en: "Too bad!", de: "Zu dumm!; Schade!" },
             { en: "tomato, tomatoes (pl)", de: "Tomate" },
             { en: "yoghurt", de: "Joghurt" },
-            // Across Cultures & Extras
             { en: "culture", de: "Kultur" },
             { en: "quick", de: "schnell" },
             { en: "contest", de: "Wettkampf; Wettbewerb" },
@@ -1129,55 +1130,49 @@
                 const stored = localStorage.getItem(VOCAB_STORAGE);
                 if (stored !== null) {
                     const parsed = JSON.parse(stored);
-                    if (Array.isArray(parsed) && parsed.length > 0) {
-                        return parsed;
-                    }
+                    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
                 }
             } catch (e) {}
-            // Falls leer oder beim ersten Öffnen: feste Vokabelliste laden
             return [...DEFAULT_VOCABS];
         }
+
         let vocabs = loadVocabs();
         let pendingPairs = [];
         let testState = { active: false, questions: [], currentIndex: 0, score: 0 };
         let clearConfirmTimeout = null;
         let clearConfirmArmed = false;
+        let speechRecognition = null;
+        let isListening = false;
 
-        // ---------- Initialisierung ----------
-        window.onload = function () {
+        window.addEventListener('DOMContentLoaded', () => {
             updateCounts();
             renderVocabList();
+            initSpeechRecognition();
             if (window.lucide) lucide.createIcons();
-        };
+        });
 
         function updateCounts() {
-            document.getElementById('header-vocab-count').textContent = vocabs.length;
-            document.getElementById('tab-vocab-count').textContent = vocabs.length;
+            const el1 = document.getElementById('header-vocab-count');
+            const el2 = document.getElementById('tab-vocab-count');
+            if (el1) el1.textContent = vocabs.length;
+            if (el2) el2.textContent = vocabs.length;
         }
 
         function saveToLocalStorage() {
             try {
                 localStorage.setItem(VOCAB_STORAGE, JSON.stringify(vocabs));
             } catch (e) {
-                showToast('Speichern nicht möglich (Speicher voll?)');
+                showToast('Speicher voll oder blockiert.');
             }
             updateCounts();
         }
 
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-message').textContent = msg;
-            toast.classList.remove('hidden');
-            clearTimeout(window._toastTimer);
-            window._toastTimer = setTimeout(() => toast.classList.add('hidden'), 3200);
-        }
-
-        // ---------- Navigation / Tabs ----------
         function switchTab(tabId) {
             ['scan', 'list', 'test'].forEach(t => {
                 const view = document.getElementById(`view-${t}`);
                 const btn = document.getElementById(`tab-btn-${t}`);
                 const base = 'flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all ';
+                if (!view || !btn) return;
                 if (t === tabId) {
                     view.classList.remove('hidden');
                     btn.className = base + 'bg-sky-600 text-white shadow-sm';
@@ -1190,18 +1185,22 @@
             if (window.lucide) lucide.createIcons();
         }
 
-        // ---------- Aussprache (Web Speech API) ----------
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const txt = document.getElementById('toast-message');
+            if (!toast || !txt) return;
+            txt.textContent = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 3500);
+        }
+
         function speakText(text, lang = 'en-GB') {
-            if (!('speechSynthesis' in window)) {
-                showToast('Sprachausgabe wird von diesem Browser nicht unterstützt.');
-                return;
-            }
+            if (!window.speechSynthesis) return;
             window.speechSynthesis.cancel();
-            const clean = text.replace(/…|\.{3}|\(.*?\)/g, '').split(';')[0].trim();
-            const utter = new SpeechSynthesisUtterance(clean);
-            utter.lang = lang;
-            utter.rate = 0.92;
-            window.speechSynthesis.speak(utter);
+            const u = new SpeechSynthesisUtterance(text);
+            u.lang = lang;
+            u.rate = 0.9;
+            window.speechSynthesis.speak(u);
         }
 
         function speakCurrentPrompt() {
@@ -1211,41 +1210,111 @@
             else speakText(q.de, 'de-DE');
         }
 
-        // ---------- Foto & Zuschneiden ----------
-        const cropState = { canvas: null, rect: null, start: null };
+        function initSpeechRecognition() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                const btn = document.getElementById('voice-input-btn');
+                if (btn) btn.classList.add('hidden');
+                return;
+            }
+            speechRecognition = new SpeechRecognition();
+            speechRecognition.continuous = false;
+            speechRecognition.interimResults = true;
 
-        function prepareImage(file, maxSide = 2000) {
-            return new Promise((resolve, reject) => {
-                const url = URL.createObjectURL(file);
-                const img = new Image();
-                img.onload = () => {
-                    const scale = Math.min(1, maxSide / Math.max(img.width, img.height));
-                    const c = document.createElement('canvas');
-                    c.width = Math.round(img.width * scale);
-                    c.height = Math.round(img.height * scale);
-                    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
-                    URL.revokeObjectURL(url);
-                    resolve(c);
-                };
-                img.onerror = () => {
-                    URL.revokeObjectURL(url);
-                    reject(new Error('Bild konnte nicht geladen werden.'));
-                };
-                img.src = url;
-            });
+            speechRecognition.onstart = () => {
+                isListening = true;
+                updateVoiceUI(true);
+            };
+
+            speechRecognition.onresult = (event) => {
+                let transcript = '';
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    transcript += event.results[i][0].transcript;
+                }
+                const input = document.getElementById('test-user-answer');
+                if (input && !input.disabled) input.value = transcript.trim();
+                if (event.results[0] && event.results[0].isFinal) {
+                    stopVoiceInput();
+                    setTimeout(() => {
+                        if (!document.getElementById('test-submit-btn').classList.contains('hidden')) {
+                            submitQuizAnswer();
+                        }
+                    }, 350);
+                }
+            };
+
+            speechRecognition.onerror = (e) => {
+                stopVoiceInput();
+                if (e.error === 'not-allowed') showToast('Mikrofon-Zugriff verweigert.');
+                else if (e.error !== 'no-speech') showToast('Spracherkennung Info: ' + e.error);
+            };
+
+            speechRecognition.onend = () => stopVoiceInput();
         }
 
-        async function handlePhoto(event) {
-            const file = event.target.files?.[0];
-            event.target.value = '';
-            if (!file) return;
-            try {
-                const canvas = await prepareImage(file);
-                openCrop(canvas);
-            } catch (e) {
-                showToast(e.message);
+        function toggleVoiceInput() {
+            if (!speechRecognition) {
+                showToast('Keine Spracherkennung in diesem Browser.');
+                return;
+            }
+            if (isListening) {
+                speechRecognition.stop();
+                stopVoiceInput();
+            } else {
+                const q = testState.questions[testState.currentIndex];
+                if (!q) return;
+                speechRecognition.lang = q.dir === 'en-de' ? 'de-DE' : 'en-GB';
+                window.speechSynthesis?.cancel();
+                try {
+                    speechRecognition.start();
+                } catch (e) {
+                    stopVoiceInput();
+                }
             }
         }
+
+        function stopVoiceInput() {
+            isListening = false;
+            updateVoiceUI(false);
+        }
+
+        function updateVoiceUI(active) {
+            const btn = document.getElementById('voice-input-btn');
+            const statusText = document.getElementById('voice-status-text');
+            if (!btn || !statusText) return;
+            if (active) {
+                btn.className = 'p-3.5 rounded-xl bg-rose-600 text-white border border-rose-600 transition-all shrink-0 flex items-center justify-center shadow-md animate-pulse';
+                statusText.classList.remove('hidden');
+            } else {
+                btn.className = 'p-3.5 rounded-xl bg-sky-50 hover:bg-sky-100 text-sky-600 border border-sky-200 transition-all shrink-0 flex items-center justify-center shadow-xs';
+                statusText.classList.add('hidden');
+            }
+        }
+
+        // ---------- Foto Upload & OCR ----------
+        function handlePhoto(e) {
+            const file = e.target.files?.[0];
+            if (!file) return;
+            e.target.value = '';
+            const url = URL.createObjectURL(file);
+            const img = new Image();
+            img.onload = () => {
+                URL.revokeObjectURL(url);
+                const scale = Math.min(1, 1800 / Math.max(img.width, img.height));
+                const canvas = document.createElement('canvas');
+                canvas.width = Math.round(img.width * scale);
+                canvas.height = Math.round(img.height * scale);
+                canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+                openCrop(canvas);
+            };
+            img.onerror = () => {
+                URL.revokeObjectURL(url);
+                showToast('Bild konnte nicht geladen werden.');
+            };
+            img.src = url;
+        }
+
+        const cropState = { canvas: null, rect: null, start: null };
 
         function openCrop(canvas) {
             cropState.canvas = canvas;
@@ -1263,14 +1332,12 @@
         (function initCropEvents() {
             const stage = document.getElementById('crop-stage');
             const rectEl = document.getElementById('crop-rect');
+            if (!stage) return;
             const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 
             stage.addEventListener('pointerdown', e => {
                 const r = stage.getBoundingClientRect();
-                cropState.start = {
-                    x: clamp(e.clientX - r.left, 0, r.width),
-                    y: clamp(e.clientY - r.top, 0, r.height)
-                };
+                cropState.start = { x: clamp(e.clientX - r.left, 0, r.width), y: clamp(e.clientY - r.top, 0, r.height) };
                 cropState.rect = null;
                 rectEl.classList.add('hidden');
                 stage.setPointerCapture(e.pointerId);
@@ -1281,12 +1348,7 @@
                 const r = stage.getBoundingClientRect();
                 const x = clamp(e.clientX - r.left, 0, r.width);
                 const y = clamp(e.clientY - r.top, 0, r.height);
-                const rect = {
-                    x: Math.min(x, cropState.start.x),
-                    y: Math.min(y, cropState.start.y),
-                    w: Math.abs(x - cropState.start.x),
-                    h: Math.abs(y - cropState.start.y)
-                };
+                const rect = { x: Math.min(x, cropState.start.x), y: Math.min(y, cropState.start.y), w: Math.abs(x - cropState.start.x), h: Math.abs(y - cropState.start.y) };
                 cropState.rect = rect;
                 rectEl.style.left = rect.x + 'px';
                 rectEl.style.top = rect.y + 'px';
@@ -1318,7 +1380,6 @@
                 targetCanvas.height = sh;
                 targetCanvas.getContext('2d').drawImage(srcCanvas, sx, sy, sw, sh, 0, 0, sw, sh);
             }
-
             cropCancel();
             await runOcrOnCanvas(targetCanvas);
         }
@@ -1335,42 +1396,35 @@
 
         async function runOcrOnCanvas(canvas) {
             if (!window.Tesseract) {
-                showToast('Texterkennung konnte nicht geladen werden.');
+                showToast('Texterkennung nicht verfügbar.');
                 return;
             }
             setOcrProgress(true, 'Laura liest dein Foto...', 0.1);
             try {
                 const result = await Tesseract.recognize(canvas, 'eng+deu', {
                     logger: m => {
-                        if (m.status === 'recognizing text') {
-                            setOcrProgress(true, 'Laura erkennt die Wörter...', m.progress);
-                        }
+                        if (m.status === 'recognizing text') setOcrProgress(true, 'Laura erkennt Wörter...', m.progress);
                     }
                 });
-                const rawText = result.data?.text || '';
-                const cleanedLines = rawText.split('\n')
-                    .map(l => cleanPhonetics(l))
-                    .filter(Boolean)
-                    .join('\n');
-                document.getElementById('paste-text').value = cleanedLines;
+                const cleaned = (result.data?.text || '').split('\n').map(l => cleanPhonetics(l)).filter(Boolean).join('\n');
+                document.getElementById('paste-text').value = cleaned;
                 setOcrProgress(false);
-                showToast('Text erkannt! Prüfe unten die Vokabeln.');
+                showToast('Text erkannt!');
                 parsePastedText();
             } catch (e) {
                 setOcrProgress(false);
-                showToast('Fehler beim Lesen des Fotos.');
+                showToast('Fehler beim Lesen des Bildes.');
             }
         }
 
-        // ---------- Text-Erkennung & Review ----------
         function looksGerman(str) {
-            return /[äöüßÄÖÜ]|\b(der|die|das|ein|eine|und|oder|nicht|ich|du|er|sie|es|wir|ihr|mit|für|auf|zu|in|am|im|vom|zum|zur)\b/i.test(str);
+            return /[äöüßÄÖÜ]|\b(der|die|das|ein|eine|und|oder|nicht|ich|du|er|sie|es|wir|ihr|mit|für|auf|zu|in|am|im)\b/i.test(str);
         }
 
         function parsePastedText() {
             const raw = document.getElementById('paste-text').value.trim();
             if (!raw) {
-                showToast('Bitte füge zuerst Text ein oder fotografiere eine Seite.');
+                showToast('Kein Text vorhanden.');
                 return;
             }
             const layout = document.getElementById('paste-layout').value;
@@ -1383,33 +1437,24 @@
             if (layout === 'pairs' || (layout === 'auto' && hasInlineSep)) {
                 lines.forEach(line => {
                     const parts = line.split(/\s*(?:\t|\s[-–—=|]\s|\|)\s*/);
-                    if (parts.length >= 2) {
-                        pairs.push({ a: parts[0].trim(), b: parts.slice(1).join(' ').trim() });
-                    }
+                    if (parts.length >= 2) pairs.push({ a: parts[0].trim(), b: parts.slice(1).join(' ').trim() });
                 });
             } else if (layout === 'blocks' && lines.length >= 2) {
                 const half = Math.floor(lines.length / 2);
-                for (let i = 0; i < half; i++) {
-                    pairs.push({ a: lines[i], b: lines[i + half] || '' });
-                }
+                for (let i = 0; i < half; i++) pairs.push({ a: lines[i], b: lines[i + half] || '' });
             } else {
-                for (let i = 0; i < lines.length; i += 2) {
-                    pairs.push({ a: lines[i], b: lines[i + 1] || '' });
-                }
+                for (let i = 0; i < lines.length; i += 2) pairs.push({ a: lines[i], b: lines[i + 1] || '' });
             }
 
             pendingPairs = pairs.map(p => {
                 let en = p.a, de = p.b;
-                if (order === 'de-en') {
-                    en = p.b; de = p.a;
-                } else if (order === 'auto' && looksGerman(p.a) && !looksGerman(p.b)) {
-                    en = p.b; de = p.a;
-                }
+                if (order === 'de-en') { en = p.b; de = p.a; }
+                else if (order === 'auto' && looksGerman(p.a) && !looksGerman(p.b)) { en = p.b; de = p.a; }
                 return { en, de };
             });
 
             if (!pendingPairs.length) {
-                showToast('Keine Wortpaare erkannt.');
+                showToast('Keine Paare erkannt.');
                 return;
             }
             renderPendingList();
@@ -1420,11 +1465,9 @@
             const list = document.getElementById('review-list');
             list.innerHTML = pendingPairs.map((p, idx) => `
                 <div class="grid grid-cols-1 sm:grid-cols-[1fr_1fr_2.5rem] gap-2 items-center bg-white p-2 rounded-xl border border-slate-200">
-                    <input type="text" value="${escapeHtml(p.en)}" oninput="pendingPairs[${idx}].en = this.value" placeholder="Englisch" class="px-3 py-1.5 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
-                    <input type="text" value="${escapeHtml(p.de)}" oninput="pendingPairs[${idx}].de = this.value" placeholder="Deutsch" class="px-3 py-1.5 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
-                    <button onclick="removePendingRow(${idx})" class="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg flex justify-center" title="Entfernen">
-                        <i data-lucide="x" class="w-4 h-4"></i>
-                    </button>
+                    <input type="text" value="${escapeHtml(p.en)}" oninput="pendingPairs[${idx}].en = this.value" class="px-3 py-1.5 rounded-lg border border-slate-200 text-sm">
+                    <input type="text" value="${escapeHtml(p.de)}" oninput="pendingPairs[${idx}].de = this.value" class="px-3 py-1.5 rounded-lg border border-slate-200 text-sm">
+                    <button onclick="removePendingRow(${idx})" class="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg flex justify-center"><i data-lucide="x" class="w-4 h-4"></i></button>
                 </div>
             `).join('');
             document.getElementById('review-save-label').textContent = `Alle ${pendingPairs.length} speichern`;
@@ -1450,7 +1493,7 @@
         function savePending() {
             const valid = pendingPairs.filter(p => p.en.trim() && p.de.trim());
             if (!valid.length) {
-                showToast('Bitte fülle mindestens ein Paar aus.');
+                showToast('Keine gültigen Paare.');
                 return;
             }
             vocabs = [...valid.map(p => ({ en: p.en.trim(), de: p.de.trim() })), ...vocabs];
@@ -1458,6 +1501,7 @@
             discardPending();
             document.getElementById('paste-text').value = '';
             showToast(`${valid.length} Vokabeln gespeichert! 🐾`);
+            renderVocabList();
         }
 
         function discardPending() {
@@ -1471,26 +1515,25 @@
             const en = enInput.value.trim();
             const de = deInput.value.trim();
             if (!en || !de) {
-                showToast('Bitte Englisch und Deutsch eingeben.');
+                showToast('Bitte beide Felder ausfüllen.');
                 return;
             }
             vocabs.unshift({ en, de });
             saveToLocalStorage();
             enInput.value = '';
             deInput.value = '';
-            showToast('Vokabel hinzugefügt! ✨');
+            renderVocabList();
+            showToast('Hinzugefügt! ✨');
         }
 
-        // ---------- Liste verwalten ----------
         function renderVocabList() {
             const container = document.getElementById('vocab-list-container');
+            if (!container) return;
             const query = (document.getElementById('vocab-search-input')?.value || '').toLowerCase().trim();
-            const filtered = vocabs
-                .map((v, idx) => ({ ...v, idx }))
-                .filter(v => !query || v.en.toLowerCase().includes(query) || v.de.toLowerCase().includes(query));
+            const filtered = vocabs.map((v, idx) => ({ ...v, idx })).filter(v => !query || v.en.toLowerCase().includes(query) || v.de.toLowerCase().includes(query));
 
             if (!filtered.length) {
-                container.innerHTML = `<p class="text-center text-slate-400 text-sm py-10">Keine Vokabeln gefunden.</p>`;
+                container.innerHTML = `<p class="text-center text-slate-400 text-sm py-10">Keine Vokabeln.</p>`;
                 return;
             }
 
@@ -1501,12 +1544,8 @@
                         <div class="text-slate-600 text-sm truncate">${escapeHtml(v.de)}</div>
                     </div>
                     <div class="flex items-center gap-1 shrink-0">
-                        <button onclick="speakText('${escapeHtml(v.en).replace(/'/g, "\\'")}', 'en-GB')" class="p-2 text-sky-600 hover:bg-sky-50 rounded-lg" title="Anhören">
-                            <i data-lucide="volume-2" class="w-4 h-4"></i>
-                        </button>
-                        <button onclick="deleteVocab(${v.idx})" class="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg" title="Löschen">
-                            <i data-lucide="trash-2" class="w-4 h-4"></i>
-                        </button>
+                        <button onclick="speakText('${escapeHtml(v.en).replace(/'/g, "\\'")}', 'en-GB')" class="p-2 text-sky-600 hover:bg-sky-50 rounded-lg"><i data-lucide="volume-2" class="w-4 h-4"></i></button>
+                        <button onclick="deleteVocab(${v.idx})" class="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                     </div>
                 </div>
             `).join('');
@@ -1517,7 +1556,6 @@
             vocabs.splice(idx, 1);
             saveToLocalStorage();
             renderVocabList();
-            showToast('Vokabel gelöscht.');
         }
 
         function clearAllVocabs() {
@@ -1542,11 +1580,9 @@
             btn.className = 'px-3.5 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold flex items-center gap-1.5';
 
             vocabs = [];
-            try { localStorage.setItem(VOCAB_STORAGE, JSON.stringify([])); } catch (e) {}
-            updateCounts();
+            saveToLocalStorage();
             renderVocabList();
-            showToast('Alle Vokabeln wurden gelöscht.');
-        }
+            showToast('Alle Vokabeln gelöscht.');
         }
 
         function resetToDefaultVocabs() {
@@ -1557,10 +1593,7 @@
         }
 
         function exportVocabs() {
-            if (!vocabs.length) {
-                showToast('Keine Vokabeln zum Exportieren vorhanden.');
-                return;
-            }
+            if (!vocabs.length) return;
             const text = vocabs.map(v => `${v.en} - ${v.de}`).join('\n');
             const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
             const url = URL.createObjectURL(blob);
@@ -1569,22 +1602,18 @@
             a.download = 'lauras_vokabeln.txt';
             a.click();
             URL.revokeObjectURL(url);
-            showToast('Vokabeln exportiert!');
         }
 
-        // ---------- Test / Quiz ----------
         function startQuiz() {
             if (vocabs.length === 0) {
-                showToast('Füge zuerst Vokabeln hinzu, um einen Test zu starten.');
+                showToast('Keine Vokabeln vorhanden.');
                 switchTab('scan');
                 return;
             }
             const shuffled = [...vocabs].sort(() => 0.5 - Math.random());
-            const selected = shuffled.slice(0, Math.min(20, shuffled.length));
-
             testState = {
                 active: true,
-                questions: selected.map(v => ({
+                questions: shuffled.slice(0, Math.min(20, shuffled.length)).map(v => ({
                     en: v.en,
                     de: v.de,
                     dir: Math.random() < 0.5 ? 'en-de' : 'de-en'
@@ -1592,7 +1621,6 @@
                 currentIndex: 0,
                 score: 0
             };
-
             document.getElementById('test-start-screen').classList.add('hidden');
             document.getElementById('test-finished-screen').classList.add('hidden');
             document.getElementById('test-active-screen').classList.remove('hidden');
@@ -1600,12 +1628,14 @@
         }
 
         function abortTest() {
+            if (isListening && speechRecognition) speechRecognition.stop();
             testState.active = false;
             document.getElementById('test-active-screen').classList.add('hidden');
             document.getElementById('test-start-screen').classList.remove('hidden');
         }
 
         function renderQuizQuestion() {
+            if (isListening && speechRecognition) speechRecognition.stop();
             const q = testState.questions[testState.currentIndex];
             const total = testState.questions.length;
             const current = testState.currentIndex + 1;
@@ -1634,45 +1664,28 @@
             document.getElementById('test-feedback').classList.add('hidden');
             document.getElementById('test-submit-btn').classList.remove('hidden');
             document.getElementById('test-next-btn').classList.add('hidden');
-
-            const cheers = [
-                '„Du schaffst das, Isabell! Wie heißt das übersetzt?“',
-                '„Konzentration! Du machst das super.“',
-                '„Schneeleoparden geben nie auf! Was meinst du?“',
-                '„Los geht’s, zeig was du drauf hast!“'
-            ];
-            document.getElementById('laura-speech-bubble').textContent = cheers[Math.floor(Math.random() * cheers.length)];
         }
 
         function normalizeAnswer(str) {
-            return str.toLowerCase()
-                      .replace(/^(to\s+|der\s+|die\s+|das\s+|a\s+|an\s+)/i, '')
-                      .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '')
-                      .replace(/\s+/g, ' ')
-                      .trim();
+            return str.toLowerCase().replace(/^(to\s+|der\s+|die\s+|das\s+|a\s+|an\s+)/i, '').replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '').replace(/\s+/g, ' ').trim();
         }
 
         function submitQuizAnswer() {
+            if (isListening && speechRecognition) speechRecognition.stop();
             const q = testState.questions[testState.currentIndex];
             const input = document.getElementById('test-user-answer');
             const userVal = input.value.trim();
-            if (!userVal) {
-                showToast('Bitte gib eine Antwort ein.');
-                return;
-            }
+            if (!userVal) return;
 
             input.disabled = true;
             const expected = q.dir === 'en-de' ? q.de : q.en;
             const cleanUser = normalizeAnswer(userVal);
             const cleanExpected = normalizeAnswer(expected);
-
-            // Accept alternative translations split by semicolon or slash or comma
             const allowed = cleanExpected.split(/[/;,]|oder/).map(s => s.trim());
             const isCorrect = allowed.some(a => cleanUser === a || (a.length > 3 && cleanUser.includes(a)));
 
             const feedback = document.getElementById('test-feedback');
             feedback.classList.remove('hidden');
-
             const avatarWrapper = document.getElementById('laura-avatar-wrapper');
 
             if (isCorrect) {
@@ -1681,8 +1694,7 @@
                 feedback.className = 'p-4 rounded-xl border bg-emerald-50 border-emerald-200 text-emerald-900';
                 document.getElementById('feedback-icon').innerHTML = '<svg class="w-5 h-5 text-emerald-600 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>';
                 document.getElementById('feedback-title').textContent = 'Richtig! 🎉';
-                document.getElementById('feedback-correct-answer').textContent = `Super gemacht! Richtig ist: ${expected}`;
-                document.getElementById('laura-speech-bubble').textContent = '„Genial! Der Punkt geht an dich, Isabell!“';
+                document.getElementById('feedback-correct-answer').textContent = `Super! Richtig ist: ${expected}`;
                 avatarWrapper.classList.add('laura-cheer');
                 setTimeout(() => avatarWrapper.classList.remove('laura-cheer'), 600);
             } else {
@@ -1690,8 +1702,7 @@
                 feedback.className = 'p-4 rounded-xl border bg-rose-50 border-rose-200 text-rose-900';
                 document.getElementById('feedback-icon').innerHTML = '<svg class="w-5 h-5 text-rose-600 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>';
                 document.getElementById('feedback-title').textContent = 'Fast richtig!';
-                document.getElementById('feedback-correct-answer').textContent = `Die richtige Übersetzung wäre gewesen: ${expected}`;
-                document.getElementById('laura-speech-bubble').textContent = '„Nicht schlimm, beim nächsten Mal klappt es!“';
+                document.getElementById('feedback-correct-answer').textContent = `Richtig wäre gewesen: ${expected}`;
             }
 
             document.getElementById('test-submit-btn').classList.add('hidden');
@@ -1701,21 +1712,15 @@
 
         function handleQuizKeydown(e) {
             if (e.key === 'Enter') {
-                if (!document.getElementById('test-submit-btn').classList.contains('hidden')) {
-                    submitQuizAnswer();
-                } else if (!document.getElementById('test-next-btn').classList.contains('hidden')) {
-                    nextQuizQuestion();
-                }
+                if (!document.getElementById('test-submit-btn').classList.contains('hidden')) submitQuizAnswer();
+                else if (!document.getElementById('test-next-btn').classList.contains('hidden')) nextQuizQuestion();
             }
         }
 
         function nextQuizQuestion() {
             testState.currentIndex++;
-            if (testState.currentIndex < testState.questions.length) {
-                renderQuizQuestion();
-            } else {
-                finishQuiz();
-            }
+            if (testState.currentIndex < testState.questions.length) renderQuizQuestion();
+            else finishQuiz();
         }
 
         function finishQuiz() {
@@ -1724,10 +1729,10 @@
             const total = testState.questions.length;
             const score = testState.score;
             let praise = 'Hervorragende Leistung! 🌟';
-            if (score / total < 0.5) praise = 'Übe noch ein bisschen, dann klappt es beim nächsten Mal noch besser! 💪';
+            if (score / total < 0.5) praise = 'Übe noch ein bisschen, dann klappt es noch besser! 💪';
             else if (score === total) praise = 'Volle Punktzahl! Du bist ein echter Schneeleopard! 🐆🏆';
 
-            document.getElementById('test-score-summary').innerHTML = `Du hast <b>${score}</b> von <b>${total}</b> Vokabeln richtig gewusst.<br><span class="text-sky-700 font-semibold mt-1 block">${praise}</span>`;
+            document.getElementById('test-score-summary').innerHTML = `Du hast <b>${score}</b> von <b>${total}</b> richtig.<br><span class="text-sky-700 font-semibold mt-1 block">${praise}</span>`;
         }
 
         function escapeHtml(str) {
