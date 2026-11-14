@@ -6,8 +6,6 @@
     <title>Lauras Vokabeltrainer</title>
     <meta name="theme-color" content="#0284c7">
     <link rel="manifest" href="manifest.json">
-    <link rel="icon" href="icon-192.png">
-    <link rel="apple-touch-icon" href="icon-192.png">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js"></script>
@@ -32,7 +30,7 @@
         <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <div class="w-12 h-12 rounded-2xl flex items-center justify-center shadow-md shadow-sky-500/20 overflow-hidden p-0.5 border border-sky-200 bg-white">
-                    <img src="laura-avatar.png" class="w-full h-full object-contain rounded-xl" alt="Laura">
+                    <img src="https://placehold.co/100x100/0284c7/ffffff?text=🐾" class="w-full h-full object-cover rounded-xl" alt="Laura">
                 </div>
                 <div>
                     <h1 class="font-extrabold text-lg text-slate-900 tracking-tight flex items-center gap-2">
@@ -72,7 +70,14 @@
         <section id="view-scan" class="fade-in space-y-6">
             <div class="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-sm border border-slate-200/90">
                 <h2 class="text-xl font-bold text-slate-900 mb-1">Hallo Isabell! Vokabeln aus einem Foto holen</h2>
-                <p class="text-sm text-slate-500 mb-4">Fotografiere die Vokabelseite. Die Texterkennung läuft direkt auf deinem Handy, das Foto wird nirgends hingeschickt. Danach kontrollierst du die Wörter vor dem Speichern.</p>
+                <p class="text-sm text-slate-500 mb-4">Fotografiere die Vokabelseite. Die Texterkennung läuft direkt auf deinem Gerät. Danach kontrollierst du die Wörter vor dem Speichern.</p>
+
+                <label class="block text-xs font-semibold text-slate-500 mb-3">Foto-Art
+                    <select id="photo-mode" class="mt-1 w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-white text-sm font-normal text-slate-800">
+                        <option value="book">Schulbuch: schwarz = Englisch, blau = Deutsch (Lautschrift wird ignoriert)</option>
+                        <option value="other">Andere Seite: alles lesen</option>
+                    </select>
+                </label>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <label class="flex items-center justify-center gap-3 p-4 rounded-2xl bg-gradient-to-br from-sky-600 to-indigo-600 text-white font-semibold shadow-lg shadow-sky-600/20 hover:opacity-95 cursor-pointer">
@@ -90,36 +95,36 @@
                     <div class="w-full h-2 bg-white rounded-full overflow-hidden mt-2 border border-sky-100">
                         <div id="ocr-bar" class="h-full bg-sky-600 transition-all duration-200" style="width: 0%"></div>
                     </div>
-                    <p class="text-xs text-slate-500 mt-2">Beim ersten Mal muss die Texterkennung geladen werden. Das dauert etwas länger.</p>
+                    <p class="text-xs text-slate-500 mt-2">Beim ersten Mal lädt die Texterkennung kurz herunter. Das dauert nur einen Moment.</p>
                 </div>
 
-                <p class="text-xs text-slate-500 mt-3">Tipps: gutes Licht, Seite gerade von oben fotografieren, möglichst nur die Vokabelspalten im Bild. Gedruckte Schrift klappt am besten, bei Handschrift musst du mehr korrigieren.</p>
+                <p class="text-xs text-slate-500 mt-3">Tipps: gutes Licht, Seite gerade von oben fotografieren, möglichst nur die Vokabelspalten im Bild.</p>
 
                 <details class="mt-5 mb-5">
                     <summary class="text-sm font-semibold text-sky-700 cursor-pointer">Alternative: Text mit dem Handy kopieren und einfügen</summary>
-                    <div class="mt-3"><div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5 text-sm">
-                    <div class="rounded-xl bg-slate-50 border border-slate-200 p-3.5">
-                        <p class="font-semibold text-slate-900 mb-1.5">iPhone</p>
-                        <ol class="list-decimal pl-4 space-y-1 text-slate-600">
-                            <li>Foto der Vokabelseite aufnehmen und in „Fotos“ öffnen.</li>
-                            <li>Unten rechts das Textsymbol (Live-Text) antippen.</li>
-                            <li>„Alles auswählen“, dann „Kopieren“.</li>
-                        </ol>
+                    <div class="mt-3">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5 text-sm">
+                            <div class="rounded-xl bg-slate-50 border border-slate-200 p-3.5">
+                                <p class="font-semibold text-slate-900 mb-1.5">iPhone</p>
+                                <ol class="list-decimal pl-4 space-y-1 text-slate-600 text-xs">
+                                    <li>Foto der Vokabelseite öffnen.</li>
+                                    <li>Unten rechts das Textsymbol (Live-Text) antippen.</li>
+                                    <li>„Alles auswählen“, dann „Kopieren“.</li>
+                                </ol>
+                            </div>
+                            <div class="rounded-xl bg-slate-50 border border-slate-200 p-3.5">
+                                <p class="font-semibold text-slate-900 mb-1.5">Android</p>
+                                <ol class="list-decimal pl-4 space-y-1 text-slate-600 text-xs">
+                                    <li>Foto in „Google Fotos“ öffnen.</li>
+                                    <li>Unten auf „Lens“ tippen.</li>
+                                    <li>„Text“ wählen, Text auswählen, „Text kopieren“.</li>
+                                </ol>
+                            </div>
+                        </div>
                     </div>
-                    <div class="rounded-xl bg-slate-50 border border-slate-200 p-3.5">
-                        <p class="font-semibold text-slate-900 mb-1.5">Android</p>
-                        <ol class="list-decimal pl-4 space-y-1 text-slate-600">
-                            <li>Foto aufnehmen und in „Google Fotos“ öffnen.</li>
-                            <li>Unten auf „Lens“ tippen.</li>
-                            <li>„Text“ wählen, Text auswählen, „Text kopieren“.</li>
-                        </ol>
-                    </div>
-                </div>
-
-                </div>
                 </details>
 
-                <label for="paste-text" class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Erkannter oder kopierter Text (kannst du hier verbessern)</label>
+                <label for="paste-text" class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Erkannter oder kopierter Text (hier bearbeitbar)</label>
                 <textarea id="paste-text" rows="7" placeholder="z.B.&#10;the dog - der Hund&#10;I am happy - Ich bin glücklich"
                     class="w-full mt-1.5 px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm bg-slate-50/50"></textarea>
 
@@ -141,13 +146,13 @@
                     </label>
                 </div>
 
-                <button onclick="parsePastedText()" class="mt-4 w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-gradient-to-br from-sky-600 to-indigo-600 text-white font-semibold shadow-lg shadow-sky-600/20 hover:opacity-95">
+                <button onclick="parsePastedText(null, null)" class="mt-4 w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-gradient-to-br from-sky-600 to-indigo-600 text-white font-semibold shadow-lg shadow-sky-600/20 hover:opacity-95">
                     <i data-lucide="wand-sparkles" class="w-5 h-5"></i> Wörter erkennen
                 </button>
 
                 <div id="review-box" class="hidden mt-6 rounded-2xl border border-sky-200 bg-sky-50/40 p-4">
                     <h3 class="font-bold text-slate-900 flex items-center gap-2"><i data-lucide="list-checks" class="w-4 h-4 text-sky-600"></i> Kontrolliere die erkannten Wörter</h3>
-                    <p class="text-xs text-slate-500 mt-1 mb-3">Korrigiere Fehler direkt im Feld oder entferne falsche Zeilen. Gespeichert wird erst mit dem Button unten.</p>
+                    <p class="text-xs text-slate-500 mt-1 mb-3">Korrigiere Fehler direkt im Feld oder entferne falsche Zeilen. Gespeichert wird erst mit Klick auf „Alle speichern“.</p>
                     <div class="hidden sm:grid grid-cols-[1fr_1fr_2.5rem] gap-2 text-xs font-semibold text-slate-500 mb-1 px-1"><span>Englisch</span><span>Deutsch</span><span></span></div>
                     <div id="review-list" class="space-y-2 max-h-[420px] overflow-y-auto pr-1"></div>
                     <div class="flex flex-wrap gap-4 mt-3">
@@ -186,10 +191,13 @@
                         <p class="text-sm text-slate-500">Alle gespeicherten Wörter und Sätze im Überblick.</p>
                     </div>
                     <div class="flex items-center gap-2">
+                        <button onclick="resetToDefaultVocabs()" class="px-3.5 py-2 rounded-xl bg-sky-50 hover:bg-sky-100 text-sky-700 text-xs font-semibold flex items-center gap-1.5" title="Standard-Vokabeln laden">
+                            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Standard-Liste
+                        </button>
                         <button onclick="exportVocabs()" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center gap-1.5">
                             <i data-lucide="download" class="w-3.5 h-3.5"></i> Exportieren
                         </button>
-                        <button onclick="clearAllVocabs()" class="px-3.5 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold flex items-center gap-1.5">
+                        <button id="clear-all-btn" onclick="clearAllVocabs()" class="px-3.5 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold flex items-center gap-1.5">
                             <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Alle löschen
                         </button>
                     </div>
@@ -207,7 +215,9 @@
             <div class="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-sm border border-slate-200/90">
 
                 <div id="test-start-screen" class="text-center py-8">
-                    <img src="laura.png" alt="Laura" class="w-40 h-40 object-contain mx-auto mb-3">
+                    <div class="w-28 h-28 bg-sky-50 rounded-3xl mx-auto flex items-center justify-center mb-4 border border-sky-100 shadow-sm overflow-hidden p-2">
+                        <img src="https://placehold.co/200x200/0284c7/ffffff?text=🐾+Laura" alt="Laura" class="w-full h-full object-cover rounded-2xl">
+                    </div>
                     <h2 class="text-2xl font-bold text-slate-900 mb-2">Zufalls-Vokabeltest (bis zu 20 Wörter)</h2>
                     <p class="text-slate-500 text-sm max-w-md mx-auto mb-6">
                         Laura wählt zufällig bis zu 20 Vokabeln aus deiner Sammlung aus und fragt sie gemischt in beide Richtungen ab (Englisch ⇄ Deutsch).
@@ -225,7 +235,7 @@
 
                     <div id="laura-companion-box" class="mb-5 flex items-center gap-3.5 bg-gradient-to-r from-sky-50/90 to-slate-50 p-3.5 rounded-2xl border border-sky-200/80 transition-all">
                         <div id="laura-avatar-wrapper" class="w-14 h-14 bg-white p-1 rounded-2xl shadow-sm border border-sky-200 shrink-0 overflow-hidden flex items-center justify-center">
-                            <img src="laura-avatar.png" alt="Laura" class="w-full h-full object-contain rounded-xl">
+                            <img src="https://placehold.co/100x100/0284c7/ffffff?text=🐾" alt="Laura" class="w-full h-full object-cover rounded-xl">
                         </div>
                         <div class="flex-1 min-w-0">
                             <span class="text-xs font-extrabold uppercase tracking-wider text-sky-700">Laura sagt:</span>
@@ -286,13 +296,13 @@
         Lauras Vokabeltrainer &bull; Schneeleoparden Edition für Isabell &copy; 2026
     </footer>
 
-    <!-- Ausschnitt wählen -->
+    <!-- Ausschnitt wählen Modal -->
     <div id="crop-modal" class="hidden fixed inset-0 z-[60] bg-slate-900/95 flex flex-col p-3">
-        <p class="text-white text-sm text-center mb-2">Ziehe mit dem Finger einen Rahmen um die Wörter, die gelesen werden sollen (zum Beispiel nur Englisch und Deutsch, ohne Beispielsätze).</p>
+        <p class="text-white text-sm text-center mb-2">Ziehe mit dem Finger einen Rahmen um die Vokabeln, die gelesen werden sollen.</p>
         <div class="flex-1 min-h-0 flex items-center justify-center">
             <div id="crop-stage" class="relative inline-block touch-none select-none">
                 <img id="crop-img" class="block max-w-full max-h-[68vh]" alt="Foto" draggable="false">
-                <div id="crop-rect" class="hidden absolute border-2 border-sky-400 bg-sky-400/20 pointer-events-none"></div>
+                <div id="crop-rect" class="hidden absolute border-2 border-sky-400 bg-sky-400/25 pointer-events-none rounded-sm"></div>
             </div>
         </div>
         <div class="flex flex-wrap gap-2 mt-3 justify-center">
@@ -303,21 +313,841 @@
     </div>
 
     <script>
-        // ---------- Speicher ----------
+        const VOCAB_STORAGE = 'lauras_vocab_snow_leopard_v2';
+
+        const DEFAULT_VOCABS = [
+            // PUA / Einführung
+            { en: "We're from …", de: "Wir sind aus …" },
+            { en: "Here's your ball.", de: "Hier ist dein Ball." },
+            { en: "Hello.", de: "Hallo." },
+            { en: "I'm …", de: "Ich heiße …; Ich bin …" },
+            { en: "You're a nice dog.", de: "Du bist ein lieber Hund." },
+            { en: "What's your name?", de: "Wie heißt du?; Wie heißen Sie?" },
+            { en: "Sorry, my dog is crazy.", de: "Tut mir leid, mein Hund ist verrückt." },
+            { en: "and", de: "und" },
+            { en: "My name is …", de: "Ich heiße …" },
+            { en: "Where are you from?", de: "Woher kommst du?; Woher kommt ihr?; Woher kommen Sie?" },
+            { en: "I'm from …", de: "Ich bin aus …" },
+            { en: "in", de: "in; im; rein; herein" },
+            { en: "Are you on holiday in …?", de: "Bist du im Urlaub in …?; Sind Sie im Urlaub in …?; Seid ihr im Urlaub in …?" },
+            { en: "yes", de: "ja" },
+            { en: "I'm here with my parents.", de: "Ich bin mit meinen Eltern hier." },
+            { en: "How old are you?", de: "Wie alt bist du?; Wie alt seid ihr?; Wie alt sind Sie?" },
+            { en: "You too?", de: "Du auch?; Ihr auch?" },
+            { en: "no", de: "nein" },
+            { en: "the", de: "der; die (auch Pl.); das" },
+            { en: "boy", de: "Junge" },
+            { en: "girl", de: "Mädchen" },
+            { en: "me too", de: "ich auch" },
+            { en: "friend", de: "Freund/-in" },
+            { en: "he", de: "er" },
+            { en: "she", de: "sie" },
+            { en: "it", de: "er; sie; es" },
+            { en: "they", de: "sie (Pl.)" },
+            { en: "new", de: "neu" },
+            { en: "Come in.", de: "Komm/Kommt rein." },
+            { en: "to come", de: "kommen" },
+            { en: "mum", de: "Mama; Mutti" },
+            { en: "who", de: "wer; wem; wen" },
+            { en: "Mrs", de: "Frau (Anrede)" },
+            { en: "town", de: "Stadt" },
+            { en: "in the north of", de: "im Norden von" },
+            { en: "student", de: "Schüler/-in; Student/-in" },
+            { en: "class", de: "Klasse; Schulklasse" },
+            { en: "You're right.", de: "Du hast Recht." },
+            { en: "all", de: "alle/-s; ganz" },
+            { en: "the same", de: "der-/die-/dasselbe; der/die/das gleiche" },
+            { en: "his", de: "sein/-e" },
+            { en: "cat", de: "Katze" },
+            { en: "animal", de: "Tier" },
+            { en: "to like", de: "mögen; gern haben" },
+            { en: "I'm not scared of dogs.", de: "Ich habe keine Angst vor Hunden." },
+            { en: "not", de: "nicht" },
+            { en: "but", de: "aber" },
+            { en: "OK", de: "o.k.; in Ordnung" },
+            { en: "They don't eat mice.", de: "Sie essen keine Mäuse." },
+            { en: "mouse, mice (pl)", de: "Maus/Mäuse" },
+            { en: "to hate", de: "nicht mögen; hassen" },
+            { en: "to love", de: "lieben; gern mögen" },
+            { en: "That was close!", de: "Das war knapp!" },
+            { en: "Thank you.", de: "Danke." },
+            { en: "This is …", de: "Das (hier) ist …" },
+            { en: "school", de: "Schule" },
+            { en: "big", de: "groß" },
+            { en: "great", de: "großartig; toll; super" },
+            { en: "for", de: "zum; für" },
+            { en: "cycling", de: "Radfahren" },
+            { en: "sport", de: "Sport; Sportart" },
+            { en: "football", de: "Fußball" },
+            { en: "boating lake", de: "See zum Rudern" },
+            { en: "Let's go!", de: "Lass/Lasst uns hingehen!; Los, gehen wir hin!" },
+            { en: "It's fun.", de: "Es macht Spaß." },
+            { en: "hobby, hobbies (pl)", de: "Hobby" },
+            { en: "place", de: "Ort; Stelle; Platz" },
+            { en: "skateboarding", de: "Skateboardfahren" },
+            { en: "volleyball", de: "Volleyball" },
+            { en: "(inline) skating", de: "Inlineskatefahren" },
+            { en: "My favourite … is …", de: "Mein Lieblings… ist…" },
+            { en: "colour", de: "Farbe" },
+            { en: "puzzle", de: "Rätsel; Puzzle" },
+            { en: "What's your favourite …?", de: "Was ist dein/-e Lieblings …?" },
+            { en: "kite", de: "Drachen" },
+            { en: "bike", de: "Fahrrad" },
+            { en: "boat", de: "Boot" },
+            { en: "bag", de: "Tasche; Tüte" },
+            { en: "there is/are", de: "es gibt" },
+            { en: "number", de: "Zahl; Nummer" },
+            { en: "quiz", de: "Quiz; Rätsel" },
+            { en: "Please.", de: "Bitte." },
+            { en: "phone number", de: "Telefon-/Handynummer" },
+            { en: "What colour is …?", de: "Welche Farbe hat …?" },
+            { en: "first name", de: "Vorname" },
+            { en: "surname", de: "Nachname" },
+            { en: "double", de: "Doppel-; zweimal" },
+            { en: "to rap", de: "rappen" },
+            { en: "like me", de: "wie ich" },
+            // Unit 1
+            { en: "at home", de: "zu Hause" },
+            { en: "to live", de: "wohnen; leben" },
+            { en: "flat", de: "Wohnung" },
+            { en: "in the street", de: "auf der Straße" },
+            { en: "family", de: "Familie" },
+            { en: "house", de: "Haus" },
+            { en: "door", de: "Tür" },
+            { en: "bath", de: "Bad; Badewanne" },
+            { en: "TV", de: "Fernsehen; Fernseher" },
+            { en: "sofa", de: "Sofa; Couch" },
+            { en: "shower", de: "Dusche" },
+            { en: "chair", de: "Stuhl; Sessel" },
+            { en: "cupboard", de: "Küchenschrank; Schrank" },
+            { en: "toilet", de: "Toilette" },
+            { en: "bed", de: "Bett" },
+            { en: "clock", de: "Uhr" },
+            { en: "wardrobe", de: "Kleiderschrank" },
+            { en: "cooker", de: "Herd" },
+            { en: "table", de: "Tisch" },
+            { en: "good", de: "gut" },
+            { en: "biscuit", de: "Keks" },
+            { en: "under", de: "unter" },
+            { en: "sister", de: "Schwester" },
+            { en: "little", de: "klein" },
+            { en: "brother", de: "Bruder" },
+            { en: "father", de: "Vater" },
+            { en: "English", de: "englisch; Englisch; aus England; Engländer/-in" },
+            { en: "mother", de: "Mutter" },
+            { en: "cousin", de: "Cousin/Cousine" },
+            { en: "… is an only child", de: "ist ein Einzelkind" },
+            { en: "like", de: "wie" },
+            { en: "dad", de: "Papa; Vati" },
+            { en: "always", de: "immer; ständig" },
+            { en: "easy", de: "einfach; leicht" },
+            { en: "our", de: "unser/-e" },
+            { en: "uncle", de: "Onkel" },
+            { en: "aunt", de: "Tante" },
+            { en: "grandad", de: "Opa; Opi" },
+            { en: "grandma", de: "Oma; Omi" },
+            { en: "Tell me about …", de: "Erzähle/Erzählt mir von …" },
+            { en: "her", de: "ihr/-e; sie" },
+            { en: "guinea pig", de: "Meerschweinchen" },
+            { en: "quiet", de: "still; ruhig; leise" },
+            { en: "small", de: "klein" },
+            { en: "child, children (pl)", de: "Kind" },
+            { en: "boring", de: "langweilig" },
+            { en: "lucky number", de: "Glückszahl" },
+            { en: "problem", de: "Problem; Schwierigkeit" },
+            { en: "part", de: "Teil; Stadtteil" },
+            { en: "end", de: "Ende; Schluss" },
+            { en: "long", de: "lang" },
+            { en: "road", de: "Straße" },
+            { en: "garden", de: "Garten" },
+            { en: "in front of", de: "vor" },
+            { en: "behind", de: "hinter" },
+            { en: "only", de: "erst; bloß; nur" },
+            { en: "Mr", de: "Herr (Anrede)" },
+            { en: "now", de: "jetzt; nun" },
+            { en: "there's (= there is)", de: "es gibt" },
+            { en: "car", de: "Auto" },
+            { en: "everywhere", de: "überall" },
+            { en: "again", de: "wieder; noch einmal; noch mal" },
+            { en: "Look!", de: "Schau/Schaut mal!" },
+            { en: "floor", de: "Fußboden" },
+            { en: "next to", de: "neben" },
+            { en: "thing", de: "Ding; Sache" },
+            { en: "to listen (to)", de: "zuhören; anhören" },
+            { en: "idea", de: "Idee; Einfall" },
+            { en: "loft", de: "Dachboden" },
+            { en: "own", de: "eigene/-r/-s" },
+            { en: "toy", de: "Spielzeug" },
+            { en: "fantasy", de: "Fantasie; Traum-" },
+            { en: "play", de: "spielen" },
+            { en: "when", de: "wenn; wann; als" },
+            { en: "to see", de: "sehen" },
+            { en: "to want (to)", de: "wollen; mögen" },
+            { en: "very", de: "sehr" },
+            { en: "happy", de: "glücklich; froh; fröhlich" },
+            { en: "at", de: "in; auf; bei" },
+            { en: "to", de: "an" },
+            { en: "cheese", de: "Käse" },
+            { en: "fridge", de: "Kühlschrank" },
+            { en: "their", de: "ihr/-e (Pl.)" },
+            { en: "can", de: "können; dürfen" },
+            { en: "Thanks", de: "Danke." },
+            { en: "home", de: "Zuhause; Heim" },
+            { en: "music", de: "Musik" },
+            { en: "near", de: "nahe; in der Nähe von" },
+            { en: "busy", de: "belebt; beschäftigt" },
+            { en: "centre", de: "Zentrum; Center" },
+            { en: "Don't worry!", de: "Keine Sorge!" },
+            { en: "or", de: "oder" },
+            { en: "address", de: "Adresse" },
+            { en: "wall", de: "Wand; Mauer" },
+            { en: "newspaper", de: "Zeitung" },
+            { en: "people (pl)", de: "Leute; Menschen" },
+            { en: "so", de: "so; also" },
+            { en: "clothes (pl)", de: "Kleider; Kleidung" },
+            { en: "lots (of)", de: "viel/-e; jede Menge" },
+            { en: "with me", de: "mit mir; bei mir" },
+            { en: "from … to", de: "von … bis" },
+            { en: "pet", de: "Haustier" },
+            { en: "model", de: "Modell; Tonmodell; Model" },
+            { en: "Who … for?", de: "Für wen …?" },
+            { en: "to explore", de: "auf Entdeckungsreise gehen; sich umschauen; erkunden; erforschen" },
+            { en: "best", de: "beste/-r/-s" },
+            { en: "maybe", de: "vielleicht" },
+            { en: "after", de: "nach (zeitlich)" },
+            { en: "visit", de: "Besuch" },
+            { en: "outside", de: "nach draußen; draußen; außerhalb (von)" },
+            { en: "awful", de: "schrecklich; furchtbar" },
+            { en: "sentence", de: "Satz" },
+            { en: "picture", de: "Bild; Foto" },
+            { en: "right", de: "richtig; korrekt" },
+            { en: "ending", de: "Ende; Schluss (einer Geschichte)" },
+            { en: "around the house", de: "rund ums Haus; ums Haus herum" },
+            { en: "What about …?", de: "Was ist mit…?; Wie wär's mit …?" },
+            { en: "hair straightener", de: "Haarglätter" },
+            { en: "magazine", de: "Zeitschrift" },
+            { en: "book", de: "Buch" },
+            { en: "radio", de: "Radio" },
+            { en: "fast", de: "schnell" },
+            { en: "interesting", de: "interessant" },
+            { en: "exciting", de: "spannend; aufregend" },
+            { en: "day", de: "Tag" },
+            { en: "skates (pl)", de: "Inlineskates; Rollschuhe; Schlittschuhe" },
+            { en: "can't", de: "kann nicht; können nicht; darf nicht; dürfen nicht" },
+            { en: "to meet", de: "treffen; sich treffen" },
+            { en: "to show", de: "zeigen" },
+            { en: "game", de: "Spiel" },
+            { en: "to be into", de: "mögen; stehen auf" },
+            { en: "to try", de: "versuchen; probieren" },
+            { en: "I'm sorry!", de: "Tut mir leid!" },
+            { en: "I'm fine.", de: "Mir geht's gut." },
+            { en: "cute", de: "niedlich; süß" },
+            { en: "lucky charm", de: "Glücksbringer; Talisman" },
+            { en: "text (message)", de: "SMS; Kurznachricht" },
+            { en: "shirt", de: "Hemd; Shirt" },
+            { en: "wrong", de: "falsch" },
+            { en: "to do", de: "machen; tun" },
+            { en: "to swim", de: "schwimmen" },
+            { en: "to read", de: "lesen" },
+            { en: "to skate", de: "Inlineskates fahren; Schlittschuh laufen" },
+            { en: "to cross", de: "überqueren; kreuzen" },
+            { en: "traffic light", de: "Ampel" },
+            { en: "loud", de: "laut" },
+            { en: "bus", de: "Bus" },
+            { en: "to cycle", de: "Fahrrad fahren" },
+            { en: "pavement", de: "Bürgersteig" },
+            { en: "to warn", de: "warnen" },
+            { en: "bell", de: "Glocke; Klingel" },
+            { en: "without", de: "ohne" },
+            { en: "light", de: "Licht; Lampe" },
+            { en: "free time (no pl)", de: "Freizeit" },
+            { en: "to draw", de: "zeichnen" },
+            { en: "to paint", de: "anmalen; malen" },
+            { en: "piano", de: "Klavier; Piano" },
+            { en: "to take photos", de: "fotografieren; Fotos machen" },
+            { en: "to watch TV", de: "fernsehen" },
+            { en: "to watch (sth)", de: "beobachten; (sich) ansehen; zuschauen; auf etw. achten" },
+            { en: "card", de: "Karte; Spielkarte" },
+            { en: "reading", de: "Lesen" },
+            { en: "plan", de: "Plan; Entwurf" },
+            { en: "to be lucky", de: "Glück haben" },
+            { en: "to find", de: "finden; herausfinden" },
+            // Unit 2
+            { en: "planner", de: "Handbuch; Kalender" },
+            { en: "rule", de: "Regel" },
+            { en: "lunch", de: "Mittagessen" },
+            { en: "cafeteria", de: "Cafeteria" },
+            { en: "money", de: "Geld" },
+            { en: "machine", de: "Automat; Maschine; Apparat; Gerät" },
+            { en: "to pay (for)", de: "bezahlen" },
+            { en: "finger", de: "Finger" },
+            { en: "art", de: "Kunst; Kunstunterricht" },
+            { en: "to buy", de: "kaufen" },
+            { en: "sweets (pl)", de: "Süßigkeiten; Bonbons" },
+            { en: "shop", de: "Geschäft; Laden" },
+            { en: "pen", de: "Füller" },
+            { en: "pencil", de: "Bleistift; Buntstift" },
+            { en: "pencil case", de: "Federmäppchen; Mäppchen" },
+            { en: "exercise book", de: "Übungsheft" },
+            { en: "ruler", de: "Lineal" },
+            { en: "rubber", de: "Radiergummi" },
+            { en: "uniform", de: "Uniform" },
+            { en: "recording studio", de: "Aufnahmestudio; Tonstudio" },
+            { en: "classroom", de: "Klassenzimmer" },
+            { en: "to have got", de: "besitzen; haben" },
+            { en: "question", de: "Frage" },
+            { en: "an", de: "ein/-e" },
+            { en: "test", de: "Test; Klassenarbeit; Prüfung" },
+            { en: "today", de: "heute; heutzutage" },
+            { en: "schoolbag", de: "Schultasche" },
+            { en: "tutor", de: "Klassenlehrer/-in" },
+            { en: "tutor group", de: "Klasse (in einer englischen Schule)" },
+            { en: "Good morning.", de: "Guten Morgen." },
+            { en: "everyone", de: "jeder; alle" },
+            { en: "to call", de: "nennen" },
+            { en: "him", de: "ihn; ihm" },
+            { en: "no", de: "kein/-e" },
+            { en: "to sing", de: "singen" },
+            { en: "to dance", de: "tanzen" },
+            { en: "project", de: "Projekt" },
+            { en: "well", de: "tja; nun" },
+            { en: "something", de: "etwas" },
+            { en: "Wait and see!", de: "Warte ab!" },
+            { en: "to look at", de: "anschauen; ansehen" },
+            { en: "silly", de: "dumm; doof; albern" },
+            { en: "teacher", de: "Lehrer/-in" },
+            { en: "office", de: "Büro" },
+            { en: "job", de: "Arbeit; Aufgabe; Job" },
+            { en: "grandparents (pl)", de: "Großeltern" },
+            { en: "talent show", de: "Talentwettbewerb" },
+            { en: "to text", de: "eine SMS schicken" },
+            { en: "food", de: "Essen; Lebensmittel" },
+            { en: "carrot", de: "Karotte; Möhre" },
+            { en: "pudding", de: "Pudding; Nachtisch" },
+            { en: "restaurant", de: "Restaurant; Gaststätte" },
+            { en: "to help", de: "helfen" },
+            { en: "pocket money", de: "Taschengeld" },
+            { en: "to stare", de: "starren; anstarren" },
+            { en: "rude", de: "unhöflich; unverschämt" },
+            { en: "funny", de: "lustig; witzig" },
+            { en: "to sit", de: "sitzen" },
+            { en: "to use", de: "benutzen; verwenden; gebrauchen" },
+            { en: "lunch break", de: "Mittagspause" },
+            { en: "them", de: "sie (Pl.); ihnen" },
+            { en: "more", de: "mehr; weitere" },
+            { en: "to forget", de: "vergessen" },
+            { en: "knife, knives (pl)", de: "Messer" },
+            { en: "fork", de: "Gabel" },
+            { en: "spoon", de: "Löffel" },
+            { en: "to run", de: "rennen; laufen" },
+            { en: "to shout", de: "schreien; rufen" },
+            { en: "polite", de: "höflich" },
+            { en: "to put away", de: "wegstellen; weglegen" },
+            { en: "tray", de: "Tablett" },
+            { en: "to be late", de: "zu spät dran sein; zu spät kommen" },
+            { en: "to wear", de: "anhaben; tragen (Kleidung)" },
+            { en: "to bring", de: "bringen; mitbringen" },
+            { en: "building", de: "Gebäude" },
+            { en: "homework (no pl)", de: "Hausaufgabe(n)" },
+            { en: "into", de: "in; in... hinein" },
+            { en: "alone", de: "allein; ohne fremde Hilfe" },
+            { en: "dream", de: "Traum; Traum-" },
+            { en: "lesson", de: "Unterrichtsstunde; Schulstunde; Unterricht" },
+            { en: "far away", de: "weit weg" },
+            { en: "these", de: "diese (hier)" },
+            { en: "those", de: "diese dort; jene" },
+            { en: "over there", de: "da drüben; dort drüben; nach dort drüben" },
+            { en: "to think", de: "denken; nachdenken; glauben" },
+            { en: "best", de: "am besten" },
+            { en: "because", de: "weil; da" },
+            { en: "to play a trick (on)", de: "einen Streich spielen" },
+            { en: "week", de: "Woche" },
+            { en: "before", de: "vor (zeitlich); bevor" },
+            { en: "to work", de: "arbeiten" },
+            { en: "group", de: "Gruppe; Klasse" },
+            { en: "in pairs", de: "zu zweit; mit einem Partner/einer Partnerin" },
+            { en: "audio", de: "Audio-; Hör-" },
+            { en: "presentation", de: "Präsentation; Vortrag" },
+            { en: "recording", de: "Aufnahme; Aufzeichnung" },
+            { en: "poem", de: "Gedicht" },
+            { en: "sure", de: "sicher" },
+            { en: "voice", de: "Stimme" },
+            { en: "next", de: "nächste/-r/-s; der/die Nächste(n)" },
+            { en: "jealous", de: "eifersüchtig; neidisch" },
+            { en: "already", de: "schon; bereits" },
+            { en: "popular", de: "beliebt; populär" },
+            { en: "king", de: "König" },
+            { en: "Come on!", de: "Komm schon!; Komm jetzt!" },
+            { en: "a few", de: "ein paar; wenige; einige" },
+            { en: "minute", de: "Minute" },
+            { en: "later", de: "später" },
+            { en: "I hear …", de: "Ich habe gehört, dass …" },
+            { en: "to hear", de: "hören" },
+            { en: "just", de: "gerade; nur; einfach" },
+            { en: "joke", de: "Witz" },
+            { en: "really", de: "wirklich" },
+            { en: "much", de: "viel" },
+            { en: "time", de: "Zeit" },
+            { en: "to know", de: "kennen; wissen" },
+            { en: "to say", de: "sagen; aufsagen; sprechen" },
+            { en: "star", de: "Star; Stern" },
+            { en: "Get out of his way.", de: "Geh ihm aus dem Weg." },
+            { en: "stage", de: "Bühne" },
+            { en: "net", de: "Netz" },
+            { en: "wanna (= want to) (infml)", de: "will/wollen" },
+            { en: "to follow", de: "folgen; befolgen; hinterhergehen" },
+            { en: "one day", de: "eines Tages" },
+            { en: "news (sg)", de: "Nachricht(en); Neuigkeit(en)" },
+            { en: "It's your turn.", de: "Du bist dran." },
+            { en: "Stop it!", de: "Mach/Macht das aus!; Hör/Hört auf!" },
+            { en: "classmate", de: "Klassenkamerad/-in; Mitschüler/-in" },
+            { en: "to laugh", de: "lachen" },
+            { en: "angry", de: "wütend; zornig; verärgert; böse" },
+            { en: "to give", de: "geben; schenken" },
+            { en: "to make trouble", de: "Ärger machen; in Schwierigkeiten bringen" },
+            { en: "to make", de: "machen; tun; bilden" },
+            { en: "to make friends", de: "Freundschaft schließen" },
+            { en: "club", de: "Klub; Verein; AG" },
+            { en: "to be good at", de: "gut sein in" },
+            { en: "to have a look (at)", de: "anschauen" },
+            { en: "chewing gum", de: "Kaugummi" },
+            { en: "mine", de: "mein/-er/-e/-es" },
+            { en: "different", de: "anders; unterschiedlich; verschieden" },
+            { en: "to write", de: "schreiben" },
+            { en: "sweet", de: "Süß" },
+            { en: "to put (in)", de: "(hinein)setzen; (hinein)stellen; (hinein)legen" },
+            { en: "box", de: "Box; Kasten; Schachtel; Kiste" },
+            // Unit 3
+            { en: "a.m.", de: "vormittags (Uhrzeit); morgens (Uhrzeit)" },
+            { en: "p.m.", de: "nachmittags (Uhrzeit); abends (Uhrzeit)" },
+            { en: "still", de: "noch; immer noch" },
+            { en: "dog-tired", de: "hundemüde" },
+            { en: "tired", de: "müde" },
+            { en: "Time to get up!", de: "Es ist Zeit aufzustehen!" },
+            { en: "I'm on my way …", de: "Ich bin auf dem Weg …; Ich bin unterwegs…" },
+            { en: "usually", de: "normalerweise; gewöhnlich; meistens" },
+            { en: "by (bike)", de: "mit (dem Fahrrad)" },
+            { en: "to sit down", de: "sich hinsetzen; sich setzen" },
+            { en: "to have breakfast", de: "frühstücken" },
+            { en: "often", de: "oft; häufig" },
+            { en: "to start", de: "anfangen; beginnen; starten" },
+            { en: "too", de: "zu" },
+            { en: "early", de: "früh" },
+            { en: "to practise", de: "üben; trainieren" },
+            { en: "saxophone", de: "Saxofon" },
+            { en: "sometimes", de: "manchmal" },
+            { en: "story, stories (pl)", de: "Story; Geschichte; Erzählung" },
+            { en: "at 7:15", de: "um Viertel nach sieben" },
+            { en: "What's the time?", de: "Wie spät ist es?; Wie viel Uhr ist es?" },
+            { en: "subject", de: "Betreff in E-Mails etc.; Thema" },
+            { en: "never", de: "nie; niemals" },
+            { en: "every", de: "jede/-r/-s" },
+            { en: "morning", de: "Morgen; Vormittag" },
+            { en: "stepmum", de: "Stiefmutter" },
+            { en: "then", de: "dann; danach" },
+            { en: "if", de: "wenn; falls; ob" },
+            { en: "till", de: "bis" },
+            { en: "after that", de: "danach" },
+            { en: "on Mondays", de: "montags" },
+            { en: "netball", de: "Korbball" },
+            { en: "other", de: "anders; andere/-r/-s; weitere" },
+            { en: "home", de: "nach Hause" },
+            { en: "right away", de: "sofort; gleich" },
+            { en: "to tidy (a room)", de: "aufräumen; in Ordnung bringen" },
+            { en: "in the evenings", de: "abends" },
+            { en: "evening", de: "Abend" },
+            { en: "afternoon", de: "Nachmittag" },
+            { en: "whole", de: "ganz" },
+            { en: "greeting", de: "Gruß" },
+            { en: "e.g. (= for example)", de: "z.B. (zum Beispiel)" },
+            { en: "bye", de: "tschüss" },
+            { en: "abbreviation", de: "Abkürzung" },
+            { en: "information (no pl)", de: "Information; Informationen" },
+            { en: "emoji", de: "Emoji" },
+            { en: "swimming", de: "Schwimmen" },
+            { en: "to organise", de: "organisieren" },
+            { en: "break", de: "Frühlingsferien" },
+            { en: "song", de: "Song; Lied" },
+            { en: "coach", de: "Trainer/-in" },
+            { en: "dinner", de: "Abendessen" },
+            { en: "move", de: "Tanzschritt" },
+            { en: "talk", de: "sprechen über; erzählen von" },
+            { en: "to go to bed", de: "ins Bett gehen" },
+            { en: "last", de: "letzte/-r/-s" },
+            { en: "She gets on my nerves.", de: "Sie geht mir auf die Nerven." },
+            { en: "weekday", de: "Wochentag" },
+            { en: "singing", de: "Gesang; Singen" },
+            { en: "dancing", de: "Tanz" },
+            { en: "spring", de: "Frühlingsferien" },
+            { en: "dance", de: "Tanz" },
+            { en: "to about", de: "sprechen über" },
+            { en: "granny", de: "Oma; Omi" },
+            { en: "to look after", de: "aufpassen auf; hüten; sich kümmern um" },
+            { en: "to look", de: "schauen; sehen; aussehen" },
+            { en: "to ask", de: "fragen; bitten" },
+            { en: "to talk", de: "sprechen; reden" },
+            { en: "together", de: "zusammen; miteinander; gemeinsam" },
+            { en: "to chat", de: "plaudern; chatten (sich online unterhalten)" },
+            { en: "to explain", de: "erklären" },
+            { en: "even", de: "sogar; selbst" },
+            { en: "friendly", de: "freundlich; nett" },
+            { en: "to leave", de: "verlassen; lassen; abfahren" },
+            { en: "work", de: "Arbeit" },
+            { en: "vet", de: "Tierarzt/Tierärztin" },
+            { en: "neighbour", de: "Nachbar/-in" },
+            { en: "to take", de: "nehmen; mitnehmen; wegnehmen; bringen; mitbringen" },
+            { en: "surgery", de: "Arztpraxis; Praxis; Praxisräume" },
+            { en: "why", de: "warum" },
+            { en: "surprise", de: "Überraschung" },
+            { en: "to sleep", de: "schlafen" },
+            { en: "cooking", de: "Kochen" },
+            { en: "routine", de: "Routine" },
+            { en: "speaker", de: "Redner/-in; Sprecher/-in" },
+            { en: "to be about", de: "sich handeln um; handeln von" },
+            { en: "clever", de: "schlau; klug" },
+            { en: "owner", de: "Besitzer/-in" },
+            { en: "clear", de: "klar; deutlich" },
+            { en: "No way!", de: "Auf keinen Fall!; keineswegs" },
+            { en: "to wash", de: "waschen; sich waschen" },
+            { en: "face", de: "Gesicht" },
+            { en: "goodbye", de: "auf Wiedersehen" },
+            { en: "to bark", de: "bellen" },
+            { en: "to be scared (of)", de: "Angst haben (vor)" },
+            { en: "to run away", de: "wegrennen" },
+            { en: "to have fun", de: "Spaß haben; sich amüsieren" },
+            { en: "to learn", de: "lernen" },
+            { en: "to listen for", de: "horchen auf" },
+            { en: "word", de: "Wort" },
+            { en: "Sit!", de: "Sitz! (Befehl für Hunde); Platz! (Befehl für Hunde)" },
+            { en: "around", de: "um... herum; umher" },
+            { en: "to chase", de: "jagen; nachjagen" },
+            { en: "tail", de: "Schwanz; Schweif" },
+            { en: "You've got a lot to learn!", de: "Du musst (noch) viel lernen." },
+            { en: "a lot", de: "viel; oft" },
+            { en: "picnic", de: "Picknick" },
+            { en: "drink", de: "Getränk" },
+            { en: "to fall over", de: "hinfallen; umkippen" },
+            { en: "to throw (at)", de: "werfen (nach)" },
+            { en: "to fall asleep", de: "einschlafen" },
+            { en: "heading", de: "Überschrift; Titel" },
+            { en: "3D", de: "3D-" },
+            { en: "surprising", de: "überraschend" },
+            { en: "weather", de: "Wetter" },
+            { en: "transport", de: "Verkehrsmittel; Transport" },
+            { en: "map", de: "Stadtplan; Landkarte" },
+            { en: "studying", de: "Lernen; Studieren" },
+            { en: "first", de: "zuerst; als Erstes" },
+            // Unit 4
+            { en: "fun", de: "lustig; witzig; fröhlich" },
+            { en: "museum", de: "Museum" },
+            { en: "to cost", de: "kosten" },
+            { en: "ship", de: "Schiff" },
+            { en: "over", de: "hinüber; über" },
+            { en: "foot, feet (pl)", de: "Fuß" },
+            { en: "east", de: "Osten; Ost-" },
+            { en: "west", de: "Westen; West-" },
+            { en: "pier", de: "Pier; Hafendamm" },
+            { en: "tunnel", de: "Tunnel" },
+            { en: "river", de: "Fluss" },
+            { en: "farm", de: "Farm; Bauernhof" },
+            { en: "across", de: "auf der anderen Seite von; über; hinüber; herüber; quer durch" },
+            { en: "city", de: "Stadt; Großstadt" },
+            { en: "free", de: "frei; kostenlos" },
+            { en: "water slide", de: "Wasserrutsche" },
+            { en: "leisure centre", de: "Freizeitzentrum" },
+            { en: "activity", de: "Aktivität" },
+            { en: "tour", de: "Tour; Fahrt; Rundgang" },
+            { en: "through", de: "durch" },
+            { en: "at the weekend", de: "am Wochenende" },
+            { en: "special", de: "besonders; speziell" },
+            { en: "What time?", de: "Um wie viel Uhr?" },
+            { en: "fine", de: "gut; in Ordnung; schön" },
+            { en: "See you!", de: "Bis dann!; Bis …" },
+            { en: "to happen", de: "geschehen; passieren" },
+            { en: "to close", de: "schließen; zumachen" },
+            { en: "enough", de: "genug; genügend" },
+            { en: "to spell", de: "buchstabieren" },
+            { en: "at last", de: "endlich; schließlich" },
+            { en: "half-sister", de: "Halbschwester" },
+            { en: "to get to", de: "kommen zu; kommen nach; erreichen" },
+            { en: "us", de: "uns" },
+            { en: "to answer", de: "antworten; beantworten" },
+            { en: "bad", de: "schlecht; böse; schlimm (ugs.)" },
+            { en: "to keep your fingers crossed", de: "die Daumen drücken" },
+            { en: "spider", de: "Spinne" },
+            { en: "to stay", de: "bleiben" },
+            { en: "brochure", de: "Broschüre; Prospekt" },
+            { en: "to get", de: "holen; bringen; bekommen" },
+            { en: "Dear …", de: "Lieber …; Liebe …" },
+            { en: "visitor", de: "Besucher/-in" },
+            { en: "to sell", de: "verkaufen" },
+            { en: "perfect", de: "perfekt; vollkommen" },
+            { en: "to talk to", de: "reden mit" },
+            { en: "difficult", de: "schwierig" },
+            { en: "German", de: "deutsch; Deutsch; aus Deutschland; Deutsche/-r" },
+            { en: "to say hello (to)", de: "grüßen" },
+            { en: "to mean", de: "bedeuten; meinen" },
+            { en: "winner", de: "Gewinner/-in; Sieger/-in" },
+            { en: "tourist", de: "Tourist/-in" },
+            { en: "line", de: "Zeile; Linie" },
+            { en: "to turn (into)", de: "einbiegen; abbiegen" },
+            { en: "left", de: "(nach) links; linke/-r/-s" },
+            { en: "right", de: "(nach) rechts; rechte/-r/-s" },
+            { en: "straight on", de: "geradeaus" },
+            { en: "I don't know!", de: "Ich weiß (es) nicht!" },
+            { en: "stop", de: "Halt; Stopp" },
+            { en: "tourist information centre", de: "Touristeninformation" },
+            { en: "market", de: "Markt" },
+            { en: "to go down", de: "entlanggehen; hinuntergehen; nach unten gehen" },
+            { en: "past", de: "vorbei (an); vorüber (an)" },
+            { en: "opposite", de: "gegenüber; auf der anderen Seite von" },
+            { en: "café", de: "Café" },
+            { en: "theatre", de: "Theater" },
+            { en: "shopping", de: "Einkaufen; Einkäufe" },
+            { en: "cinema", de: "Kino" },
+            { en: "church", de: "Kirche" },
+            { en: "survey", de: "Umfrage; Studie" },
+            { en: "to think of", de: "halten von; denken über" },
+            { en: "help", de: "Hilfe" },
+            { en: "some", de: "einige; ein paar; etwas" },
+            { en: "captain", de: "Kapitän/-in; Mannschaftsführer/-in" },
+            { en: "cabin boy", de: "Schiffsjunge" },
+            { en: "sea", de: "Meer" },
+            { en: "sound", de: "Ton; Geräusch; Klang" },
+            { en: "aboard", de: "an Bord" },
+            { en: "sailor", de: "Seemann; Matrose" },
+            { en: "tea", de: "Tee" },
+            { en: "land", de: "Land" },
+            { en: "storm", de: "Sturm" },
+            { en: "wave", de: "Welle" },
+            { en: "wheel", de: "Rad; Steuerrad; Steuer" },
+            { en: "to reef the sails", de: "die Segel einholen" },
+            { en: "to climb", de: "klettern; besteigen; steigen" },
+            { en: "rigging", de: "Takelage" },
+            { en: "dangerous", de: "gefährlich" },
+            { en: "slow", de: "langsam" },
+            { en: "brave", de: "mutig; tapfer" },
+            { en: "to come down", de: "herunterkommen" },
+            { en: "mate", de: "Schiffsoffizier; Maat" },
+            { en: "to drink", de: "trinken" },
+            { en: "back", de: "zurück" },
+            { en: "just then", de: "genau in dem Moment" },
+            { en: "to hit", de: "schlagen; treffen" },
+            { en: "to fall", de: "fallen; hinfallen" },
+            { en: "to save", de: "retten; bergen" },
+            { en: "lifebuoy", de: "Rettungsring" },
+            { en: "lifeboat", de: "Rettungsboot" },
+            { en: "to jump", de: "springen" },
+            { en: "that's how", de: "so" },
+            { en: "to find out", de: "herausfinden" },
+            { en: "to be wrong", de: "unrecht haben; sich irren" },
+            { en: "to be sorry", de: "leid tun" },
+            { en: "to make", de: "hier: ergeben" },
+            { en: "very much", de: "sehr" },
+            { en: "to remember", de: "sich erinnern (an); sich merken; denken an" },
+            { en: "trip", de: "Trip; Reise; Ausflug; Fahrt" },
+            { en: "geocaching", de: "Geocaching" },
+            { en: "GPS device", de: "GPS-Gerät" },
+            { en: "cache", de: "Versteck; geheimes Lager" },
+            { en: "out", de: "außerhalb; heraus; hinaus; nach draußen" },
+            { en: "coin", de: "Münze" },
+            { en: "first aid kit", de: "Erste-Hilfe-Kasten" },
+            { en: "I'd like to … (= I would like to)", de: "Ich möchte …; Ich würde gern …" },
+            { en: "to fall off", de: "herunterfallen; hinunterfallen" },
+            { en: "to need to (do)", de: "(tun) müssen" },
+            // Unit 5
+            { en: "to go shopping", de: "einkaufen gehen" },
+            { en: "bottle", de: "Flasche" },
+            { en: "That's …", de: "Das macht …" },
+            { en: "pound (£)", de: "Pfund (brit. Währungseinheit)" },
+            { en: "Anything else?", de: "Sonst noch etwas?" },
+            { en: "can", de: "Dose; Büchse" },
+            { en: "coke", de: "Cola" },
+            { en: "packet", de: "Päckchen; Paket; Packung" },
+            { en: "Here you are.", de: "Bitte schön." },
+            { en: "cheap", de: "billig; preiswert" },
+            { en: "How much (is/are) …?", de: "Wie viel (kostet/kosten) …?" },
+            { en: "It's …/They're …", de: "Es kostet …/Sie kosten" },
+            { en: "expensive", de: "teuer" },
+            { en: "top", de: "Spitzen-; oberste/-r/-s; beste/-r/-s" },
+            { en: "quality", de: "Qualität; Eigenschaft" },
+            { en: "I'm looking for …", de: "Ich suche nach …" },
+            { en: "present", de: "Geschenk" },
+            { en: "bracelet", de: "Armband" },
+            { en: "special offer", de: "Sonderangebot" },
+            { en: "fashion", de: "Mode" },
+            { en: "snack bar", de: "Snackbar; Imbissstube" },
+            { en: "jewellery", de: "Schmuck" },
+            { en: "price", de: "Preis" },
+            { en: "penny, pence (pl)", de: "Penny; Pence (brit. Währungseinheit)" },
+            { en: "euro", de: "Euro (Währung)" },
+            { en: "cent", de: "Cent (Währung)" },
+            { en: "to spend", de: "ausgeben (Geld)" },
+            { en: "piggy bank", de: "Sparbüchse; Spardose; Sparschwein" },
+            { en: "next", de: "als Nächstes" },
+            { en: "glass", de: "Glas" },
+            { en: "orange", de: "Orange" },
+            { en: "juice", de: "Saft" },
+            { en: "at the moment", de: "im Moment; gerade" },
+            { en: "sad", de: "traurig" },
+            { en: "like that", de: "so" },
+            { en: "to earn", de: "verdienen" },
+            { en: "flea market", de: "Flohmarkt" },
+            { en: "community centre", de: "Gemeindezentrum" },
+            { en: "year", de: "Jahr" },
+            { en: "to add", de: "hinzufügen; ergänzen; addieren" },
+            { en: "to make money", de: "Geld verdienen" },
+            { en: "charity (no pl)", de: "Wohltätigkeitsverein; wohltätige Zwecke; Wohlfahrt" },
+            { en: "DVD", de: "DVD" },
+            { en: "to clear out", de: "ausräumen; entrümpeln" },
+            { en: "garage", de: "Garage" },
+            { en: "to feel", de: "fühlen; sich fühlen" },
+            { en: "hopeful", de: "hoffnungsvoll" },
+            { en: "pair", de: "Paar" },
+            { en: "to ring", de: "klingeln; läuten" },
+            { en: "advice (no pl)", de: "Rat; Ratschlag" },
+            { en: "should", de: "sollte/-st/-t/-n" },
+            { en: "full (of)", de: "voll (mit/von)" },
+            { en: "to throw away", de: "wegwerfen" },
+            { en: "coffee", de: "Kaffee" },
+            { en: "charity shop", de: "Second-Hand-Laden (für wohltätige Zwecke)" },
+            { en: "any", de: "irgendein/-e/-er; irgendwelche" },
+            { en: "That's what friends are for.", de: "Dafür sind Freunde da." },
+            { en: "must", de: "müssen" },
+            { en: "to be worth", de: "wert sein" },
+            { en: "How many …?", de: "Wie viele…?" },
+            { en: "about", de: "ungefähr; circa; etwa" },
+            { en: "stuff (no pl)", de: "Zeug" },
+            { en: "not … any", de: "kein/-e/-en" },
+            { en: "a lot of", de: "viel/-e; eine Menge" },
+            { en: "a couple of", de: "ein paar" },
+            { en: "everything", de: "alles" },
+            { en: "to ask for", de: "fragen nach; bitten um" },
+            { en: "bargain", de: "Schnäppchen" },
+            { en: "a little", de: "ein wenig; etwas" },
+            { en: "in the end", de: "schließlich; zum Schluss" },
+            { en: "size", de: "Größe; Kleidergröße" },
+            { en: "another", de: "ein/-e andere/-r/-s; noch ein/-e" },
+            { en: "to take", de: "dauern (Zeit) brauchen" },
+            { en: "to call", de: "anrufen; rufen" },
+            { en: "sunny", de: "sonnig" },
+            { en: "to check", de: "überprüfen; prüfen; kontrollieren" },
+            { en: "to have a break", de: "eine Pause machen" },
+            { en: "sugar", de: "Zucker" },
+            { en: "milk", de: "Milch" },
+            { en: "disgusting", de: "ekelhaft; widerlich" },
+            { en: "fruit", de: "Frucht; Obst" },
+            { en: "apple", de: "Apfel" },
+            { en: "would like", de: "würde/-st/-n/-t gern; hätte/-st/-n/-t gern" },
+            { en: "crisp", de: "Kartoffelchip" },
+            { en: "not any more", de: "nicht mehr" },
+            { en: "buyer", de: "Käufer/-in" },
+            { en: "seller", de: "Verkäufer/-in (auf einem Flohmarkt)" },
+            { en: "chips (pl)", de: "Pommes frites" },
+            { en: "voice message", de: "Sprachnachricht" },
+            { en: "phone call", de: "Anruf; Telefonanruf" },
+            { en: "to speak (to)", de: "sprechen (mit)" },
+            { en: "tomorrow", de: "morgen" },
+            { en: "left", de: "übrig" },
+            { en: "hour", de: "Stunde" },
+            { en: "to take a message", de: "eine Nachricht entgegennehmen; jmdm. etw. ausrichten" },
+            { en: "lucky…", de: "der/die Glückliche" },
+            { en: "wine", de: "Wein" },
+            { en: "raffle", de: "Tombola" },
+            { en: "prize", de: "Preis; Gewinn" },
+            { en: "ticket", de: "Los; Ticket; Eintrittskarte" },
+            { en: "each", de: "pro Person; pro Stück" },
+            { en: "to hope", de: "hoffen" },
+            { en: "to pull", de: "ziehen" },
+            { en: "piece", de: "Stück" },
+            { en: "broken", de: "gebrochen; kaputt" },
+            { en: "horrified", de: "entsetzt" },
+            { en: "rubbish", de: "Müll; Gerümpel" },
+            { en: "as … as", de: "so… wie" },
+            { en: "not … anything", de: "nichts" },
+            { en: "more … than", de: "mehr … als" },
+            { en: "half", de: "halb" },
+            { en: "sovereign", de: "historische Münze" },
+            { en: "head", de: "Kopf" },
+            { en: "to believe", de: "glauben" },
+            { en: "to hug", de: "umarmen" },
+            { en: "disappointed", de: "enttäuscht" },
+            { en: "helpful", de: "hilfsbereit; hilfreich" },
+            { en: "thankful", de: "dankbar" },
+            { en: "excited", de: "aufgeregt; begeistert" },
+            { en: "helpless", de: "hilflos" },
+            { en: "out and about", de: "unterwegs" },
+            { en: "post office", de: "Postamt" },
+            { en: "gift", de: "Geschenk" },
+            { en: "bus stop", de: "Bushaltestelle" },
+            { en: "Too bad!", de: "Zu dumm!; Schade!" },
+            { en: "tomato, tomatoes (pl)", de: "Tomate" },
+            { en: "yoghurt", de: "Joghurt" },
+            // Across Cultures & Extras
+            { en: "culture", de: "Kultur" },
+            { en: "quick", de: "schnell" },
+            { en: "contest", de: "Wettkampf; Wettbewerb" },
+            { en: "bacon", de: "Schinkenspeck; Speck" },
+            { en: "bread", de: "Brot" },
+            { en: "cake", de: "Kuchen; Torte" },
+            { en: "egg", de: "Ei" },
+            { en: "fish, fish (pl)", de: "Fisch" },
+            { en: "pie", de: "Kuchen; Pastete" },
+            { en: "strange", de: "fremd; seltsam; merkwürdig" },
+            { en: "cereal (no pl)", de: "Frühstückszerealie; Getreideprodukt (z. B. Cornflakes)" },
+            { en: "chocolate", de: "Schokolade" },
+            { en: "nut", de: "Nuss" },
+            { en: "healthy", de: "gesund" },
+            { en: "supermarket", de: "Supermarkt" },
+            { en: "to go together", de: "zueinander passen; zueinander gehören" },
+            { en: "baked beans (pl)", de: "weiße Bohnen in Tomatensoße" },
+            { en: "banana", de: "Banane" },
+            { en: "ready meal", de: "Fertiggericht" },
+            { en: "salad", de: "Salat" },
+            { en: "Indian", de: "Inder/-in; indisch" },
+            { en: "chicken tikka masala", de: "indisches Hühnchengericht" },
+            { en: "young", de: "jung" },
+            { en: "school holidays (pl)", de: "Schulferien" },
+            { en: "to relax", de: "sich entspannen; sich ausruhen; sich beruhigen" },
+            { en: "camp", de: "Camp; Lager" },
+            { en: "summer", de: "Sommer" },
+            { en: "to take part (in)", de: "teilnehmen (an)" },
+            { en: "to miss", de: "verpassen; versäumen" },
+            { en: "still", de: "dennoch" },
+            { en: "wakeboarding", de: "Wakeboarding" },
+            { en: "to teach", de: "unterrichten; lehren; beibringen" },
+            { en: "paddle boarding", de: "Stehpaddeln" },
+            { en: "future", de: "Zukunft" },
+            { en: "sign", de: "Zeichen; Schild" },
+            { en: "to spend", de: "verbringen (Zeit)" },
+            { en: "postcard", de: "Postkarte" },
+            { en: "date", de: "Datum" }
+        ];
+
         function loadVocabs() {
-            try { return JSON.parse(localStorage.getItem(VOCAB_STORAGE)) || []; } catch (e) { return []; }
+            try {
+                const stored = localStorage.getItem(VOCAB_STORAGE);
+                if (stored !== null) {
+                    const parsed = JSON.parse(stored);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        return parsed;
+                    }
+                }
+            } catch (e) {}
+            // Falls leer oder beim ersten Öffnen: feste Vokabelliste laden
+            return [...DEFAULT_VOCABS];
         }
         let vocabs = loadVocabs();
-        let videoStream = null;
+        let pendingPairs = [];
         let testState = { active: false, questions: [], currentIndex: 0, score: 0 };
+        let clearConfirmTimeout = null;
+        let clearConfirmArmed = false;
 
+        // ---------- Initialisierung ----------
         window.onload = function () {
             updateCounts();
             renderVocabList();
-            lucide.createIcons();
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('sw.js').catch(err => console.warn('SW:', err));
-            }
+            if (window.lucide) lucide.createIcons();
         };
 
         function updateCounts() {
@@ -326,12 +1156,23 @@
         }
 
         function saveToLocalStorage() {
-            try { localStorage.setItem(VOCAB_STORAGE, JSON.stringify(vocabs)); }
-            catch (e) { showToast('Speichern nicht möglich (Speicher voll?)'); }
+            try {
+                localStorage.setItem(VOCAB_STORAGE, JSON.stringify(vocabs));
+            } catch (e) {
+                showToast('Speichern nicht möglich (Speicher voll?)');
+            }
             updateCounts();
         }
 
-        // ---------- Tabs ----------
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').textContent = msg;
+            toast.classList.remove('hidden');
+            clearTimeout(window._toastTimer);
+            window._toastTimer = setTimeout(() => toast.classList.add('hidden'), 3200);
+        }
+
+        // ---------- Navigation / Tabs ----------
         function switchTab(tabId) {
             ['scan', 'list', 'test'].forEach(t => {
                 const view = document.getElementById(`view-${t}`);
@@ -346,17 +1187,32 @@
                 }
             });
             if (tabId === 'list') renderVocabList();
-            lucide.createIcons();
+            if (window.lucide) lucide.createIcons();
         }
 
-
-
-        // ---------- Foto → Text (Tesseract läuft lokal im Browser) ----------
-        function setOcrProgress(show, text, pct) {
-            document.getElementById('ocr-progress').classList.toggle('hidden', !show);
-            if (text) document.getElementById('ocr-status').textContent = text;
-            if (typeof pct === 'number') document.getElementById('ocr-bar').style.width = Math.round(pct * 100) + '%';
+        // ---------- Aussprache (Web Speech API) ----------
+        function speakText(text, lang = 'en-GB') {
+            if (!('speechSynthesis' in window)) {
+                showToast('Sprachausgabe wird von diesem Browser nicht unterstützt.');
+                return;
+            }
+            window.speechSynthesis.cancel();
+            const clean = text.replace(/…|\.{3}|\(.*?\)/g, '').split(';')[0].trim();
+            const utter = new SpeechSynthesisUtterance(clean);
+            utter.lang = lang;
+            utter.rate = 0.92;
+            window.speechSynthesis.speak(utter);
         }
+
+        function speakCurrentPrompt() {
+            const q = testState.questions[testState.currentIndex];
+            if (!q) return;
+            if (q.dir === 'en-de') speakText(q.en, 'en-GB');
+            else speakText(q.de, 'de-DE');
+        }
+
+        // ---------- Foto & Zuschneiden ----------
+        const cropState = { canvas: null, rect: null, start: null };
 
         function prepareImage(file, maxSide = 2000) {
             return new Promise((resolve, reject) => {
@@ -367,57 +1223,29 @@
                     const c = document.createElement('canvas');
                     c.width = Math.round(img.width * scale);
                     c.height = Math.round(img.height * scale);
-                    const ctx = c.getContext('2d');
-                    ctx.drawImage(img, 0, 0, c.width, c.height);
+                    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
                     URL.revokeObjectURL(url);
                     resolve(c);
                 };
-                img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Das Bild konnte nicht gelesen werden.')); };
+                img.onerror = () => {
+                    URL.revokeObjectURL(url);
+                    reject(new Error('Bild konnte nicht geladen werden.'));
+                };
                 img.src = url;
             });
         }
 
-        // Lautschrift [..] entfernen
-        function cleanPhonetics(s) {
-            return s.replace(/\[[^\]]*\]?/g, ' ').replace(/^[•·▪●!]+\s*/, '').replace(/\s{2,}/g, ' ').trim();
+        async function handlePhoto(event) {
+            const file = event.target.files?.[0];
+            event.target.value = '';
+            if (!file) return;
+            try {
+                const canvas = await prepareImage(file);
+                openCrop(canvas);
+            } catch (e) {
+                showToast(e.message);
+            }
         }
-
-        // Zeilen in Spalten-Abschnitte teilen und zu Wortpaaren "englisch | deutsch" machen.
-        // Abschnitte entstehen an großen Lücken und direkt nach einer Lautschrift-Klammer "]".
-        // Bei 3 Spalten (Wort | Übersetzung | Beispielsatz) zählen die ersten beiden.
-        function ocrLinesToText(data) {
-            const lines = data.lines || [];
-            if (!lines.length) return (data.text || '').trim();
-            const out = [];
-            lines.forEach(l => {
-                const ws = (l.words || [])
-                    .filter(w => w.text && w.text.trim() && !/^[|¦_\]\[]+$/.test(w.text.trim()))
-                    .sort((a, b) => a.bbox.x0 - b.bbox.x0);
-                if (ws.length === 0) return;
-                const hs = ws.map(w => w.bbox.y1 - w.bbox.y0).sort((a, b) => a - b);
-                const h = Math.max(8, hs[Math.floor(hs.length / 2)]);
-
-                let segs = [[ws[0].text.trim()]];
-                for (let i = 1; i < ws.length; i++) {
-                    const prevTxt = ws[i - 1].text.trim();
-                    const gap = ws[i].bbox.x0 - ws[i - 1].bbox.x1;
-                    if (gap > h * 1.3 || (/\]$/.test(prevTxt) && gap > h * 0.3)) segs.push([]);
-                    segs[segs.length - 1].push(ws[i].text.trim());
-                }
-                segs = segs.map(s => cleanPhonetics(s.join(' ')))
-                           .filter(s => s && !/^[\d\s.,:;!?-]+$/.test(s));   // leere Teile und reine Zahlen (große Farbzahlen) weg
-
-                if (segs.length === 1) { out.push(segs[0]); return; }          // Einzelzeile (z.B. durch Seitenumbruch)
-                if (segs.length === 2 || segs.length === 3) { out.push(segs[0] + ' | ' + segs[1]); return; }
-                if (segs.length >= 4) {
-                    for (let i = 0; i + 1 < segs.length; i += 2) out.push(segs[i] + ' | ' + segs[i + 1]);
-                }
-            });
-            return out.join('\n');
-        }
-
-        // ---------- Ausschnitt wählen ----------
-        const cropState = { canvas: null, rect: null, start: null };
 
         function openCrop(canvas) {
             cropState.canvas = canvas;
@@ -428,375 +1256,347 @@
             document.getElementById('crop-modal').classList.remove('hidden');
         }
 
-        function closeCrop() {
+        function cropCancel() {
             document.getElementById('crop-modal').classList.add('hidden');
         }
 
-        (function initCrop() {
+        (function initCropEvents() {
             const stage = document.getElementById('crop-stage');
             const rectEl = document.getElementById('crop-rect');
             const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+
             stage.addEventListener('pointerdown', e => {
                 const r = stage.getBoundingClientRect();
-                cropState.start = { x: clamp(e.clientX - r.left, 0, r.width), y: clamp(e.clientY - r.top, 0, r.height) };
+                cropState.start = {
+                    x: clamp(e.clientX - r.left, 0, r.width),
+                    y: clamp(e.clientY - r.top, 0, r.height)
+                };
                 cropState.rect = null;
                 rectEl.classList.add('hidden');
                 stage.setPointerCapture(e.pointerId);
             });
+
             stage.addEventListener('pointermove', e => {
                 if (!cropState.start) return;
                 const r = stage.getBoundingClientRect();
-                const x = clamp(e.clientX - r.left, 0, r.width), y = clamp(e.clientY - r.top, 0, r.height);
-                const rect = { x: Math.min(x, cropState.start.x), y: Math.min(y, cropState.start.y), w: Math.abs(x - cropState.start.x), h: Math.abs(y - cropState.start.y) };
+                const x = clamp(e.clientX - r.left, 0, r.width);
+                const y = clamp(e.clientY - r.top, 0, r.height);
+                const rect = {
+                    x: Math.min(x, cropState.start.x),
+                    y: Math.min(y, cropState.start.y),
+                    w: Math.abs(x - cropState.start.x),
+                    h: Math.abs(y - cropState.start.y)
+                };
                 cropState.rect = rect;
-                rectEl.style.left = rect.x + 'px'; rectEl.style.top = rect.y + 'px';
-                rectEl.style.width = rect.w + 'px'; rectEl.style.height = rect.h + 'px';
+                rectEl.style.left = rect.x + 'px';
+                rectEl.style.top = rect.y + 'px';
+                rectEl.style.width = rect.w + 'px';
+                rectEl.style.height = rect.h + 'px';
                 rectEl.classList.remove('hidden');
             });
-            const end = () => {
-                cropState.start = null;
-                if (cropState.rect && (cropState.rect.w < 30 || cropState.rect.h < 30)) {
-                    cropState.rect = null;
-                    rectEl.classList.add('hidden');
-                }
-            };
+
+            const end = () => { cropState.start = null; };
             stage.addEventListener('pointerup', end);
             stage.addEventListener('pointercancel', end);
         })();
 
-        function cropConfirm(useAll) {
-            const c = cropState.canvas;
-            let sx = 0, sy = 0, sw = c.width, sh = c.height;
-            if (!useAll && cropState.rect) {
-                const k = c.width / document.getElementById('crop-img').clientWidth;
-                sx = Math.round(cropState.rect.x * k); sy = Math.round(cropState.rect.y * k);
-                sw = Math.max(20, Math.round(cropState.rect.w * k)); sh = Math.max(20, Math.round(cropState.rect.h * k));
+        async function cropConfirm(fullImage) {
+            const srcCanvas = cropState.canvas;
+            const imgEl = document.getElementById('crop-img');
+            let targetCanvas = srcCanvas;
+
+            if (!fullImage && cropState.rect && cropState.rect.w > 12 && cropState.rect.h > 12) {
+                const scaleX = srcCanvas.width / imgEl.clientWidth;
+                const scaleY = srcCanvas.height / imgEl.clientHeight;
+                const sx = Math.round(cropState.rect.x * scaleX);
+                const sy = Math.round(cropState.rect.y * scaleY);
+                const sw = Math.round(cropState.rect.w * scaleX);
+                const sh = Math.round(cropState.rect.h * scaleY);
+
+                targetCanvas = document.createElement('canvas');
+                targetCanvas.width = sw;
+                targetCanvas.height = sh;
+                targetCanvas.getContext('2d').drawImage(srcCanvas, sx, sy, sw, sh, 0, 0, sw, sh);
             }
-            closeCrop();
-            const scale = sw < 1100 ? 1.6 : 1;           // kleine Ausschnitte vergrößern
-            const out = document.createElement('canvas');
-            out.width = Math.round(sw * scale); out.height = Math.round(sh * scale);
-            const ctx = out.getContext('2d');
-            ctx.filter = 'grayscale(1) contrast(1.35)';  // wird nicht von jedem Browser unterstützt, dann ohne
-            ctx.drawImage(c, sx, sy, sw, sh, 0, 0, out.width, out.height);
-            runOcr(out);
+
+            cropCancel();
+            await runOcrOnCanvas(targetCanvas);
         }
 
-        function cropCancel() {
-            closeCrop();
-            setOcrProgress(false);
+        function setOcrProgress(show, text, pct) {
+            document.getElementById('ocr-progress').classList.toggle('hidden', !show);
+            if (text) document.getElementById('ocr-status').textContent = text;
+            if (typeof pct === 'number') document.getElementById('ocr-bar').style.width = Math.round(pct * 100) + '%';
         }
 
-        // ---------- Foto wählen → Ausschnitt → Texterkennung ----------
-        async function handlePhoto(event) {
-            const file = event.target.files[0];
-            event.target.value = '';
-            if (!file) return;
-            if (typeof Tesseract === 'undefined') {
-                showToast('Texterkennung konnte nicht geladen werden. Internet prüfen und Seite neu laden.');
+        function cleanPhonetics(s) {
+            return s.replace(/\[[^\]]*\]?/g, ' ').replace(/^[•·▪●!]+\s*/, '').replace(/\s{2,}/g, ' ').trim();
+        }
+
+        async function runOcrOnCanvas(canvas) {
+            if (!window.Tesseract) {
+                showToast('Texterkennung konnte nicht geladen werden.');
                 return;
             }
-            pendingVocabs = []; renderReview();
+            setOcrProgress(true, 'Laura liest dein Foto...', 0.1);
             try {
-                openCrop(await prepareImage(file));
-            } catch (err) {
-                showToast(err.message || 'Das Foto konnte nicht geöffnet werden.');
-            }
-        }
-
-        async function runOcr(canvas) {
-            setOcrProgress(true, 'Texterkennung wird vorbereitet...', 0.02);
-            let worker = null;
-            try {
-                worker = await Tesseract.createWorker('deu+eng', 1, {
+                const result = await Tesseract.recognize(canvas, 'eng+deu', {
                     logger: m => {
-                        if (m.status === 'recognizing text') setOcrProgress(true, 'Laura liest dein Foto...', 0.1 + 0.9 * m.progress);
-                        else setOcrProgress(true, 'Texterkennung wird geladen...', 0.05);
+                        if (m.status === 'recognizing text') {
+                            setOcrProgress(true, 'Laura erkennt die Wörter...', m.progress);
+                        }
                     }
                 });
-                await worker.setParameters({ tessedit_pageseg_mode: '6', preserve_interword_spaces: '1' });
-                const { data } = await worker.recognize(canvas);
-                const text = ocrLinesToText(data);
-                if (!text.trim()) throw new Error('Es wurde kein Text erkannt. Wähle einen engeren Ausschnitt oder fotografiere schärfer und mit mehr Licht.');
-                document.getElementById('paste-text').value = text;
+                const rawText = result.data?.text || '';
+                const cleanedLines = rawText.split('\n')
+                    .map(l => cleanPhonetics(l))
+                    .filter(Boolean)
+                    .join('\n');
+                document.getElementById('paste-text').value = cleanedLines;
                 setOcrProgress(false);
+                showToast('Text erkannt! Prüfe unten die Vokabeln.');
                 parsePastedText();
-            } catch (err) {
-                console.error('OCR:', err);
+            } catch (e) {
                 setOcrProgress(false);
-                showToast(err.message || 'Texterkennung fehlgeschlagen.');
-            } finally {
-                if (worker) { try { await worker.terminate(); } catch (e) {} }
+                showToast('Fehler beim Lesen des Fotos.');
             }
         }
 
-        // ---------- Text einfügen & sortieren ----------
-        const DE_WORDS = new Set(['der','die','das','ein','eine','und','ich','du','er','sie','es','nicht','ist','sind','mit','von','zu','den','dem','auf','für','wir','ihr','mein','dein','haben','sein','werden','bin','hast']);
-        const EN_WORDS = new Set(['the','a','an','and','to','of','is','are','you','i','he','she','it','we','they','not','with','for','in','on','my','your','have','be','am']);
-
-        function germanScore(s) {
-            let sc = /[äöüßÄÖÜ]/.test(s) ? 3 : 0;
-            s.toLowerCase().split(/[^a-zäöüß]+/).forEach(w => {
-                if (DE_WORDS.has(w)) sc++;
-                if (EN_WORDS.has(w)) sc--;
-            });
-            return sc;
-        }
-
-        function cleanLine(l) {
-            return l.replace(/^\s*(\d+[.)]|[•*·▪●-])\s+/, '').trim();
-        }
-
-        function splitLine(line) {
-            // Ein senkrechter Strich ist der eindeutigste Trenner (Semikolons gehören oft zum Wort: "wohnen; leben")
-            const bar = line.indexOf('|');
-            if (bar >= 0) {
-                const a = line.slice(0, bar).trim(), b = line.slice(bar + 1).trim();
-                return (a && b) ? [a, b] : null;
-            }
-            const m = line.match(/\t+|\s*=\s*|\s+[-–—]\s+|\s*:\s+|\s{2,}/);
-            if (!m) return null;
-            const a = line.slice(0, m.index).trim();
-            const b = line.slice(m.index + m[0].length).trim();
-            return (a && b) ? [a, b] : null;
-        }
-
-        function parseVocabText(text, layout, order) {
-            const rawLines = text.split(/\r?\n/).map(l => l.trim());
-            const lines = rawLines.filter(Boolean).map(cleanLine).filter(Boolean);
-            if (lines.length === 0) return [];
-
-            let pairs = [];
-            if (layout === 'auto') {
-                const sepCount = lines.filter(l => splitLine(l)).length;
-                if (sepCount >= lines.length * 0.5) layout = 'pairs';
-                else {
-                    const groups = rawLines.join('\n').split(/\n\s*\n/).map(g => g.split('\n').map(cleanLine).filter(Boolean)).filter(g => g.length);
-                    layout = (groups.length === 2 && groups[0].length === groups[1].length) ? 'blocks' : 'alternating';
-                }
-            }
-
-            if (layout === 'pairs') {
-                lines.forEach(l => { const p = splitLine(l); if (p) pairs.push(p); });
-            } else if (layout === 'alternating') {
-                for (let i = 0; i + 1 < lines.length; i += 2) pairs.push([lines[i], lines[i + 1]]);
-            } else if (layout === 'blocks') {
-                const groups = rawLines.join('\n').split(/\n\s*\n/).map(g => g.split('\n').map(cleanLine).filter(Boolean)).filter(g => g.length);
-                let first, second;
-                if (groups.length === 2) { first = groups[0]; second = groups[1]; }
-                else { const h = Math.floor(lines.length / 2); first = lines.slice(0, h); second = lines.slice(h, h * 2); }
-                const n = Math.min(first.length, second.length);
-                for (let i = 0; i < n; i++) pairs.push([first[i], second[i]]);
-            }
-
-            // Reihenfolge einmal für die ganze Seite bestimmen (Spalten sind meist einheitlich)
-            let sa = 0, sb = 0;
-            pairs.forEach(([a, b]) => { sa += germanScore(a); sb += germanScore(b); });
-            const deFirst = order === 'de-en' || (order === 'auto' && sa > sb);
-            return pairs.map(([a, b]) => deFirst ? { en: b, de: a } : { en: a, de: b });
+        // ---------- Text-Erkennung & Review ----------
+        function looksGerman(str) {
+            return /[äöüßÄÖÜ]|\b(der|die|das|ein|eine|und|oder|nicht|ich|du|er|sie|es|wir|ihr|mit|für|auf|zu|in|am|im|vom|zum|zur)\b/i.test(str);
         }
 
         function parsePastedText() {
-            const text = document.getElementById('paste-text').value;
-            if (!text.trim()) { showToast('Bitte zuerst den kopierten Text einfügen.'); return; }
-            const result = parseVocabText(text, document.getElementById('paste-layout').value, document.getElementById('paste-order').value);
-            if (result.length === 0) {
-                showToast('Keine Paare gefunden. Probiere einen anderen „Aufbau des Textes“.');
+            const raw = document.getElementById('paste-text').value.trim();
+            if (!raw) {
+                showToast('Bitte füge zuerst Text ein oder fotografiere eine Seite.');
                 return;
             }
-            pendingVocabs = result;
-            renderReview();
-            showToast(`${result.length} Wörter erkannt – bitte kontrollieren.`);
-            document.getElementById('review-box').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            const layout = document.getElementById('paste-layout').value;
+            const order = document.getElementById('paste-order').value;
+            const lines = raw.split('\n').map(l => cleanPhonetics(l)).filter(Boolean);
+
+            let pairs = [];
+            const hasInlineSep = lines.some(l => /\s[-–—=|]\s|\t/.test(l));
+
+            if (layout === 'pairs' || (layout === 'auto' && hasInlineSep)) {
+                lines.forEach(line => {
+                    const parts = line.split(/\s*(?:\t|\s[-–—=|]\s|\|)\s*/);
+                    if (parts.length >= 2) {
+                        pairs.push({ a: parts[0].trim(), b: parts.slice(1).join(' ').trim() });
+                    }
+                });
+            } else if (layout === 'blocks' && lines.length >= 2) {
+                const half = Math.floor(lines.length / 2);
+                for (let i = 0; i < half; i++) {
+                    pairs.push({ a: lines[i], b: lines[i + half] || '' });
+                }
+            } else {
+                for (let i = 0; i < lines.length; i += 2) {
+                    pairs.push({ a: lines[i], b: lines[i + 1] || '' });
+                }
+            }
+
+            pendingPairs = pairs.map(p => {
+                let en = p.a, de = p.b;
+                if (order === 'de-en') {
+                    en = p.b; de = p.a;
+                } else if (order === 'auto' && looksGerman(p.a) && !looksGerman(p.b)) {
+                    en = p.b; de = p.a;
+                }
+                return { en, de };
+            });
+
+            if (!pendingPairs.length) {
+                showToast('Keine Wortpaare erkannt.');
+                return;
+            }
+            renderPendingList();
+            document.getElementById('review-box').classList.remove('hidden');
+        }
+
+        function renderPendingList() {
+            const list = document.getElementById('review-list');
+            list.innerHTML = pendingPairs.map((p, idx) => `
+                <div class="grid grid-cols-1 sm:grid-cols-[1fr_1fr_2.5rem] gap-2 items-center bg-white p-2 rounded-xl border border-slate-200">
+                    <input type="text" value="${escapeHtml(p.en)}" oninput="pendingPairs[${idx}].en = this.value" placeholder="Englisch" class="px-3 py-1.5 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
+                    <input type="text" value="${escapeHtml(p.de)}" oninput="pendingPairs[${idx}].de = this.value" placeholder="Deutsch" class="px-3 py-1.5 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
+                    <button onclick="removePendingRow(${idx})" class="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg flex justify-center" title="Entfernen">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            `).join('');
+            document.getElementById('review-save-label').textContent = `Alle ${pendingPairs.length} speichern`;
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function addPendingRow() {
+            pendingPairs.push({ en: '', de: '' });
+            renderPendingList();
+        }
+
+        function removePendingRow(idx) {
+            pendingPairs.splice(idx, 1);
+            if (!pendingPairs.length) discardPending();
+            else renderPendingList();
         }
 
         function swapPending() {
-            pendingVocabs = pendingVocabs.map(v => ({ en: v.de, de: v.en }));
-            renderReview();
-        }
-
-        // ---------- Vorabkontrolle ----------
-        let pendingVocabs = [];
-
-        function renderReview() {
-            const box = document.getElementById('review-box');
-            const list = document.getElementById('review-list');
-            if (pendingVocabs.length === 0) { box.classList.add('hidden'); list.innerHTML = ''; return; }
-            box.classList.remove('hidden');
-            list.innerHTML = pendingVocabs.map((v, i) => `
-                <div class="grid grid-cols-[1fr_2.5rem] sm:grid-cols-[1fr_1fr_2.5rem] gap-2 items-center">
-                    <input type="text" value="${escapeHtml(v.en)}" placeholder="Englisch" oninput="updatePending(${i}, 'en', this.value)"
-                        class="px-3 py-2.5 rounded-xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 min-w-0">
-                    <button onclick="removePending(${i})" class="sm:order-last p-2 text-slate-400 hover:text-rose-500 row-span-2 sm:row-span-1" title="Zeile entfernen">
-                        <i data-lucide="x" class="w-4 h-4"></i>
-                    </button>
-                    <input type="text" value="${escapeHtml(v.de)}" placeholder="Deutsch" oninput="updatePending(${i}, 'de', this.value)"
-                        class="px-3 py-2.5 rounded-xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 min-w-0">
-                </div>`).join('');
-            document.getElementById('review-save-label').textContent = `Alle ${pendingVocabs.length} speichern`;
-            lucide.createIcons();
-        }
-
-        function updatePending(i, field, value) { if (pendingVocabs[i]) pendingVocabs[i][field] = value; }
-
-        function removePending(i) { pendingVocabs.splice(i, 1); renderReview(); }
-
-        function addPendingRow() { pendingVocabs.push({ en: '', de: '' }); renderReview(); }
-
-        function discardPending() {
-            pendingVocabs = [];
-            renderReview();
+            pendingPairs = pendingPairs.map(p => ({ en: p.de, de: p.en }));
+            renderPendingList();
         }
 
         function savePending() {
-            let added = 0, skipped = 0;
-            pendingVocabs.forEach(item => {
-                const en = item.en.trim(), de = item.de.trim();
-                if (!en || !de) return;
-                const exists = vocabs.some(v => v.en.toLowerCase() === en.toLowerCase() && v.de.toLowerCase() === de.toLowerCase());
-                if (exists) { skipped++; return; }
-                vocabs.unshift({ id: (Date.now() + Math.random()).toString(), en, de });
-                added++;
-            });
+            const valid = pendingPairs.filter(p => p.en.trim() && p.de.trim());
+            if (!valid.length) {
+                showToast('Bitte fülle mindestens ein Paar aus.');
+                return;
+            }
+            vocabs = [...valid.map(p => ({ en: p.en.trim(), de: p.de.trim() })), ...vocabs];
             saveToLocalStorage();
-            pendingVocabs = [];
-            renderReview();
+            discardPending();
             document.getElementById('paste-text').value = '';
-            showToast(`${added} Vokabeln gespeichert 🎉` + (skipped ? ` (${skipped} schon vorhanden)` : ''));
-            switchTab('list');
+            showToast(`${valid.length} Vokabeln gespeichert! 🐾`);
         }
 
-        // ---------- Manuell / Liste ----------
+        function discardPending() {
+            pendingPairs = [];
+            document.getElementById('review-box').classList.add('hidden');
+        }
+
         function addManualVocab() {
             const enInput = document.getElementById('manual-en');
             const deInput = document.getElementById('manual-de');
             const en = enInput.value.trim();
             const de = deInput.value.trim();
-            if (!en || !de) { showToast('Bitte sowohl Englisch als auch Deutsch eingeben.'); return; }
-            vocabs.unshift({ id: Date.now().toString(), en, de });
+            if (!en || !de) {
+                showToast('Bitte Englisch und Deutsch eingeben.');
+                return;
+            }
+            vocabs.unshift({ en, de });
+            saveToLocalStorage();
             enInput.value = '';
             deInput.value = '';
-            saveToLocalStorage();
-            showToast('Vokabel hinzugefügt! 🐾');
-            renderVocabList();
+            showToast('Vokabel hinzugefügt! ✨');
         }
 
+        // ---------- Liste verwalten ----------
         function renderVocabList() {
             const container = document.getElementById('vocab-list-container');
-            const searchTerm = (document.getElementById('vocab-search-input')?.value || '').toLowerCase();
-            const filtered = vocabs.filter(v => v.en.toLowerCase().includes(searchTerm) || v.de.toLowerCase().includes(searchTerm));
+            const query = (document.getElementById('vocab-search-input')?.value || '').toLowerCase().trim();
+            const filtered = vocabs
+                .map((v, idx) => ({ ...v, idx }))
+                .filter(v => !query || v.en.toLowerCase().includes(query) || v.de.toLowerCase().includes(query));
 
-            if (filtered.length === 0) {
-                container.innerHTML = `
-                    <div class="py-12 text-center text-slate-400">
-                        <i data-lucide="book-open" class="w-8 h-8 mx-auto mb-2 opacity-50"></i>
-                        <p class="text-sm">Noch keine Vokabeln vorhanden. Scanne ein Foto oder füge welche hinzu!</p>
-                    </div>`;
-                lucide.createIcons();
+            if (!filtered.length) {
+                container.innerHTML = `<p class="text-center text-slate-400 text-sm py-10">Keine Vokabeln gefunden.</p>`;
                 return;
             }
 
             container.innerHTML = filtered.map(v => `
-                <div class="py-3.5 flex items-center justify-between gap-4">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 flex-1 min-w-0">
-                        <div class="flex items-center gap-2">
-                            <span class="font-semibold text-slate-900 text-sm truncate">${escapeHtml(v.en)}</span>
-                            <button data-speak="${escapeHtml(v.en)}" data-lang="en" class="speak-btn p-1 rounded-lg text-slate-400 hover:text-sky-600 hover:bg-sky-50 shrink-0" title="Englisch anhören">
-                                <i data-lucide="volume-2" class="w-4 h-4"></i>
-                            </button>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <span class="text-slate-600 text-sm truncate">${escapeHtml(v.de)}</span>
-                            <button data-speak="${escapeHtml(v.de)}" data-lang="de" class="speak-btn p-1 rounded-lg text-slate-400 hover:text-sky-600 hover:bg-sky-50 shrink-0" title="Deutsch anhören">
-                                <i data-lucide="volume-2" class="w-4 h-4"></i>
-                            </button>
-                        </div>
+                <div class="py-3 flex items-center justify-between gap-3 hover:bg-slate-50/80 px-2 rounded-xl transition-colors">
+                    <div class="min-w-0 flex-1 grid grid-cols-1 sm:grid-cols-2 gap-1 sm:gap-4">
+                        <div class="font-semibold text-slate-900 text-sm truncate">${escapeHtml(v.en)}</div>
+                        <div class="text-slate-600 text-sm truncate">${escapeHtml(v.de)}</div>
                     </div>
-                    <button data-del="${v.id}" class="del-btn text-slate-300 hover:text-rose-500 p-2 rounded-lg">
-                        <i data-lucide="trash-2" class="w-4 h-4"></i>
-                    </button>
-                </div>`).join('');
-            lucide.createIcons();
+                    <div class="flex items-center gap-1 shrink-0">
+                        <button onclick="speakText('${escapeHtml(v.en).replace(/'/g, "\\'")}', 'en-GB')" class="p-2 text-sky-600 hover:bg-sky-50 rounded-lg" title="Anhören">
+                            <i data-lucide="volume-2" class="w-4 h-4"></i>
+                        </button>
+                        <button onclick="deleteVocab(${v.idx})" class="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg" title="Löschen">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            if (window.lucide) lucide.createIcons();
         }
 
-        // Event-Delegation (sicherer als Inline-onclick mit Text)
-        document.addEventListener('click', e => {
-            const sp = e.target.closest('.speak-btn');
-            if (sp) { speakText(sp.dataset.speak, sp.dataset.lang); return; }
-            const del = e.target.closest('.del-btn');
-            if (del) deleteVocab(del.dataset.del);
-        });
-
-        function deleteVocab(id) {
-            vocabs = vocabs.filter(v => v.id !== id);
+        function deleteVocab(idx) {
+            vocabs.splice(idx, 1);
             saveToLocalStorage();
             renderVocabList();
-            showToast('Vokabel gelöscht');
+            showToast('Vokabel gelöscht.');
         }
 
         function clearAllVocabs() {
-            if (confirm('Möchtest du wirklich alle Vokabeln löschen?')) {
-                vocabs = [];
-                saveToLocalStorage();
-                renderVocabList();
-                showToast('Alle Vokabeln gelöscht');
+            if (!vocabs.length) return;
+            const btn = document.getElementById('clear-all-btn');
+            if (!clearConfirmArmed) {
+                clearConfirmArmed = true;
+                btn.innerHTML = `<i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i> Wirklich löschen?`;
+                btn.className = 'px-3.5 py-2 rounded-xl bg-rose-600 text-white text-xs font-semibold flex items-center gap-1.5 shadow-sm';
+                if (window.lucide) lucide.createIcons();
+                clearConfirmTimeout = setTimeout(() => {
+                    clearConfirmArmed = false;
+                    btn.innerHTML = `<i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Alle löschen`;
+                    btn.className = 'px-3.5 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold flex items-center gap-1.5';
+                    if (window.lucide) lucide.createIcons();
+                }, 4000);
+                return;
             }
+            clearTimeout(clearConfirmTimeout);
+            clearConfirmArmed = false;
+            btn.innerHTML = `<i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Alle löschen`;
+            btn.className = 'px-3.5 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold flex items-center gap-1.5';
+
+            vocabs = [];
+            try { localStorage.setItem(VOCAB_STORAGE, JSON.stringify([])); } catch (e) {}
+            updateCounts();
+            renderVocabList();
+            showToast('Alle Vokabeln wurden gelöscht.');
+        }
+        }
+
+        function resetToDefaultVocabs() {
+            vocabs = [...DEFAULT_VOCABS];
+            saveToLocalStorage();
+            renderVocabList();
+            showToast(`${DEFAULT_VOCABS.length} Standard-Vokabeln geladen! 🐆`);
         }
 
         function exportVocabs() {
-            const blob = new Blob([JSON.stringify(vocabs, null, 2)], { type: 'application/json' });
+            if (!vocabs.length) {
+                showToast('Keine Vokabeln zum Exportieren vorhanden.');
+                return;
+            }
+            const text = vocabs.map(v => `${v.en} - ${v.de}`).join('\n');
+            const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = 'lauras_vokabeln.json';
-            document.body.appendChild(a);
+            a.href = url;
+            a.download = 'lauras_vokabeln.txt';
             a.click();
-            a.remove();
-            setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+            URL.revokeObjectURL(url);
             showToast('Vokabeln exportiert!');
         }
 
-        // ---------- Sprache ----------
-        function speakText(text, langCode) {
-            if (!('speechSynthesis' in window)) return;
-            window.speechSynthesis.cancel();
-            const u = new SpeechSynthesisUtterance(text);
-            u.lang = langCode === 'en' ? 'en-US' : 'de-DE';
-            u.rate = 0.95;
-            window.speechSynthesis.speak(u);
-        }
-
-        function speakCurrentPrompt() {
-            if (!testState.active || testState.questions.length === 0) return;
-            const q = testState.questions[testState.currentIndex];
-            speakText(q.prompt, q.direction === 'en-de' ? 'en' : 'de');
-        }
-
-        // ---------- Test ----------
+        // ---------- Test / Quiz ----------
         function startQuiz() {
             if (vocabs.length === 0) {
-                showToast('Bitte füge erst Vokabeln hinzu!');
+                showToast('Füge zuerst Vokabeln hinzu, um einen Test zu starten.');
                 switchTab('scan');
                 return;
             }
             const shuffled = [...vocabs].sort(() => 0.5 - Math.random());
             const selected = shuffled.slice(0, Math.min(20, shuffled.length));
 
-            testState.questions = selected.map(v => {
-                const dir = Math.random() < 0.5 ? 'en-de' : 'de-en';
-                return {
-                    id: v.id, en: v.en, de: v.de, direction: dir,
-                    prompt: dir === 'en-de' ? v.en : v.de,
-                    expected: dir === 'en-de' ? v.de : v.en
-                };
-            });
-            testState.currentIndex = 0;
-            testState.score = 0;
-            testState.active = true;
+            testState = {
+                active: true,
+                questions: selected.map(v => ({
+                    en: v.en,
+                    de: v.de,
+                    dir: Math.random() < 0.5 ? 'en-de' : 'de-en'
+                })),
+                currentIndex: 0,
+                score: 0
+            };
 
             document.getElementById('test-start-screen').classList.add('hidden');
             document.getElementById('test-finished-screen').classList.add('hidden');
             document.getElementById('test-active-screen').classList.remove('hidden');
-            loadQuizQuestion();
+            renderQuizQuestion();
         }
 
         function abortTest() {
@@ -805,148 +1605,133 @@
             document.getElementById('test-start-screen').classList.remove('hidden');
         }
 
-        function loadQuizQuestion() {
+        function renderQuizQuestion() {
+            const q = testState.questions[testState.currentIndex];
             const total = testState.questions.length;
-            const idx = testState.currentIndex;
-            const q = testState.questions[idx];
+            const current = testState.currentIndex + 1;
 
-            document.getElementById('test-current-num').textContent = idx + 1;
+            document.getElementById('test-current-num').textContent = current;
             document.getElementById('test-total-num').textContent = total;
-            const percent = Math.round(((idx + 1) / total) * 100);
-            document.getElementById('test-progress-percent').textContent = percent + '%';
-            document.getElementById('test-progress-bar').style.width = percent + '%';
+            const pct = Math.round((current / total) * 100);
+            document.getElementById('test-progress-percent').textContent = pct + '%';
+            document.getElementById('test-progress-bar').style.width = pct + '%';
 
-            document.getElementById('test-direction-badge').innerHTML =
-                `<i data-lucide="languages" class="w-3.5 h-3.5"></i> ${q.direction === 'en-de' ? 'Englisch → Deutsch' : 'Deutsch → Englisch'}`;
-            document.getElementById('test-question-term').textContent = q.prompt;
+            const badge = document.getElementById('test-direction-badge');
+            if (q.dir === 'en-de') {
+                badge.textContent = 'Englisch → Deutsch';
+                document.getElementById('test-question-term').textContent = q.en;
+            } else {
+                badge.textContent = 'Deutsch → Englisch';
+                document.getElementById('test-question-term').textContent = q.de;
+            }
 
             const input = document.getElementById('test-user-answer');
             input.value = '';
             input.disabled = false;
-            input.className = 'w-full px-4 py-3.5 rounded-xl border border-slate-200 text-base focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white';
+            input.classList.remove('bg-emerald-50', 'bg-rose-50', 'border-emerald-300', 'border-rose-300');
             input.focus();
 
             document.getElementById('test-feedback').classList.add('hidden');
             document.getElementById('test-submit-btn').classList.remove('hidden');
             document.getElementById('test-next-btn').classList.add('hidden');
 
-            const box = document.getElementById('laura-companion-box');
-            const speech = document.getElementById('laura-speech-bubble');
-            const wrap = document.getElementById('laura-avatar-wrapper');
-            box.className = 'mb-5 flex items-center gap-3.5 bg-gradient-to-r from-sky-50/90 to-slate-50 p-3.5 rounded-2xl border border-sky-200/80 transition-all';
-            wrap.classList.remove('laura-cheer');
-            const prompts = [
+            const cheers = [
                 '„Du schaffst das, Isabell! Wie heißt das übersetzt?“',
-                '„Ich drücke dir die Tatzen, Isabell!“',
-                '„Kennst du diese Vokabel schon?“',
-                '„Konzentrier dich, Isabell – du weißt das!“'
+                '„Konzentration! Du machst das super.“',
+                '„Schneeleoparden geben nie auf! Was meinst du?“',
+                '„Los geht’s, zeig was du drauf hast!“'
             ];
-            speech.textContent = prompts[idx % prompts.length];
-            lucide.createIcons();
+            document.getElementById('laura-speech-bubble').textContent = cheers[Math.floor(Math.random() * cheers.length)];
         }
 
-        function handleQuizKeydown(event) {
-            if (event.key !== 'Enter') return;
-            const submitBtn = document.getElementById('test-submit-btn');
-            const nextBtn = document.getElementById('test-next-btn');
-            if (!submitBtn.classList.contains('hidden')) submitQuizAnswer();
-            else if (!nextBtn.classList.contains('hidden')) nextQuizQuestion();
+        function normalizeAnswer(str) {
+            return str.toLowerCase()
+                      .replace(/^(to\s+|der\s+|die\s+|das\s+|a\s+|an\s+)/i, '')
+                      .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '')
+                      .replace(/\s+/g, ' ')
+                      .trim();
         }
 
         function submitQuizAnswer() {
+            const q = testState.questions[testState.currentIndex];
             const input = document.getElementById('test-user-answer');
-            const userAns = input.value.trim().toLowerCase();
-            if (!userAns) { showToast('Bitte gib eine Antwort ein.'); return; }
+            const userVal = input.value.trim();
+            if (!userVal) {
+                showToast('Bitte gib eine Antwort ein.');
+                return;
+            }
 
             input.disabled = true;
-            const q = testState.questions[testState.currentIndex];
-            const expected = q.expected.trim().toLowerCase();
-            const isCorrect = userAns === expected || (expected.includes(userAns) && userAns.length > 3);
-            if (isCorrect) testState.score++;
+            const expected = q.dir === 'en-de' ? q.de : q.en;
+            const cleanUser = normalizeAnswer(userVal);
+            const cleanExpected = normalizeAnswer(expected);
 
-            const fb = document.getElementById('test-feedback');
-            const icon = document.getElementById('feedback-icon');
-            const title = document.getElementById('feedback-title');
-            const correct = document.getElementById('feedback-correct-answer');
-            fb.classList.remove('hidden');
+            // Accept alternative translations split by semicolon or slash or comma
+            const allowed = cleanExpected.split(/[/;,]|oder/).map(s => s.trim());
+            const isCorrect = allowed.some(a => cleanUser === a || (a.length > 3 && cleanUser.includes(a)));
 
-            const box = document.getElementById('laura-companion-box');
-            const speech = document.getElementById('laura-speech-bubble');
-            const wrap = document.getElementById('laura-avatar-wrapper');
+            const feedback = document.getElementById('test-feedback');
+            feedback.classList.remove('hidden');
+
+            const avatarWrapper = document.getElementById('laura-avatar-wrapper');
 
             if (isCorrect) {
-                input.classList.add('border-emerald-500', 'bg-emerald-50/30');
-                fb.className = 'p-4 rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-900 fade-in';
-                icon.innerHTML = '<i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-600"></i>';
-                title.textContent = 'Richtig!';
-                correct.textContent = `Lösung: ${q.expected}`;
-                const praises = [
-                    '„Good! 🎉 Weiter so, Isabell!“',
-                    '„Great job, Isabell! 🐾 Das war goldrichtig!“',
-                    '„Awesome! 🌟 Du bist richtig stark!“',
-                    '„Well done! ❄️ Perfekt gewusst!“',
-                    '„Super, Isabell! 🐆 Du wirst zum Vokabel-Profi!“'
-                ];
-                box.className = 'mb-5 flex items-center gap-3.5 bg-gradient-to-r from-emerald-50 to-sky-50 p-3.5 rounded-2xl border border-emerald-300 shadow-sm transition-all';
-                speech.textContent = praises[Math.floor(Math.random() * praises.length)];
-                wrap.classList.remove('laura-cheer');
-                void wrap.offsetWidth;
-                wrap.classList.add('laura-cheer');
+                testState.score++;
+                input.classList.add('bg-emerald-50', 'border-emerald-300');
+                feedback.className = 'p-4 rounded-xl border bg-emerald-50 border-emerald-200 text-emerald-900';
+                document.getElementById('feedback-icon').innerHTML = '<svg class="w-5 h-5 text-emerald-600 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>';
+                document.getElementById('feedback-title').textContent = 'Richtig! 🎉';
+                document.getElementById('feedback-correct-answer').textContent = `Super gemacht! Richtig ist: ${expected}`;
+                document.getElementById('laura-speech-bubble').textContent = '„Genial! Der Punkt geht an dich, Isabell!“';
+                avatarWrapper.classList.add('laura-cheer');
+                setTimeout(() => avatarWrapper.classList.remove('laura-cheer'), 600);
             } else {
-                input.classList.add('border-red-400', 'bg-red-50/30');
-                fb.className = 'p-4 rounded-xl border border-red-200 bg-red-50 text-red-900 fade-in';
-                icon.innerHTML = '<i data-lucide="x-circle" class="w-5 h-5 text-red-600"></i>';
-                title.textContent = 'Leider nicht ganz richtig';
-                correct.innerHTML = `Richtige Antwort: <strong>${escapeHtml(q.expected)}</strong>`;
-                const enc = [
-                    '„Fast! 💪 Merk dir das Wort – beim nächsten Mal klappt’s!“',
-                    '„Kein Problem, Isabell! 🐾 Schau dir die Lösung kurz an.“',
-                    '„Knapp daneben! ❄️ Weiter geht’s, du schaffst die nächste!“'
-                ];
-                box.className = 'mb-5 flex items-center gap-3.5 bg-gradient-to-r from-amber-50 to-slate-50 p-3.5 rounded-2xl border border-amber-200 transition-all';
-                speech.textContent = enc[Math.floor(Math.random() * enc.length)];
+                input.classList.add('bg-rose-50', 'border-rose-300');
+                feedback.className = 'p-4 rounded-xl border bg-rose-50 border-rose-200 text-rose-900';
+                document.getElementById('feedback-icon').innerHTML = '<svg class="w-5 h-5 text-rose-600 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>';
+                document.getElementById('feedback-title').textContent = 'Fast richtig!';
+                document.getElementById('feedback-correct-answer').textContent = `Die richtige Übersetzung wäre gewesen: ${expected}`;
+                document.getElementById('laura-speech-bubble').textContent = '„Nicht schlimm, beim nächsten Mal klappt es!“';
             }
 
             document.getElementById('test-submit-btn').classList.add('hidden');
-            const next = document.getElementById('test-next-btn');
-            next.classList.remove('hidden');
-            next.focus();
-            lucide.createIcons();
+            document.getElementById('test-next-btn').classList.remove('hidden');
+            document.getElementById('test-next-btn').focus();
+        }
+
+        function handleQuizKeydown(e) {
+            if (e.key === 'Enter') {
+                if (!document.getElementById('test-submit-btn').classList.contains('hidden')) {
+                    submitQuizAnswer();
+                } else if (!document.getElementById('test-next-btn').classList.contains('hidden')) {
+                    nextQuizQuestion();
+                }
+            }
         }
 
         function nextQuizQuestion() {
             testState.currentIndex++;
-            if (testState.currentIndex < testState.questions.length) loadQuizQuestion();
-            else finishQuiz();
+            if (testState.currentIndex < testState.questions.length) {
+                renderQuizQuestion();
+            } else {
+                finishQuiz();
+            }
         }
 
         function finishQuiz() {
-            testState.active = false;
             document.getElementById('test-active-screen').classList.add('hidden');
             document.getElementById('test-finished-screen').classList.remove('hidden');
             const total = testState.questions.length;
             const score = testState.score;
-            let praise = 'Das hast du super gemacht!';
-            if (score === total) praise = 'Absolut fehlerfrei! Du bist ein echter Schneeleopard!';
-            else if (score < total / 2) praise = 'Übung macht den Meister, bleib dran!';
-            document.getElementById('test-score-summary').innerHTML =
-                `Du hast <strong>${score}</strong> von <strong>${total}</strong> Vokabeln richtig gewusst.<br><span class="text-sky-700 font-semibold mt-1 block">${praise}</span>`;
-            lucide.createIcons();
+            let praise = 'Hervorragende Leistung! 🌟';
+            if (score / total < 0.5) praise = 'Übe noch ein bisschen, dann klappt es beim nächsten Mal noch besser! 💪';
+            else if (score === total) praise = 'Volle Punktzahl! Du bist ein echter Schneeleopard! 🐆🏆';
+
+            document.getElementById('test-score-summary').innerHTML = `Du hast <b>${score}</b> von <b>${total}</b> Vokabeln richtig gewusst.<br><span class="text-sky-700 font-semibold mt-1 block">${praise}</span>`;
         }
 
-        // ---------- Hilfen ----------
-        let toastTimer = null;
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-message').textContent = message;
-            toast.classList.remove('hidden');
-            clearTimeout(toastTimer);
-            toastTimer = setTimeout(() => toast.classList.add('hidden'), 3500);
-        }
-
-        function escapeHtml(text) {
-            const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
-            return String(text).replace(/[&<>"']/g, m => map[m]);
+        function escapeHtml(str) {
+            return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
         }
     </script>
 </body>
