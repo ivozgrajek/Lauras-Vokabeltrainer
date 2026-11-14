@@ -4,733 +4,433 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lauras Vokabeltrainer</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Google Fonts: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="icon.png">
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <style>
+        :root {
+            --primary-color: #3b82f6;
+            --primary-hover: #2563eb;
+            --bg-color: #f3f4f6;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-color: #1f2937;
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #eef2f6;
-            /* Hochwertiges, nahtloses Schneeleoparden-Muster per SVG im Hintergrund */
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cg fill='%2394a3b8' fill-opacity='0.22'%3E%3Cpath d='M30,20 Q40,15 45,25 Q50,35 40,40 Q30,45 25,35 Q20,25 30,20 Z'/%3E%3Cpath d='M120,40 Q135,30 140,45 Q145,60 130,65 Q115,70 110,55 Q105,40 120,40 Z'/%3E%3Cpath d='M70,90 Q85,85 90,95 Q95,105 85,115 Q75,125 65,110 Q55,95 70,90 Z'/%3E%3Cpath d='M25,120 Q35,115 45,125 Q55,135 40,145 Q25,155 20,135 Q15,125 25,120 Z'/%3E%3Cpath d='M110,120 Q125,110 135,125 Q145,140 130,150 Q115,160 105,140 Q95,125 110,120 Z'/%3E%3C/g%3E%3C/svg%3E");
-            background-repeat: repeat;
-            background-size: 160px 160px;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#d1d5db 1px, transparent 1px), radial-gradient(#d1d5db 1px, var(--bg-color) 1px);
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
-        .fade-in {
-            animation: fadeIn 0.3s ease-in-out;
+
+        header {
+            background-color: var(--card-bg);
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
+
+        header img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary-color);
         }
-        /* Hüpf-Animation für Schneeleopard Laura beim Jubeln */
-        .laura-cheer {
-            animation: lauraBounce 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+        header h1 {
+            font-size: 1.25rem;
+            margin: 0;
+            color: #111827;
         }
-        @keyframes lauraBounce {
-            0%, 100% { transform: translateY(0) scale(1); }
-            45% { transform: translateY(-7px) scale(1.06); }
+
+        .container {
+            max-width: 650px;
+            margin: 20px auto;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            flex: 1;
+            box-sizing: border-box;
+            width: 100%;
+        }
+
+        .welcome-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            background: #eff6ff;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .welcome-section img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .welcome-section h2 {
+            margin: 0;
+            font-size: 1.4rem;
+            color: #1e3a8a;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .nav-buttons button {
+            margin-top: 0;
+            background-color: #4b5563;
+        }
+
+        .nav-buttons button.active-nav {
+            background-color: var(--primary-color);
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feedback.success {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .feedback.error {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
         }
     </style>
 </head>
-<body class="min-h-screen text-slate-800 flex flex-col selection:bg-sky-200 selection:text-sky-900">
+<body>
 
-    <!-- Header -->
-    <header class="bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50 shadow-xs">
-        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-sky-500/20 overflow-hidden p-1 border border-sky-200">
-                    <!-- Laura Maskottchen Icon / Fallback SVG -->
-                    <svg viewBox="0 0 100 100" class="w-full h-full fill-white drop-shadow-xs">
-                        <circle cx="50" cy="50" r="45" fill="#f1f5f9"/>
-                        <circle cx="32" cy="38" r="8" fill="#334155"/>
-                        <circle cx="68" cy="38" r="8" fill="#334155"/>
-                        <ellipse cx="50" cy="58" rx="22" ry="18" fill="#e2e8f0"/>
-                        <circle cx="40" cy="52" r="5" fill="#0f172a"/>
-                        <circle cx="60" cy="52" r="5" fill="#0f172a"/>
-                        <polygon points="46,62 54,62 50,68" fill="#334155"/>
-                        <path d="M42,74 Q50,80 58,74" fill="none" stroke="#334155" stroke-width="3" stroke-linecap="round"/>
-                    </svg>
-                </div>
-                <div>
-                    <h1 class="font-extrabold text-lg text-slate-900 tracking-tight flex items-center gap-2">
-                        Lauras Vokabeltrainer
-                        <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 border border-sky-200">Snow Leopard</span>
-                    </h1>
-                    <p class="text-xs text-slate-500">Für Isabell &bull; Fotografieren, lernen & sprechen</p>
-                </div>
-            </div>
-            
-            <div class="flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-medium">
-                <i data-lucide="book-open" class="w-3.5 h-3.5 text-sky-600"></i>
-                <span id="header-vocab-count">0</span> Vokabeln
-            </div>
-        </div>
+    <header>
+        <img src="icon.png" alt="Laura Logo">
+        <h1>Lauras Vokabeltrainer</h1>
     </header>
 
-    <!-- Main Content Area -->
-    <main class="max-w-4xl mx-auto px-4 py-6 flex-1 w-full flex flex-col gap-6">
-
-        <!-- Navigation Tabs -->
-        <nav class="flex rounded-2xl bg-white p-1.5 shadow-sm border border-slate-200 gap-1">
-            <button onclick="switchTab('scan')" id="tab-btn-scan" class="flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all bg-sky-600 text-white shadow-sm">
-                <i data-lucide="camera" class="w-4 h-4"></i>
-                Foto & Scan
-            </button>
-            <button onclick="switchTab('list')" id="tab-btn-list" class="flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all text-slate-600 hover:bg-slate-50">
-                <i data-lucide="library" class="w-4 h-4"></i>
-                Vokabelliste (<span id="tab-vocab-count">0</span>)
-            </button>
-            <button onclick="switchTab('test')" id="tab-btn-test" class="flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all text-slate-600 hover:bg-slate-50">
-                <i data-lucide="brain-circuit" class="w-4 h-4"></i>
-                Zufalls-Test
-            </button>
-        </nav>
-
-        <!-- Toast Notification -->
-        <div id="toast" class="hidden fixed bottom-6 right-6 z-50 flex items-center gap-2.5 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl text-sm font-medium fade-in border border-slate-700">
-            <i data-lucide="info" class="w-4 h-4 text-sky-400"></i>
-            <span id="toast-message">Meldung</span>
+    <div class="container">
+        <!-- Begrüßung mit Laura und Hallo Isabell -->
+        <div class="welcome-section">
+            <img src="icon.png" alt="Laura">
+            <div>
+                <h2>Hallo Isabell!</h2>
+                <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #4b5563;">Dein Schneeleoparden-Vokabeltrainer ist bereit. Viel Erfolg!</p>
+            </div>
         </div>
 
-        <!-- ================= VIEW 1: SCAN & FOTO ================= -->
-        <section id="view-scan" class="fade-in space-y-6">
-            <div class="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-sm border border-slate-200/90">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-                    <div>
-                        <h2 class="text-xl font-bold text-slate-900 mb-1">Hallo Isabell! Vokabelseite abfotografieren</h2>
-                        <p class="text-sm text-slate-500">Starte die Live-Kamera oder wähle ein Foto aus. Die KI erkennt englische & deutsche Wörter sowie kleine Sätze.</p>
-                    </div>
-                </div>
+        <!-- Navigation -->
+        <div class="nav-buttons">
+            <button id="btn-test" class="active-nav" onclick="switchTab('test')">Zufallstest</button>
+            <button id="btn-vocab" onclick="switchTab('vocab')">Vokabelliste</button>
+            <button id="btn-scan" onclick="switchTab('scan')">Kamera / OCR</button>
+        </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <button onclick="startLiveCamera()" class="flex items-center justify-center gap-3 p-4 rounded-2xl bg-gradient-to-br from-sky-600 to-indigo-600 text-white font-semibold shadow-lg shadow-sky-600/20 hover:opacity-95 transition-all cursor-pointer">
-                        <i data-lucide="camera" class="w-5 h-5"></i>
-                        Live-Kamera öffnen
-                    </button>
-                    
-                    <label class="flex items-center justify-center gap-3 p-4 rounded-2xl bg-slate-100 hover:bg-slate-200/70 text-slate-700 font-semibold border border-slate-200 transition-all cursor-pointer">
-                        <i data-lucide="image-plus" class="w-5 h-5 text-sky-600"></i>
-                        Foto aus Galerie wählen
-                        <input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(event)">
-                    </label>
-                </div>
-
-                <!-- Live Camera Container -->
-                <div id="camera-container" class="hidden mt-6 relative rounded-2xl overflow-hidden bg-black border border-slate-700 shadow-inner">
-                    <video id="camera-video" autoplay playsinline class="w-full h-72 sm:h-96 object-cover"></video>
-                    <div class="absolute inset-0 border-2 border-sky-400/40 pointer-events-none m-6 rounded-xl flex items-center justify-center">
-                        <span class="text-xs text-white/80 bg-black/50 px-3 py-1 rounded-full backdrop-blur-xs">Vokabeln im Rahmen positionieren</span>
-                    </div>
-                    <div class="absolute bottom-4 left-0 right-0 flex justify-center gap-3 px-4">
-                        <button onclick="captureCameraPhoto()" class="px-6 py-3 bg-sky-500 hover:bg-sky-400 text-white font-bold rounded-xl shadow-lg flex items-center gap-2">
-                            <i data-lucide="aperture" class="w-5 h-5"></i> Foto aufnehmen
-                        </button>
-                        <button onclick="stopLiveCamera()" class="px-4 py-3 bg-slate-800/80 hover:bg-slate-900 text-white rounded-xl backdrop-blur-xs">
-                            Abbrechen
-                        </button>
-                    </div>
-                </div>
-                <canvas id="camera-canvas" class="hidden"></canvas>
-
-                <!-- Loading State -->
-                <div id="scan-loading" class="hidden mt-6 p-8 text-center bg-sky-50/50 rounded-2xl border border-sky-100">
-                    <div class="inline-block p-3 rounded-full bg-white shadow-sm text-sky-600 mb-3 animate-spin">
-                        <i data-lucide="loader-2" class="w-6 h-6"></i>
-                    </div>
-                    <h3 class="font-semibold text-slate-800">Laura analysiert dein Vokabel-Foto...</h3>
-                    <p class="text-xs text-slate-500 mt-1">Die Vokabeln werden ausgelesen und übersetzt.</p>
-                </div>
-
-                <!-- Preview Box -->
-                <div id="image-preview-box" class="hidden mt-6">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Aufgenommenes Foto</span>
-                        <button onclick="clearCapturedImage()" class="text-xs text-rose-500 hover:underline">Foto verwerfen</button>
-                    </div>
-                    <img id="preview-img" src="" alt="Vokabel Foto" class="max-h-60 rounded-xl border border-slate-200 object-contain mx-auto bg-slate-50">
-                </div>
+        <!-- Sektion 1: Vokabeltest -->
+        <div id="section-test" class="section active">
+            <h3>Vokabel-Test (Bi-directional)</h3>
+            <p id="test-progress">Frage 1 von 20</p>
+            <div id="test-box" style="background: #f9fafb; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #e5e7eb;">
+                <p id="word-prompt" style="font-size: 1.1rem; font-weight: bold;">Lade Vokabeln...</p>
+                <input type="text" id="answer-input" placeholder="Deine Übersetzung eingeben..." onkeypress="handleKeyPress(event)">
+                <button onclick="checkAnswer()">Antwort prüfen</button>
             </div>
+            <div id="feedback-container"></div>
+            <button onclick="startTest()" style="background-color: #6b7280; margin-top: 15px;">Test neu starten</button>
+        </div>
 
-            <!-- Manual Quick-Add -->
-            <div class="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-sm border border-slate-200/90">
-                <h3 class="text-base font-bold text-slate-900 mb-3 flex items-center gap-2">
-                    <i data-lucide="plus-circle" class="w-4 h-4 text-sky-600"></i>
-                    Vokabel manuell hinzufügen
-                </h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
-                    <input type="text" id="manual-en" placeholder="Englisch (z.B. snow leopard)" class="px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm bg-slate-50/50">
-                    <input type="text" id="manual-de" placeholder="Deutsch (z.B. Schneeleopard)" class="px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm bg-slate-50/50">
-                </div>
-                <button onclick="addManualVocab()" class="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-xl text-sm transition-all shadow-sm">
-                    Zur Vokabelliste hinzufügen
-                </button>
+        <!-- Sektion 2: Vokabelliste -->
+        <div id="section-vocab" class="section">
+            <h3>Deine Vokabeln</h3>
+            <p>Füge neue Vokabeln hinzu oder verwalte sie:</p>
+            <input type="text" id="new-de" placeholder="Deutsch (z.B. Hund)">
+            <input type="text" id="new-en" placeholder="Fremdsprache (z.B. dog)">
+            <button onclick="addVocab()">Vokabel hinzufügen</button>
+            <ul id="vocab-list" style="margin-top: 20px; max-height: 250px; overflow-y: auto;"></ul>
+        </div>
+
+        <!-- Sektion 3: Kamera / OCR -->
+        <div id="section-scan" class="section">
+            <h3>Kamera-Scan (OCR)</h3>
+            <p>Fotografiere einen Vokabelzettel oder wähle ein Bild aus – die Vokabeln werden automatisch ausgelesen:</p>
+            <input type="file" accept="image/*" capture="environment" id="camera-input" onchange="handleImageScan(event)" style="margin: 15px 0;">
+            <div id="scan-result" style="background: #f9fafb; padding: 15px; border-radius: 8px; border: 1px solid #e5e7eb; min-height: 80px;">
+                <em>Noch kein Bild ausgewählt. Klicke auf den Button, um ein Foto zu machen oder ein Bild hochzuladen.</em>
             </div>
-        </section>
+        </div>
+    </div>
 
-        <!-- ================= VIEW 2: VOKABELLISTE ================= -->
-        <section id="view-list" class="hidden fade-in space-y-4">
-            <div class="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-sm border border-slate-200/90">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-                    <div>
-                        <h2 class="text-xl font-bold text-slate-900">Deine Vokabelliste</h2>
-                        <p class="text-sm text-slate-500">Alle gespeicherten Wörter und Sätze im Überblick.</p>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <button onclick="exportVocabs()" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center gap-1.5 transition-all">
-                            <i data-lucide="download" class="w-3.5 h-3.5"></i> Exportieren
-                        </button>
-                        <button onclick="clearAllVocabs()" class="px-3.5 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold flex items-center gap-1.5 transition-all">
-                            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Alle löschen
-                        </button>
-                    </div>
-                </div>
-
-                <div class="relative mb-4">
-                    <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5"></i>
-                    <input type="text" id="vocab-search-input" oninput="renderVocabList()" placeholder="Vokabeln durchsuchen..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
-                </div>
-
-                <div id="vocab-list-container" class="divide-y divide-slate-100 max-h-[550px] overflow-y-auto pr-1"></div>
-            </div>
-        </section>
-
-        <!-- ================= VIEW 3: ZUFALLS-TEST ================= -->
-        <section id="view-test" class="hidden fade-in space-y-6">
-            <div class="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-sm border border-slate-200/90">
-                
-                <!-- Start Screen -->
-                <div id="test-start-screen" class="text-center py-8">
-                    <div class="w-16 h-16 bg-sky-50 text-sky-600 rounded-3xl mx-auto flex items-center justify-center mb-4 shadow-sm border border-sky-100">
-                        <i data-lucide="brain-circuit" class="w-8 h-8"></i>
-                    </div>
-                    <h2 class="text-2xl font-bold text-slate-900 mb-2">Zufalls-Vokabeltest (20 Wörter)</h2>
-                    <p class="text-slate-500 text-sm max-w-md mx-auto mb-6">
-                        Laura wählt zufällig bis zu 20 Vokabeln aus deiner Sammlung aus und fragt sie gemischt in beide Richtungen ab (Englisch ⇄ Deutsch).
-                    </p>
-                    <button onclick="startQuiz()" class="px-8 py-4 bg-gradient-to-r from-sky-600 to-indigo-600 hover:opacity-95 text-white font-bold rounded-2xl shadow-lg shadow-sky-600/20 transition-all text-base inline-flex items-center gap-2">
-                        <i data-lucide="play" class="w-5 h-5 fill-current"></i>
-                        Zufalls-Test starten (20)
-                    </button>
-                </div>
-
-                <!-- Active Quiz Screen -->
-                <div id="test-active-screen" class="hidden">
-                    <div class="flex items-center justify-between mb-4">
-                        <span id="test-direction-badge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-sky-50 text-sky-800">
-                            Englisch → Deutsch
-                        </span>
-                        <button onclick="abortTest()" class="text-xs text-slate-400 hover:text-slate-600">Test abbrechen</button>
-                    </div>
-
-                    <!-- Laura interaktiver Begleiter -->
-                    <div id="laura-companion-box" class="mb-5 flex items-center gap-3.5 bg-gradient-to-r from-sky-50/90 to-slate-50 p-3.5 rounded-2xl border border-sky-200/80 transition-all">
-                        <div id="laura-avatar-wrapper" class="w-14 h-14 bg-white p-1.5 rounded-2xl shadow-sm border border-sky-200 shrink-0 overflow-hidden flex items-center justify-center">
-                            <svg viewBox="0 0 100 100" class="w-full h-full fill-sky-700">
-                                <circle cx="50" cy="50" r="48" fill="#e0f2fe"/>
-                                <circle cx="30" cy="35" r="9" fill="#0369a1"/>
-                                <circle cx="70" cy="35" r="9" fill="#0369a1"/>
-                                <ellipse cx="50" cy="58" rx="24" ry="20" fill="#bae6fd"/>
-                                <circle cx="38" cy="52" r="5" fill="#0f172a"/>
-                                <circle cx="62" cy="52" r="5" fill="#0f172a"/>
-                                <polygon points="45,62 55,62 50,69" fill="#0369a1"/>
-                                <path d="M40,75 Q50,83 60,75" fill="none" stroke="#0369a1" stroke-width="3.5" stroke-linecap="round"/>
-                            </svg>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center gap-1.5">
-                                <span class="text-xs font-extrabold uppercase tracking-wider text-sky-700">Laura sagt:</span>
-                            </div>
-                            <p id="laura-speech-bubble" class="text-sm font-semibold text-slate-800 mt-0.5">
-                                „Du schaffst das, Isabell! Wie heißt das übersetzt?“
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="my-6">
-                        <div class="flex justify-between text-xs text-slate-400 mb-1">
-                            <span>Frage <span id="test-current-num">1</span> von <span id="test-total-num">20</span></span>
-                            <span id="test-progress-percent">5%</span>
-                        </div>
-                        <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
-                            <div id="test-progress-bar" class="h-full bg-sky-600 transition-all duration-300" style="width: 5%"></div>
-                        </div>
-                    </div>
-
-                    <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-6 text-center mb-6">
-                        <span id="test-prompt-label" class="text-xs font-semibold uppercase tracking-wider text-slate-400 block mb-2">Übersetze diesen Begriff:</span>
-                        <div class="flex items-center justify-center gap-3">
-                            <h3 id="test-question-term" class="text-2xl font-extrabold text-slate-900">Loading...</h3>
-                            <button onclick="speakCurrentPrompt()" class="p-2 rounded-full bg-white shadow-sm border border-slate-200 text-sky-600 hover:bg-sky-50 transition-all" title="Aussprache anhören">
-                                <i data-lucide="volume-2" class="w-5 h-5"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="space-y-4">
-                        <input type="text" id="test-user-answer" onkeydown="handleQuizKeydown(event)" placeholder="Deine Übersetzung..." class="w-full px-4 py-3.5 rounded-xl border border-slate-200 text-base focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white">
-                        
-                        <div id="test-feedback" class="hidden p-4 rounded-xl border">
-                            <div class="flex items-center gap-2 font-bold mb-1" id="feedback-header">
-                                <span id="feedback-icon"></span>
-                                <span id="feedback-title">Richtig</span>
-                            </div>
-                            <p id="feedback-correct-answer" class="text-sm text-slate-700"></p>
-                        </div>
-
-                        <button id="test-submit-btn" onclick="submitQuizAnswer()" class="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-xl text-sm transition-all shadow-sm">
-                            Antwort überprüfen
-                        </button>
-                        <button id="test-next-btn" onclick="nextQuizQuestion()" class="hidden w-full py-3.5 bg-sky-600 hover:bg-sky-500 text-white font-semibold rounded-xl text-sm transition-all shadow-sm">
-                            Nächste Frage →
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Finished Screen -->
-                <div id="test-finished-screen" class="hidden text-center py-8">
-                    <div class="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-3xl mx-auto flex items-center justify-center mb-4 shadow-sm border border-emerald-100">
-                        <i data-lucide="award" class="w-8 h-8"></i>
-                    </div>
-                    <h2 class="text-2xl font-bold text-slate-900 mb-2">Test beendet!</h2>
-                    <p class="text-slate-600 text-sm mb-6" id="test-score-summary">Du hast 18 von 20 richtig beantwortet.</p>
-                    
-                    <div class="flex justify-center gap-3">
-                        <button onclick="startQuiz()" class="px-6 py-3 bg-sky-600 hover:bg-sky-500 text-white font-semibold rounded-xl text-sm transition-all">
-                            Nochmal testen
-                        </button>
-                        <button onclick="switchTab('list')" class="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-sm transition-all">
-                            Zur Vokabelliste
-                        </button>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-    </main>
-
-    <footer class="text-center py-6 text-xs text-slate-400 border-t border-slate-200/60 mt-auto">
-        Lauras Vokabeltrainer &bull; Schneeleoparden Edition für Isabell &copy; 2026
-    </footer>
-
-    <!-- JavaScript -->
     <script>
-        let vocabs = JSON.parse(localStorage.getItem('laura_vocabs_v1')) || [
-            { id: '1', en: 'snow leopard', de: 'Schneeleopard' },
-            { id: '2', en: 'majestic mountains', de: 'majestätische Berge' },
-            { id: '3', en: 'to learn vocabulary', de: 'Vokabeln lernen' },
-            { id: '4', en: 'quick and smart', de: 'schnell und clever' }
+        // Vokabeldatenbank (Start-Set)
+        let vocabularies = [
+            { de: "Haus", en: "house" },
+            { de: "Katze", en: "cat" },
+            { de: "Schule", en: "school" },
+            { de: "Apfel", en: "apple" },
+            { de: "Wasser", en: "water" },
+            { de: "Buch", en: "book" },
+            { de: "Sonne", en: "sun" },
+            { de: "Freund", en: "friend" },
+            { de: "Baum", en: "tree" },
+            { de: "Auto", en: "car" }
         ];
 
-        let currentTab = 'scan';
-        let testState = {
-            active: false,
-            questions: [],
-            currentIndex: 0,
-            score: 0,
-            direction: 'en-de'
-        };
-        let videoStream = null;
+        let currentTestList = [];
+        let currentIndex = 0;
+        let currentItem = null;
 
-        window.onload = function() {
-            updateCounts();
-            renderVocabList();
-            lucide.createIcons();
-        };
+        function switchTab(tab) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-buttons button').forEach(b => b.classList.remove('active-nav'));
+            
+            document.getElementById('section-' + tab).classList.add('active');
+            document.getElementById('btn-' + tab).classList.add('active-nav');
 
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-message').textContent = message;
-            toast.classList.remove('hidden');
-            setTimeout(() => { toast.classList.add('hidden'); }, 3000);
-        }
-
-        function updateCounts() {
-            const count = vocabs.length;
-            document.getElementById('header-vocab-count').textContent = count;
-            document.getElementById('tab-vocab-count').textContent = count;
-        }
-
-        function saveToLocalStorage() {
-            localStorage.setItem('laura_vocabs_v1', JSON.stringify(vocabs));
-            updateCounts();
-        }
-
-        function switchTab(tabId) {
-            currentTab = tabId;
-            ['scan', 'list', 'test'].forEach(t => {
-                const view = document.getElementById(`view-${t}`);
-                const btn = document.getElementById(`tab-btn-${t}`);
-                if (t === tabId) {
-                    view.classList.remove('hidden');
-                    btn.className = 'flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all bg-sky-600 text-white shadow-sm';
-                } else {
-                    view.classList.add('hidden');
-                    btn.className = 'flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all text-slate-600 hover:bg-slate-50';
-                }
-            });
-            if (tabId === 'list') renderVocabList();
-            if (tabId === 'scan') stopLiveCamera();
-            lucide.createIcons();
-        }
-
-        async function startLiveCamera() {
-            const container = document.getElementById('camera-container');
-            const video = document.getElementById('camera-video');
-            container.classList.remove('hidden');
-            try {
-                videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
-                video.srcObject = videoStream;
-            } catch (err) {
-                console.error("Kamerafehler:", err);
-                container.classList.add('hidden');
-                showToast("Kamera nicht verfügbar. Bitte Foto hochladen.");
+            if (tab === 'test') {
+                startTest();
+            } else if (tab === 'vocab') {
+                renderVocabList();
             }
         }
 
-        function stopLiveCamera() {
-            if (videoStream) {
-                videoStream.getTracks().forEach(track => track.stop());
-                videoStream = null;
-            }
-            document.getElementById('camera-container').classList.add('hidden');
-        }
-
-        function captureCameraPhoto() {
-            const video = document.getElementById('camera-video');
-            const canvas = document.getElementById('camera-canvas');
-            canvas.width = video.videoWidth || 640;
-            canvas.height = video.videoHeight || 480;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            const dataUrl = canvas.toDataURL('image/jpeg');
-            stopLiveCamera();
-            processImageForVocabs(dataUrl);
-        }
-
-        function handleImageUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) { processImageForVocabs(e.target.result); };
-            reader.readAsDataURL(file);
-        }
-
-        function clearCapturedImage() {
-            document.getElementById('image-preview-box').classList.add('hidden');
-        }
-
-        function processImageForVocabs(imageDataUrl) {
-            const previewBox = document.getElementById('image-preview-box');
-            const previewImg = document.getElementById('preview-img');
-            previewImg.src = imageDataUrl;
-            previewBox.classList.remove('hidden');
-
-            const loading = document.getElementById('scan-loading');
-            loading.classList.remove('hidden');
-
-            setTimeout(() => {
-                loading.classList.add('hidden');
-                const simulatedNewVocabs = [
-                    { id: Date.now() + 1, en: 'snow-capped peak', de: 'schneebedeckter Gipfel' },
-                    { id: Date.now() + 2, en: 'to explore the wilderness', de: 'die Wildnis erkunden' },
-                    { id: Date.now() + 3, en: 'agile predator', de: 'wendiges Raubtier' }
-                ];
-                simulatedNewVocabs.forEach(v => vocabs.unshift(v));
-                saveToLocalStorage();
-                showToast(`3 neue Vokabeln erfolgreich erkannt & gespeichert! 🎉`);
-                setTimeout(() => { switchTab('list'); }, 800);
-            }, 1800);
-        }
-
-        function addManualVocab() {
-            const enInput = document.getElementById('manual-en');
-            const deInput = document.getElementById('manual-de');
-            const en = enInput.value.trim();
-            const de = deInput.value.trim();
-            if (!en || !de) {
-                showToast('Bitte sowohl Englisch als auch Deutsch eingeben.');
+        // Test-Logik (20 Fragen / Zufall)
+        function startTest() {
+            if (vocabularies.length === 0) {
+                document.getElementById('word-prompt').innerText = "Bitte füge zuerst Vokabeln hinzu!";
                 return;
             }
-            vocabs.unshift({ id: Date.now().toString(), en, de });
-            enInput.value = '';
-            deInput.value = '';
-            saveToLocalStorage();
-            showToast('Vokabel hinzugefügt! 🐾');
-            renderVocabList();
+            currentTestList = [...vocabularies].sort(() => 0.5 - Math.random()).slice(0, 20);
+            currentIndex = 0;
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if (currentIndex >= currentTestList.length) {
+                document.getElementById('test-box').innerHTML = `
+                    <h4>Test beendet! 🎉</h4>
+                    <p>Super gemacht, Isabell! Du hast alle Vokabeln durchgeschafft.</p>
+                `;
+                document.getElementById('feedback-container').innerHTML = "";
+                return;
+            }
+
+            currentItem = currentTestList[currentIndex];
+            currentItem.direction = Math.random() > 0.5 ? 'de-en' : 'en-de';
+
+            const promptText = currentItem.direction === 'de-en' 
+                ? `Übersetze ins Englische: <strong>${currentItem.de}</strong>`
+                : `Übersetze ins Deutsche: <strong>${currentItem.en}</strong>`;
+
+            document.getElementById('word-prompt').innerHTML = promptText;
+            document.getElementById('test-progress').innerText = `Frage ${currentIndex + 1} von ${currentTestList.length}`;
+            document.getElementById('answer-input').value = "";
+            document.getElementById('feedback-container').innerHTML = "";
+            document.getElementById('answer-input').focus();
+        }
+
+        function checkAnswer() {
+            if (!currentItem) return;
+            const userInputValue = document.getElementById("answer-input").value.trim().toLowerCase();
+            const feedbackContainer = document.getElementById("feedback-container");
+            
+            const expected = currentItem.direction === 'de-en' ? currentItem.en.toLowerCase() : currentItem.de.toLowerCase();
+
+            if (userInputValue === expected) {
+                speakText("Good job!");
+
+                const praisePhrases = [
+                    "Good! Great job, Isabell!🎉", 
+                    "Well done! Super gemacht!👌", 
+                    "Awesome! Richtig stark!🐯", 
+                    "Great! Du hast es drauf!"
+                ];
+                const randomPraise = praisePhrases[Math.floor(Math.random() * praisePhrases.length)];
+                
+                feedbackContainer.innerHTML = `
+                    <div class="feedback success">
+                        <img src="icon.png" style="width:30px; height:30px; border-radius:50%; object-fit:cover;" alt="Laura">
+                        <span>Laura sagt: "${randomPraise}"</span>
+                    </div>
+                `;
+                
+                currentIndex++;
+                setTimeout(loadQuestion, 1500);
+            } else {
+                feedbackContainer.innerHTML = `
+                    <div class="feedback error">
+                        <img src="icon.png" style="width:30px; height:30px; border-radius:50%; object-fit:cover;" alt="Laura">
+                        <span>Laura flüstert: "Fast! Richtig wäre: ${expected}"</span>
+                    </div>
+                `;
+            }
+        }
+
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') {
+                checkAnswer();
+            }
+        }
+
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function addVocab() {
+            const de = document.getElementById('new-de').value.trim();
+            const en = document.getElementById('new-en').value.trim();
+            if (de && en) {
+                vocabularies.push({ de, en });
+                document.getElementById('new-de').value = "";
+                document.getElementById('new-en').value = "";
+                renderVocabList();
+                alert("Vokabel hinzugefügt!");
+            }
         }
 
         function renderVocabList() {
-            const container = document.getElementById('vocab-list-container');
-            const searchTerm = (document.getElementById('vocab-search-input')?.value || '').toLowerCase();
-            const filtered = vocabs.filter(v => v.en.toLowerCase().includes(searchTerm) || v.de.toLowerCase().includes(searchTerm));
-
-            if (filtered.length === 0) {
-                container.innerHTML = `
-                    <div class="py-12 text-center text-slate-400">
-                        <i data-lucide="book-open" class="w-8 h-8 mx-auto mb-2 opacity-50"></i>
-                        <p class="text-sm">Keine Vokabeln gefunden.</p>
-                    </div>
-                `;
-                lucide.createIcons();
-                return;
-            }
-
-            container.innerHTML = filtered.map(v => `
-                <div class="py-3.5 flex items-center justify-between gap-4 group">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 flex-1 min-w-0">
-                        <div class="flex items-center gap-2">
-                            <span class="font-semibold text-slate-900 text-sm truncate">${escapeHtml(v.en)}</span>
-                            <button onclick="speakText('${escapeHtml(v.en).replace(/'/g, "\\'")}', 'en')" class="p-1 rounded-lg text-slate-400 hover:text-sky-600 hover:bg-sky-50 transition-all shrink-0" title="Englisch anhören">
-                                <i data-lucide="volume-2" class="w-4 h-4"></i>
-                            </button>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <span class="text-slate-600 text-sm truncate">${escapeHtml(v.de)}</span>
-                            <button onclick="speakText('${escapeHtml(v.de).replace(/'/g, "\\'")}', 'de')" class="p-1 rounded-lg text-slate-400 hover:text-sky-600 hover:bg-sky-50 transition-all shrink-0" title="Deutsch anhören">
-                                <i data-lucide="volume-2" class="w-4 h-4"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <button onclick="deleteVocab('${v.id}')" class="text-slate-300 hover:text-rose-500 p-2 rounded-lg transition-all opacity-0 group-hover:opacity-100">
-                        <i data-lucide="trash-2" class="w-4 h-4"></i>
-                    </button>
-                </div>
-            `).join('');
-            lucide.createIcons();
-        }
-
-        function deleteVocab(id) {
-            vocabs = vocabs.filter(v => v.id !== id);
-            saveToLocalStorage();
-            renderVocabList();
-            showToast('Vokabel gelöscht');
-        }
-
-        function clearAllVocabs() {
-            if (confirm('Möchtest du wirklich alle Vokabeln löschen?')) {
-                vocabs = [];
-                saveToLocalStorage();
-                renderVocabList();
-                showToast('Alle Vokabeln gelöscht');
-            }
-        }
-
-        function exportVocabs() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(vocabs, null, 2));
-            const downloadAnchor = document.createElement('a');
-            downloadAnchor.setAttribute("href", dataStr);
-            downloadAnchor.setAttribute("download", "lauras_vokabeln.json");
-            document.body.appendChild(downloadAnchor);
-            downloadAnchor.click();
-            downloadAnchor.remove();
-            showToast('Vokabeln exportiert!');
-        }
-
-        function speakText(text, langCode) {
-            if (!('speechSynthesis' in window)) return;
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = langCode === 'en' ? 'en-US' : 'de-DE';
-            utterance.rate = 0.95;
-            window.speechSynthesis.speak(utterance);
-        }
-
-        function speakCurrentPrompt() {
-            if (!testState.active || testState.questions.length === 0) return;
-            const currentQ = testState.questions[testState.currentIndex];
-            speakText(currentQ.direction === 'en-de' ? currentQ.en : currentQ.de, currentQ.direction === 'en-de' ? 'en' : 'de');
-        }
-
-        function startQuiz() {
-            if (vocabs.length === 0) {
-                showToast('Bitte füge erst Vokabeln hinzu!');
-                switchTab('scan');
-                return;
-            }
-            const shuffled = [...vocabs].sort(() => 0.5 - Math.random());
-            const selected = shuffled.slice(0, Math.min(20, shuffled.length));
-
-            testState.questions = selected.map(v => {
-                const dir = Math.random() < 0.5 ? 'en-de' : 'de-en';
-                return {
-                    id: v.id,
-                    en: v.en,
-                    de: v.de,
-                    direction: dir,
-                    prompt: dir === 'en-de' ? v.en : v.de,
-                    expected: dir === 'en-de' ? v.de : v.en
-                };
+            const list = document.getElementById('vocab-list');
+            list.innerHTML = "";
+            vocabularies.forEach((v, idx) => {
+                const li = document.createElement('li');
+                li.innerText = `${v.de} ⟷ ${v.en}`;
+                list.appendChild(li);
             });
-
-            testState.currentIndex = 0;
-            testState.score = 0;
-            testState.active = true;
-
-            document.getElementById('test-start-screen').classList.add('hidden');
-            document.getElementById('test-finished-screen').classList.add('hidden');
-            document.getElementById('test-active-screen').classList.remove('hidden');
-            loadQuizQuestion();
         }
 
-        function abortTest() {
-            testState.active = false;
-            document.getElementById('test-active-screen').classList.add('hidden');
-            document.getElementById('test-start-screen').classList.remove('hidden');
-        }
+        // Echte OCR-Bilderkennung via Tesseract.js
+        async function handleImageScan(event) {
+            const file = event.target.files[0];
+            if (!file) return;
 
-        function loadQuizQuestion() {
-            const total = testState.questions.length;
-            const idx = testState.currentIndex;
-            const currentQ = testState.questions[idx];
+            const resultBox = document.getElementById('scan-result');
+            resultBox.innerHTML = `<p style="color: #3b82f6; font-weight: bold;">⏳ Bild wird analysiert und Text ausgelesen...</p>`;
 
-            document.getElementById('test-current-num').textContent = idx + 1;
-            document.getElementById('test-total-num').textContent = total;
-            
-            const percent = Math.round(((idx + 1) / total) * 100);
-            document.getElementById('test-progress-percent').textContent = percent + '%';
-            document.getElementById('test-progress-bar').style.width = percent + '%';
-
-            const badge = document.getElementById('test-direction-badge');
-            badge.innerHTML = `<i data-lucide="languages" class="w-3.5 h-3.5"></i> ${currentQ.direction === 'en-de' ? 'Englisch → Deutsch' : 'Deutsch → Englisch'}`;
-
-            document.getElementById('test-question-term').textContent = currentQ.prompt;
-            
-            const inputEl = document.getElementById('test-user-answer');
-            inputEl.value = '';
-            inputEl.disabled = false;
-            inputEl.className = 'w-full px-4 py-3.5 rounded-xl border border-slate-200 text-base focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white';
-            inputEl.focus();
-
-            document.getElementById('test-feedback').classList.add('hidden');
-            document.getElementById('test-submit-btn').classList.remove('hidden');
-            document.getElementById('test-next-btn').classList.add('hidden');
-
-            const lauraBox = document.getElementById('laura-companion-box');
-            const lauraSpeech = document.getElementById('laura-speech-bubble');
-            const avatarWrap = document.getElementById('laura-avatar-wrapper');
-            if (lauraBox && lauraSpeech) {
-                lauraBox.className = 'mb-5 flex items-center gap-3.5 bg-gradient-to-r from-sky-50/90 to-slate-50 p-3.5 rounded-2xl border border-sky-200/80 transition-all';
-                avatarWrap?.classList.remove('laura-cheer');
-                const prompts = [
-                    "„Du schaffst das, Isabell! Wie heißt das übersetzt?“",
-                    "„Ich drücke dir die Tatzen, Isabell!“",
-                    "„Kennst du diese Vokabel schon?“",
-                    "„Konzentrier dich, Isabell – du weißt das!“"
-                ];
-                lauraSpeech.textContent = prompts[testState.currentIndex % prompts.length];
-            }
-            lucide.createIcons();
-        }
-
-        function handleQuizKeydown(event) {
-            if (event.key === 'Enter') {
-                const submitBtn = document.getElementById('test-submit-btn');
-                const nextBtn = document.getElementById('test-next-btn');
-                if (!submitBtn.classList.contains('hidden')) submitQuizAnswer();
-                else if (!nextBtn.classList.contains('hidden')) nextQuizQuestion();
-            }
-        }
-
-        function submitQuizAnswer() {
-            const inputEl = document.getElementById('test-user-answer');
-            const userAns = inputEl.value.trim().toLowerCase();
-            if (!userAns) {
-                showToast('Bitte gib eine Antwort ein.');
-                return;
-            }
-
-            inputEl.disabled = true;
-            const currentQ = testState.questions[testState.currentIndex];
-            const expectedAns = currentQ.expected.trim().toLowerCase();
-            const isCorrect = userAns === expectedAns || (expectedAns.includes(userAns) && userAns.length > 3);
-
-            if (isCorrect) testState.score++;
-
-            const feedbackEl = document.getElementById('test-feedback');
-            const iconEl = document.getElementById('feedback-icon');
-            const titleEl = document.getElementById('feedback-title');
-            const correctEl = document.getElementById('feedback-correct-answer');
-            feedbackEl.classList.remove('hidden');
-
-            const lauraBox = document.getElementById('laura-companion-box');
-            const lauraSpeech = document.getElementById('laura-speech-bubble');
-            const avatarWrap = document.getElementById('laura-avatar-wrapper');
-
-            if (isCorrect) {
-                inputEl.classList.add('border-emerald-500', 'bg-emerald-50/30');
-                feedbackEl.className = 'p-4 rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-900 fade-in';
-                iconEl.innerHTML = '<i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-600"></i>';
-                titleEl.textContent = 'Richtig!';
-                correctEl.textContent = `Lösung: ${currentQ.expected}`;
-
-                if (lauraBox && lauraSpeech) {
-                    const praises = [
-                        "„Good! 🎉 Weiter so, Isabell!“",
-                        "„Great job, Isabell! 🐾 Das war goldrichtig!“",
-                        "„Awesome! 🌟 Du bist richtig stark!“",
-                        "„Well done! ❄️ Perfekt gewusst!“",
-                        "„Super, Isabell! 🐆 Du wirst zum Vokabel-Profi!“"
-                    ];
-                    lauraBox.className = 'mb-5 flex items-center gap-3.5 bg-gradient-to-r from-emerald-50 to-sky-50 p-3.5 rounded-2xl border border-emerald-300 shadow-sm transition-all';
-                    lauraSpeech.textContent = praises[Math.floor(Math.random() * praises.length)];
-                    if (avatarWrap) {
-                        avatarWrap.classList.remove('laura-cheer');
-                        void avatarWrap.offsetWidth;
-                        avatarWrap.classList.add('laura-cheer');
+            try {
+                // Bild mit Tesseract OCR scannen (Deutsch + Englisch)
+                const { data: { text } } = await Tesseract.recognize(file, 'deu+eng', {
+                    logger: m => {
+                        if (m.status === 'recognizing text') {
+                            const progress = Math.round(m.progress * 100);
+                            resultBox.innerHTML = `<p style="color: #3b82f6; font-weight: bold;">⏳ Analysiere Bild... (${progress}%)</p>`;
+                        }
                     }
-                }
-            } else {
-                inputEl.classList.add('border-red-400', 'bg-red-50/30');
-                feedbackEl.className = 'p-4 rounded-xl border border-red-200 bg-red-50 text-red-900 fade-in';
-                iconEl.innerHTML = '<i data-lucide="x-circle" class="w-5 h-5 text-red-600"></i>';
-                titleEl.textContent = 'Leider nicht ganz richtig';
-                correctEl.innerHTML = `Richtige Antwort: <strong>${escapeHtml(currentQ.expected)}</strong>`;
+                });
 
-                if (lauraBox && lauraSpeech) {
-                    const encouragements = [
-                        "„Fast! 💪 Merk dir das Wort – beim nächsten Mal klappt’s!“",
-                        "„Kein Problem, Isabell! 🐾 Schau dir die Lösung kurz an.“",
-                        "„Knapp daneben! ❄️ Weiter geht’s, du schaffst die nächste!“"
-                    ];
-                    lauraBox.className = 'mb-5 flex items-center gap-3.5 bg-gradient-to-r from-amber-50 to-slate-50 p-3.5 rounded-2xl border border-amber-200 transition-all';
-                    lauraSpeech.textContent = encouragements[Math.floor(Math.random() * encouragements.length)];
+                // Zeilenweise verarbeiten und Vokabeln extrahieren
+                const lines = text.split('\n');
+                let addedCount = window.addedCount || 0;
+                let foundVocabs = [];
+
+                lines.forEach(line => {
+                    let cleanLine = line.trim();
+                    if (!cleanLine) return;
+
+                    // Versuche Trennzeichen wie Bindestrich, Doppelpunkt oder Pfeile zu finden
+                    let parts = cleanLine.split(/[-–—:;>|]+/);
+                    if (parts.length >= 2) {
+                        let deWord = parts[0].trim();
+                        let enWord = parts[1].trim();
+                        if (deWord.length > 1 && enWord.length > 1) {
+                            vocabularies.push({ de: deWord, en: enWord });
+                            foundVocabs.push(`${deWord} ⟷ ${enWord}`);
+                        }
+                    }
+                });
+
+                if (foundVocabs.length > 0) {
+                    resultBox.innerHTML = `
+                        <p style="color: #065f46; font-weight: bold;">✅ Erfolgreich ${foundVocabs.length} Vokabeln erkannt und hinzugefügt!</p>
+                        <ul style="margin: 5px 0 0 0; padding-left: 15px; font-size: 0.9rem;">
+                            ${foundVocabs.map(v => `<li>${v}</li>`).join('')}
+                        </ul>
+                    `;
+                } else {
+                    resultBox.innerHTML = `
+                        <p style="color: #991b1b; font-weight: bold;">⚠️ Kein klares Vokabelmuster gefunden.</p>
+                        <p style="font-size: 0.85rem; margin: 5px 0;">Erkannter Rohtext: "${text.substring(0, 100)}..."</p>
+                        <p style="font-size: 0.85rem;">Tipp: Achte darauf, dass die Wörter im Format "Wort - Übersetzung" auf dem Bild stehen.</p>
+                    `;
                 }
+            } catch (error) {
+                resultBox.innerHTML = `<p style="color: #991b1b; font-weight: bold;">❌ Fehler bei der Texterkennung: ${error.message}</p>`;
             }
-
-            document.getElementById('test-submit-btn').classList.add('hidden');
-            document.getElementById('test-next-btn').classList.remove('hidden');
-            document.getElementById('test-next-btn').focus();
-            lucide.createIcons();
         }
 
-        function nextQuizQuestion() {
-            testState.currentIndex++;
-            if (testState.currentIndex < testState.questions.length) loadQuizQuestion();
-            else finishQuiz();
-        }
-
-        function finishQuiz() {
-            document.getElementById('test-active-screen').classList.add('hidden');
-            document.getElementById('test-finished-screen').classList.remove('hidden');
-            const total = testState.questions.length;
-            const score = testState.score;
-            const summary = document.getElementById('test-score-summary');
-            let praise = "Das hast du super gemacht!";
-            if (score === total) praise = "Absolut fehlerfrei! Du bist ein echter Schneeleopard!";
-            else if (score < total / 2) praise = "Übung macht den Meister, bleib dran!";
-            summary.innerHTML = `Du hast <strong>${score}</strong> von <strong>${total}</strong> Vokabeln richtig gewusst.<br><span class="text-sky-700 font-semibold mt-1 block">${praise}</span>`;
-            lucide.createIcons();
-        }
-
-        function escapeHtml(text) {
-            const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
-            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
-        }
+        window.onload = function() {
+            startTest();
+        };
     </script>
+
 </body>
 </html>
