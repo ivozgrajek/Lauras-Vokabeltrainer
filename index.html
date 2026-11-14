@@ -38,7 +38,7 @@
                         Lauras Vokabeltrainer
                         <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 border border-sky-200">Snow Leopard</span>
                     </h1>
-                    <p class="text-xs text-slate-500">Für Isabell &bull; Fotografieren, lernen & sprechen</p>
+                    <p class="text-xs text-slate-500">Für Isabell &bull; Einfügen, lernen & sprechen</p>
                 </div>
             </div>
             <div class="flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-medium">
@@ -52,7 +52,7 @@
 
         <nav class="flex rounded-2xl bg-white p-1.5 shadow-sm border border-slate-200 gap-1">
             <button onclick="switchTab('scan')" id="tab-btn-scan" class="flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all bg-sky-600 text-white shadow-sm">
-                <i data-lucide="camera" class="w-4 h-4"></i> Foto & Scan
+                <i data-lucide="plus-circle" class="w-4 h-4"></i> Hinzufügen
             </button>
             <button onclick="switchTab('list')" id="tab-btn-list" class="flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all text-slate-600 hover:bg-slate-50">
                 <i data-lucide="library" class="w-4 h-4"></i> Liste (<span id="tab-vocab-count">0</span>)
@@ -67,89 +67,72 @@
             <span id="toast-message">Meldung</span>
         </div>
 
-        <!-- ================= VIEW 1: SCAN ================= -->
+        <!-- ================= VIEW 1: HINZUFÜGEN ================= -->
         <section id="view-scan" class="fade-in space-y-6">
-
-            <!-- API-Key Einstellung -->
-            <div id="api-key-card" class="bg-white/95 backdrop-blur-sm rounded-2xl p-5 shadow-sm border border-slate-200/90">
-                <div class="flex items-start justify-between gap-3">
-                    <div>
-                        <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
-                            <i data-lucide="key-round" class="w-4 h-4 text-sky-600"></i>
-                            Foto-Erkennung einrichten
-                        </h3>
-                        <p class="text-xs text-slate-500 mt-1 max-w-xl">
-                            Für das Auslesen von Fotos wird einmalig ein kostenloser Gemini-API-Schlüssel gebraucht
-                            (<a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" class="text-sky-700 underline">aistudio.google.com/apikey</a>).
-                            Der Schlüssel wird nur auf diesem Gerät gespeichert.
-                        </p>
-                    </div>
-                    <span id="api-key-status" class="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800">fehlt</span>
-                </div>
-                <div class="flex flex-col sm:flex-row gap-2 mt-3">
-                    <input type="password" id="api-key-input" placeholder="API-Schlüssel einfügen" autocomplete="off"
-                        class="flex-1 px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm bg-slate-50/50">
-                    <button onclick="saveApiKey()" class="px-5 py-3 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-xl text-sm">Speichern</button>
-                </div>
-            </div>
-
             <div class="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-sm border border-slate-200/90">
-                <div class="mb-6">
-                    <h2 class="text-xl font-bold text-slate-900 mb-1">Hallo Isabell! Vokabelseite abfotografieren</h2>
-                    <p class="text-sm text-slate-500">Starte die Kamera oder wähle ein Foto aus. Laura liest die Wörter aus und speichert sie in deiner Liste.</p>
+                <h2 class="text-xl font-bold text-slate-900 mb-1">Hallo Isabell! Vokabeln aus einem Foto holen</h2>
+                <p class="text-sm text-slate-500 mb-4">Dein Handy kann Text in Fotos selbst erkennen. Du kopierst ihn und fügst ihn hier ein. Laura sortiert die Wörter, und du kontrollierst sie vor dem Speichern.</p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5 text-sm">
+                    <div class="rounded-xl bg-slate-50 border border-slate-200 p-3.5">
+                        <p class="font-semibold text-slate-900 mb-1.5">iPhone</p>
+                        <ol class="list-decimal pl-4 space-y-1 text-slate-600">
+                            <li>Foto der Vokabelseite aufnehmen und in „Fotos“ öffnen.</li>
+                            <li>Unten rechts das Textsymbol (Live-Text) antippen.</li>
+                            <li>„Alles auswählen“, dann „Kopieren“.</li>
+                        </ol>
+                    </div>
+                    <div class="rounded-xl bg-slate-50 border border-slate-200 p-3.5">
+                        <p class="font-semibold text-slate-900 mb-1.5">Android</p>
+                        <ol class="list-decimal pl-4 space-y-1 text-slate-600">
+                            <li>Foto aufnehmen und in „Google Fotos“ öffnen.</li>
+                            <li>Unten auf „Lens“ tippen.</li>
+                            <li>„Text“ wählen, Text auswählen, „Text kopieren“.</li>
+                        </ol>
+                    </div>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <button onclick="startLiveCamera()" class="flex items-center justify-center gap-3 p-4 rounded-2xl bg-gradient-to-br from-sky-600 to-indigo-600 text-white font-semibold shadow-lg shadow-sky-600/20 hover:opacity-95 transition-all cursor-pointer">
-                        <i data-lucide="camera" class="w-5 h-5"></i> Live-Kamera öffnen
-                    </button>
-                    <label class="flex items-center justify-center gap-3 p-4 rounded-2xl bg-slate-100 hover:bg-slate-200/70 text-slate-700 font-semibold border border-slate-200 transition-all cursor-pointer">
-                        <i data-lucide="image-plus" class="w-5 h-5 text-sky-600"></i> Foto aus Galerie wählen
-                        <input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(event)">
+                <label for="paste-text" class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Kopierten Text hier einfügen</label>
+                <textarea id="paste-text" rows="7" placeholder="z.B.&#10;the dog - der Hund&#10;I am happy - Ich bin glücklich"
+                    class="w-full mt-1.5 px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm bg-slate-50/50"></textarea>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
+                    <label class="text-xs font-semibold text-slate-500">Aufbau des Textes
+                        <select id="paste-layout" class="mt-1 w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-white text-sm font-normal text-slate-800">
+                            <option value="auto">Automatisch erkennen</option>
+                            <option value="pairs">Ein Paar pro Zeile (mit Strich, = oder Tab)</option>
+                            <option value="alternating">Abwechselnd: Zeile 1 und Zeile 2 gehören zusammen</option>
+                            <option value="blocks">Erst alle Wörter einer Sprache, dann alle der anderen</option>
+                        </select>
+                    </label>
+                    <label class="text-xs font-semibold text-slate-500">Welche Sprache steht zuerst?
+                        <select id="paste-order" class="mt-1 w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-white text-sm font-normal text-slate-800">
+                            <option value="auto">Automatisch erkennen</option>
+                            <option value="en-de">Englisch zuerst</option>
+                            <option value="de-en">Deutsch zuerst</option>
+                        </select>
                     </label>
                 </div>
 
-                <div id="camera-container" class="hidden mt-6 relative rounded-2xl overflow-hidden bg-black border border-slate-700 shadow-inner">
-                    <video id="camera-video" autoplay playsinline muted class="w-full h-72 sm:h-96 object-cover"></video>
-                    <div class="absolute bottom-4 left-0 right-0 flex justify-center gap-3 px-4">
-                        <button onclick="captureCameraPhoto()" class="px-6 py-3 bg-sky-500 hover:bg-sky-400 text-white font-bold rounded-xl shadow-lg flex items-center gap-2">
-                            <i data-lucide="aperture" class="w-5 h-5"></i> Foto aufnehmen
-                        </button>
-                        <button onclick="stopLiveCamera()" class="px-4 py-3 bg-slate-800/80 hover:bg-slate-900 text-white rounded-xl">Abbrechen</button>
-                    </div>
-                </div>
-                <canvas id="camera-canvas" class="hidden"></canvas>
-
-                <div id="scan-loading" class="hidden mt-6 p-8 text-center bg-sky-50/50 rounded-2xl border border-sky-100">
-                    <div class="inline-block p-3 rounded-full bg-white shadow-sm text-sky-600 mb-3 animate-spin">
-                        <i data-lucide="loader-2" class="w-6 h-6"></i>
-                    </div>
-                    <h3 class="font-semibold text-slate-800">Laura analysiert dein Vokabel-Foto...</h3>
-                    <p class="text-xs text-slate-500 mt-1">Das kann ein paar Sekunden dauern.</p>
-                </div>
-
-                <div id="scan-error" class="hidden mt-6 p-4 rounded-xl border border-red-200 bg-red-50 text-red-900 text-sm"></div>
+                <button onclick="parsePastedText()" class="mt-4 w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-gradient-to-br from-sky-600 to-indigo-600 text-white font-semibold shadow-lg shadow-sky-600/20 hover:opacity-95">
+                    <i data-lucide="wand-sparkles" class="w-5 h-5"></i> Wörter erkennen
+                </button>
 
                 <div id="review-box" class="hidden mt-6 rounded-2xl border border-sky-200 bg-sky-50/40 p-4">
                     <h3 class="font-bold text-slate-900 flex items-center gap-2"><i data-lucide="list-checks" class="w-4 h-4 text-sky-600"></i> Kontrolliere die erkannten Wörter</h3>
                     <p class="text-xs text-slate-500 mt-1 mb-3">Korrigiere Fehler direkt im Feld oder entferne falsche Zeilen. Gespeichert wird erst mit dem Button unten.</p>
                     <div class="hidden sm:grid grid-cols-[1fr_1fr_2.5rem] gap-2 text-xs font-semibold text-slate-500 mb-1 px-1"><span>Englisch</span><span>Deutsch</span><span></span></div>
                     <div id="review-list" class="space-y-2 max-h-[420px] overflow-y-auto pr-1"></div>
-                    <button onclick="addPendingRow()" class="mt-3 text-xs font-semibold text-sky-700 hover:underline">+ Zeile hinzufügen</button>
+                    <div class="flex flex-wrap gap-4 mt-3">
+                        <button onclick="addPendingRow()" class="text-xs font-semibold text-sky-700 hover:underline">+ Zeile hinzufügen</button>
+                        <button onclick="swapPending()" class="text-xs font-semibold text-sky-700 hover:underline">⇄ Englisch und Deutsch tauschen</button>
+                    </div>
                     <div class="flex flex-col sm:flex-row gap-2 mt-4">
                         <button onclick="savePending()" class="flex-1 py-3 bg-sky-600 hover:bg-sky-500 text-white font-semibold rounded-xl text-sm shadow-sm">
                             <span id="review-save-label">Alle speichern</span>
                         </button>
                         <button onclick="discardPending()" class="px-5 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-sm">Verwerfen</button>
                     </div>
-                </div>
-
-                <div id="image-preview-box" class="hidden mt-6">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Aufgenommenes Foto</span>
-                        <button onclick="clearCapturedImage()" class="text-xs text-rose-500 hover:underline">Foto verwerfen</button>
-                    </div>
-                    <img id="preview-img" src="" alt="Vokabel Foto" class="max-h-60 rounded-xl border border-slate-200 object-contain mx-auto bg-slate-50">
                 </div>
             </div>
 
@@ -277,11 +260,6 @@
     </footer>
 
     <script>
-        // ---------- Konfiguration ----------
-        const GEMINI_MODEL = 'gemini-2.5-flash';   // bei Bedarf ändern, z.B. 'gemini-flash-latest'
-        const KEY_STORAGE = 'laura_gemini_key';
-        const VOCAB_STORAGE = 'laura_vocabs_v1';
-
         // ---------- Speicher ----------
         function loadVocabs() {
             try { return JSON.parse(localStorage.getItem(VOCAB_STORAGE)) || []; } catch (e) { return []; }
@@ -293,7 +271,6 @@
         window.onload = function () {
             updateCounts();
             renderVocabList();
-            updateApiKeyUi();
             lucide.createIcons();
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('sw.js').catch(err => console.warn('SW:', err));
@@ -311,27 +288,6 @@
             updateCounts();
         }
 
-        // ---------- API-Key ----------
-        function getApiKey() { return (localStorage.getItem(KEY_STORAGE) || '').trim(); }
-
-        function updateApiKeyUi() {
-            const has = !!getApiKey();
-            const s = document.getElementById('api-key-status');
-            s.textContent = has ? 'gespeichert' : 'fehlt';
-            s.className = 'shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full ' +
-                (has ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800');
-            document.getElementById('api-key-input').placeholder = has ? '•••••••• (zum Ändern neuen Schlüssel einfügen)' : 'API-Schlüssel einfügen';
-        }
-
-        function saveApiKey() {
-            const v = document.getElementById('api-key-input').value.trim();
-            if (!v) { showToast('Bitte einen Schlüssel einfügen.'); return; }
-            localStorage.setItem(KEY_STORAGE, v);
-            document.getElementById('api-key-input').value = '';
-            updateApiKeyUi();
-            showToast('Schlüssel gespeichert ✔');
-        }
-
         // ---------- Tabs ----------
         function switchTab(tabId) {
             ['scan', 'list', 'test'].forEach(t => {
@@ -347,177 +303,90 @@
                 }
             });
             if (tabId === 'list') renderVocabList();
-            if (tabId !== 'scan') stopLiveCamera();
             lucide.createIcons();
         }
 
-        // ---------- Kamera ----------
-        async function startLiveCamera() {
-            const container = document.getElementById('camera-container');
-            const video = document.getElementById('camera-video');
-            container.classList.remove('hidden');
-            try {
-                videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } }, audio: false });
-                video.srcObject = videoStream;
-            } catch (err) {
-                console.error('Kamerafehler:', err);
-                container.classList.add('hidden');
-                showToast('Kamera nicht verfügbar. Bitte Foto aus Galerie wählen.');
+
+        // ---------- Text einfügen & sortieren ----------
+        const DE_WORDS = new Set(['der','die','das','ein','eine','und','ich','du','er','sie','es','nicht','ist','sind','mit','von','zu','den','dem','auf','für','wir','ihr','mein','dein','haben','sein','werden','bin','hast']);
+        const EN_WORDS = new Set(['the','a','an','and','to','of','is','are','you','i','he','she','it','we','they','not','with','for','in','on','my','your','have','be','am']);
+
+        function germanScore(s) {
+            let sc = /[äöüßÄÖÜ]/.test(s) ? 3 : 0;
+            s.toLowerCase().split(/[^a-zäöüß]+/).forEach(w => {
+                if (DE_WORDS.has(w)) sc++;
+                if (EN_WORDS.has(w)) sc--;
+            });
+            return sc;
+        }
+
+        function cleanLine(l) {
+            return l.replace(/^\s*(\d+[.)]|[•*·▪●-])\s+/, '').trim();
+        }
+
+        function splitLine(line) {
+            const m = line.match(/\t+|\s*[=|;]\s*|\s+[-–—]\s+|\s*:\s+|\s{2,}/);
+            if (!m) return null;
+            const a = line.slice(0, m.index).trim();
+            const b = line.slice(m.index + m[0].length).trim();
+            return (a && b) ? [a, b] : null;
+        }
+
+        function parseVocabText(text, layout, order) {
+            const rawLines = text.split(/\r?\n/).map(l => l.trim());
+            const lines = rawLines.filter(Boolean).map(cleanLine).filter(Boolean);
+            if (lines.length === 0) return [];
+
+            let pairs = [];
+            if (layout === 'auto') {
+                const sepCount = lines.filter(l => splitLine(l)).length;
+                if (sepCount >= lines.length * 0.5) layout = 'pairs';
+                else {
+                    const groups = rawLines.join('\n').split(/\n\s*\n/).map(g => g.split('\n').map(cleanLine).filter(Boolean)).filter(g => g.length);
+                    layout = (groups.length === 2 && groups[0].length === groups[1].length) ? 'blocks' : 'alternating';
+                }
             }
-        }
 
-        function stopLiveCamera() {
-            if (videoStream) { videoStream.getTracks().forEach(t => t.stop()); videoStream = null; }
-            document.getElementById('camera-container').classList.add('hidden');
-        }
+            if (layout === 'pairs') {
+                lines.forEach(l => { const p = splitLine(l); if (p) pairs.push(p); });
+            } else if (layout === 'alternating') {
+                for (let i = 0; i + 1 < lines.length; i += 2) pairs.push([lines[i], lines[i + 1]]);
+            } else if (layout === 'blocks') {
+                const groups = rawLines.join('\n').split(/\n\s*\n/).map(g => g.split('\n').map(cleanLine).filter(Boolean)).filter(g => g.length);
+                let first, second;
+                if (groups.length === 2) { first = groups[0]; second = groups[1]; }
+                else { const h = Math.floor(lines.length / 2); first = lines.slice(0, h); second = lines.slice(h, h * 2); }
+                const n = Math.min(first.length, second.length);
+                for (let i = 0; i < n; i++) pairs.push([first[i], second[i]]);
+            }
 
-        function captureCameraPhoto() {
-            const video = document.getElementById('camera-video');
-            if (!video.videoWidth) { showToast('Kamera ist noch nicht bereit.'); return; }
-            const canvas = document.getElementById('camera-canvas');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            canvas.getContext('2d').drawImage(video, 0, 0);
-            const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
-            stopLiveCamera();
-            processImageForVocabs(dataUrl);
-        }
-
-        function handleImageUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = e => processImageForVocabs(e.target.result);
-            reader.readAsDataURL(file);
-            event.target.value = '';   // gleiches Foto erneut wählbar
-        }
-
-        function clearCapturedImage() {
-            document.getElementById('image-preview-box').classList.add('hidden');
-        }
-
-        // Foto verkleinern (Handyfotos sind riesig → sonst Fehler/Timeouts)
-        function downscaleImage(dataUrl, maxSide = 1600, quality = 0.85) {
-            return new Promise((resolve, reject) => {
-                const img = new Image();
-                img.onload = () => {
-                    const scale = Math.min(1, maxSide / Math.max(img.width, img.height));
-                    const c = document.createElement('canvas');
-                    c.width = Math.round(img.width * scale);
-                    c.height = Math.round(img.height * scale);
-                    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
-                    resolve(c.toDataURL('image/jpeg', quality));
-                };
-                img.onerror = () => reject(new Error('Das Bild konnte nicht gelesen werden.'));
-                img.src = dataUrl;
+            return pairs.map(([a, b]) => {
+                if (order === 'en-de') return { en: a, de: b };
+                if (order === 'de-en') return { en: b, de: a };
+                const ga = germanScore(a), gb = germanScore(b);
+                if (ga > gb) return { en: b, de: a };
+                return { en: a, de: b };
             });
         }
 
-        function showScanError(msg) {
-            const el = document.getElementById('scan-error');
-            if (!msg) { el.classList.add('hidden'); return; }
-            el.textContent = msg;
-            el.classList.remove('hidden');
-        }
-
-        // ---------- Foto → Vokabeln (Gemini) ----------
-        async function processImageForVocabs(rawDataUrl) {
-            showScanError('');
-            pendingVocabs = []; renderReview();
-            const apiKey = getApiKey();
-            if (!apiKey) {
-                showToast('Bitte zuerst den API-Schlüssel speichern.');
-                document.getElementById('api-key-input').focus();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+        function parsePastedText() {
+            const text = document.getElementById('paste-text').value;
+            if (!text.trim()) { showToast('Bitte zuerst den kopierten Text einfügen.'); return; }
+            const result = parseVocabText(text, document.getElementById('paste-layout').value, document.getElementById('paste-order').value);
+            if (result.length === 0) {
+                showToast('Keine Paare gefunden. Probiere einen anderen „Aufbau des Textes“.');
                 return;
             }
-
-            const loading = document.getElementById('scan-loading');
-            loading.classList.remove('hidden');
-
-            try {
-                const imageDataUrl = await downscaleImage(rawDataUrl);
-                document.getElementById('preview-img').src = imageDataUrl;
-                document.getElementById('image-preview-box').classList.remove('hidden');
-                const base64Data = imageDataUrl.split(',')[1];
-
-                const systemPrompt = 'Du bist ein präziser Vokabel-Assistent für Handschrift- und Druck-OCR. Analysiere das Foto einer Vokabelseite (deutsche Begriffe/Sätze und englische Übersetzungen, meist in zwei Spalten oder durch Striche/Gleichheitszeichen getrennt). Extrahiere alle Paare. Gib ausschließlich ein JSON-Array zurück: [{"de":"Wort auf Deutsch","en":"Wort auf Englisch"}]. Keine Erklärungen, kein Markdown.';
-
-                const payload = {
-                    contents: [{
-                        role: 'user',
-                        parts: [
-                            { text: 'Lies alle Vokabelpaare aus diesem Foto aus und gib sie als JSON-Array zurück.' },
-                            { inlineData: { mimeType: 'image/jpeg', data: base64Data } }
-                        ]
-                    }],
-                    systemInstruction: { parts: [{ text: systemPrompt }] },
-                    generationConfig: {
-                        responseMimeType: 'application/json',
-                        responseSchema: {
-                            type: 'ARRAY',
-                            items: {
-                                type: 'OBJECT',
-                                properties: { de: { type: 'STRING' }, en: { type: 'STRING' } },
-                                required: ['de', 'en']
-                            }
-                        }
-                    }
-                };
-
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
-                let response = null, lastErr = '';
-                for (let attempt = 0; attempt < 3; attempt++) {
-                    try {
-                        response = await fetch(apiUrl, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
-                            body: JSON.stringify(payload)
-                        });
-                        if (response.ok) break;
-                        let detail = '';
-                        try { detail = (await response.json()).error?.message || ''; } catch (_) {}
-                        lastErr = `Fehler ${response.status}${detail ? ': ' + detail : ''}`;
-                        // Bei falschem Schlüssel / ungültiger Anfrage nicht wiederholen
-                        if (response.status === 400 || response.status === 401 || response.status === 403 || response.status === 404) break;
-                    } catch (e) {
-                        lastErr = 'Keine Verbindung zum Internet.';
-                    }
-                    await new Promise(r => setTimeout(r, Math.pow(2, attempt) * 1000));
-                }
-
-                if (!response || !response.ok) throw new Error(lastErr || 'Netzwerkfehler bei der Texterkennung.');
-
-                const result = await response.json();
-                let jsonText = '';
-                for (const part of (result.candidates?.[0]?.content?.parts || [])) {
-                    if (part.text) jsonText += part.text;
-                }
-                if (!jsonText) throw new Error('Keine Antwort von der KI erhalten (evtl. blockiert). Bitte anderes Foto probieren.');
-
-                jsonText = jsonText.replace(/```json/g, '').replace(/```/g, '').trim();
-                let parsed = JSON.parse(jsonText);
-                if (!Array.isArray(parsed)) parsed = parsed.vocabs || parsed.pairs || [];
-                if (parsed.length === 0) throw new Error('Es konnten keine Vokabeln erkannt werden. Bitte näher/schärfer fotografieren.');
-
-                pendingVocabs = parsed
-                    .map(i => ({ en: String(i.en || '').trim(), de: String(i.de || '').trim() }))
-                    .filter(i => i.en || i.de);
-                loading.classList.add('hidden');
-                if (pendingVocabs.length === 0) throw new Error('Es konnten keine Vokabeln erkannt werden.');
-                renderReview();
-                showToast(`${pendingVocabs.length} Wörter erkannt – bitte kontrollieren.`);
-                document.getElementById('review-box').scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-            } catch (error) {
-                console.error('OCR Fehler:', error);
-                loading.classList.add('hidden');
-                let msg = error.message || 'Unbekannter Fehler.';
-                if (/API key|API_KEY|permission|403|401/i.test(msg)) msg += ' – Prüfe den API-Schlüssel.';
-                showScanError('Handschrifterkennung fehlgeschlagen. ' + msg);
-            }
+            pendingVocabs = result;
+            renderReview();
+            showToast(`${result.length} Wörter erkannt – bitte kontrollieren.`);
+            document.getElementById('review-box').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
+        function swapPending() {
+            pendingVocabs = pendingVocabs.map(v => ({ en: v.de, de: v.en }));
+            renderReview();
+        }
 
         // ---------- Vorabkontrolle ----------
         let pendingVocabs = [];
@@ -550,7 +419,6 @@
         function discardPending() {
             pendingVocabs = [];
             renderReview();
-            clearCapturedImage();
         }
 
         function savePending() {
@@ -566,7 +434,7 @@
             saveToLocalStorage();
             pendingVocabs = [];
             renderReview();
-            clearCapturedImage();
+            document.getElementById('paste-text').value = '';
             showToast(`${added} Vokabeln gespeichert 🎉` + (skipped ? ` (${skipped} schon vorhanden)` : ''));
             switchTab('list');
         }
